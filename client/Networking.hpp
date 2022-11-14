@@ -28,17 +28,18 @@
 #define PlayerSize 10
 
 using namespace std;
+
 // TODO pass IP and port as params
-void connect();
+void Connect();
 
 // Process one frame of updates
 //void update();
 
 // Disconnect from the server
-//void disconnect();
+void Disconnect();
 
 // True if we are connected to the server and have a valid player id.
-//bool connected();
+bool Connected();
 
 // Tell the network game play how far we wanted to move this frame
 //void updateLocalPlayer(Vector2* movementDelta, float deltaT);
