@@ -1,0 +1,14 @@
+//
+// Created by Admin on 2022-11-14.
+//
+
+#ifndef COMP3940PROJECT_PACKETBUILDER_HPP
+#define COMP3940PROJECT_PACKETBUILDER_HPP
+
+
+class PacketBuilder {
+
+};
+
+
+#endif //COMP3940PROJECT_PACKETBUILDER_HPP
