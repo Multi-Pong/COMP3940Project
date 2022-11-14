@@ -14,7 +14,7 @@ ServerSocket::ServerSocket(int port) {
 
     struct addrinfo *result = NULL;
     struct addrinfo hints{};
-    memset((&hints), 0, (sizeof(hints)));
+    ZeroMemory(&hints, sizeof(hints)); // Set bits to 0
     hints.ai_family = AF_INET;
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_protocol = IPPROTO_TCP;

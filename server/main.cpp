@@ -107,6 +107,7 @@ int __cdecl main(void) {
     ListenSocket->close();
 
     // Receive until the peer shuts down the connection
+    // TODO Put in game thread
     do {
 
 //        iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
