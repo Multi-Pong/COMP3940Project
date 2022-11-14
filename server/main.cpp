@@ -10,6 +10,7 @@
 #include <iostream>
 
 #include "sockets/ServerSocket.hpp"
+#include "threads/SocketThread.hpp"
 
 // Need to link with Ws2_32.lib
 #pragma comment (lib, "Ws2_32.lib")
@@ -42,8 +43,8 @@ int __cdecl main(void) {
     while (!isShutDown) {
         cout << "waiting" << endl;
         ClientSocket = ListenSocket->Accept();
-//        Router *thread = new Router(cs);
-//        thread->start();
+        SocketThread *thread = new SocketThread(ClientSocket);
+        thread->start();
 //      shutDownServer();
     }
 

@@ -4,6 +4,7 @@
 
 #include "SocketThread.hpp"
 #include <unistd.h>
+#include <string>
 
 #include "../pongServer//GameInstanceSingleton.hpp"
 
@@ -32,10 +33,10 @@ void SocketThread::run()
 //        default:;
 //    }
 //
-//    string res = response.getResponse();
-//    char responseCharArray[res.length()];
-//    strncpy(responseCharArray, res.c_str(), res.length());
-//    sock->sendResponse(responseCharArray);
+    string res = "response.getResponse()";
+    char responseCharArray[res.length()];
+    strncpy(responseCharArray, res.c_str(), res.length());
+    sock->sendResponse(responseCharArray);
 }
 
 SocketThread::~SocketThread()
