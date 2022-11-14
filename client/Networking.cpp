@@ -1,6 +1,9 @@
 //
 // Created by Admin on 2022-11-14.
 //
+#include <winsock2.h>
+#include <windows.h>
+#include <ws2tcpip.h>
 #include <cstdio>
 #include "Networking.hpp"
 
