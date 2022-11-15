@@ -6,8 +6,17 @@
 #define COMP3940PROJECT_PACKETREADER_HPP
 
 
-class PacketReader {
+#include "../../game/Player.hpp"
+#include <vector>
+#include <string>
+using namespace std;
 
+class PacketReader {
+private:
+    vector<Player> players;
+public:
+    void readPacket(string packet);
+    vector<Player> getPlayers();
 };
 
 

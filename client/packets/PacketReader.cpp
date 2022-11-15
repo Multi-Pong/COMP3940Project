@@ -3,3 +3,12 @@
 //
 
 #include "PacketReader.hpp"
+#include <sstream>
+
+void PacketReader::readPacket(string packet) {
+    istringstream stream(packet);
+    string current;
+    while(stream >> current){
+
+    }
+}
