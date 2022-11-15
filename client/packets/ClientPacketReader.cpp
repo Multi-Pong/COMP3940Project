@@ -2,10 +2,10 @@
 // Created by Admin on 2022-11-14.
 //
 
-#include "PacketReader.hpp"
+#include "ClientPacketReader.hpp"
 #include <sstream>
 
-void PacketReader::readPacket(string packet) {
+void ClientPacketReader::readPacket(string packet) {
     istringstream stream(packet);
     string current;
     while(stream >> current){

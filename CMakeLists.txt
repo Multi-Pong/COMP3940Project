@@ -31,8 +31,6 @@ file(GLOB serverSourceFiles
         "server/threads/*.cpp"
         "server/packets/*.hpp"
         "server/packets/*.cpp"
-        "server/pongServer/*.hpp"
-        "server/pongServer/*.cpp"
         "game/*.hpp"
         "game/*.cpp"
         )
@@ -44,8 +42,6 @@ file(GLOB clientSourceFiles
         "client/*.cpp"
         "client/packets/*.hpp"
         "client/packets/*.cpp"
-        "client/pongClient/*.hpp"
-        "client/pongClient/*.cpp"
         "game/*.hpp"
         "game/*.cpp"
         )

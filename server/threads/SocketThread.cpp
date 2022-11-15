@@ -7,8 +7,9 @@
 #include <string>
 #include <iostream>
 #include "../packets/ServerPacketBuilder.hpp"
+#include "../packets/ServerPacketReader.hpp"
 
-#include "../pongServer//GameInstanceSingleton.hpp"
+#include "../../game/GameInstanceSingleton.hpp"
 
 SocketThread::SocketThread(Socket *sock) : Thread(this) {
 //    request.setSocket(sock);
@@ -36,12 +37,27 @@ void SocketThread::run() {
     // Create Container to hold message
     vector<char> result;
     // Dump every char from Payload into vector. Vector now holds entire Payload.
-    sock->dump(result);
+//    sock->dump(result);
 //    string buildMessage = "";
-    for (char x: result) {
-//        buildMessage.append(reinterpret_cast<const char *>(x));
-        cout << x;
+    string str;
+    char *buf;
+    while (*(buf = sock->getNext()) > 0) {
+        str += buf[0];
     }
+    ServerPacketReader read;
+    cout << "READING PACKET" << endl;
+    cout << str << endl;
+    read.readPacket(str);
+    Player p = read.getPlayer();
+    cout << "RECIEVED PLAYER" << endl;
+    cout << "Player id: " << p.getID() << endl;
+    cout << "Player x: " << p.getX() << endl;
+    cout << "Player y: " << p.getY() << endl;
+
+//    for (char x: result) {
+//        buildMessage.append(reinterpret_cast<const char *>(x));
+
+//    }
 
 
     //TODO Replace with buiildPacket
