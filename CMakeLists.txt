@@ -33,6 +33,8 @@ file(GLOB serverSourceFiles
         "server/packets/*.cpp"
         "server/pongServer/*.hpp"
         "server/pongServer/*.cpp"
+        "game/*.hpp"
+        "game/*.cpp"
         )
 
 add_executable(server ${serverSourceFiles} )
@@ -44,6 +46,8 @@ file(GLOB clientSourceFiles
         "client/packets/*.cpp"
         "client/pongClient/*.hpp"
         "client/pongClient/*.cpp"
+        "game/*.hpp"
+        "game/*.cpp"
         )
 
 add_executable(client ${clientSourceFiles})
