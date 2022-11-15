@@ -31,8 +31,8 @@ file(GLOB serverSourceFiles
         "server/threads/*.cpp"
         "server/packets/*.hpp"
         "server/packets/*.cpp"
-        "pong/*.hpp"
-        "pong/*.cpp"
+        "server/pongServer/*.hpp"
+        "server/pongServer/*.cpp"
         )
 
 add_executable(server ${serverSourceFiles} )
@@ -42,8 +42,8 @@ file(GLOB clientSourceFiles
         "client/*.cpp"
         "client/packets/*.hpp"
         "client/packets/*.cpp"
-        "pong/*.hpp"
-        "pong/*.cpp"
+        "client/pongClient/*.hpp"
+        "client/pongClient/*.cpp"
         )
 
 add_executable(client ${clientSourceFiles})
