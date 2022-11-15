@@ -6,8 +6,9 @@
 #include <ws2tcpip.h>
 #include <cstdio>
 #include "Networking.hpp"
+#include "packets/ClientPacketBuilder.hpp"
 
-void connect(){
+void connect() {
     // https://stackoverflow.com/questions/4991967/how-does-wsastartup-function-initiates-use-of-the-winsock-dll
     // In the WSADATA that it populates, it will tell you what version it is offering you based on your request.
     // It also fills in some other information which you are not required to look at if you aren't interested.
@@ -79,7 +80,10 @@ void connect(){
 
     // Send an initial buffer
     // TODO Change sendbuf to game logic packet
-    const char *sendbuf = "this is a test";
+    string packet = ClientPacketBuilder::buildPacket(1, 2, 3);
+    cout << "PACKET:"<< endl;
+    cout << packet << endl;
+    const char *sendbuf = packet.c_str();
     iResult = send(ConnectSocket, sendbuf, (int) strlen(sendbuf), 0);
     if (iResult == SOCKET_ERROR) {
         printf("send failed with error: %d\n", WSAGetLastError());
