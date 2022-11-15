@@ -5,7 +5,7 @@
 #include "ServerPacketBuilder.hpp"
 
 string ServerPacketBuilder::addPlayerBodyPart(const Player &player){
-//    string playerBody;
+    string playerBody;
 //    playerBody.append(BOUNDARY).append(CRLF);
 //    // Header
 //    playerBody.append("Content-Type: Player").append(CRLF).append(CRLF);
@@ -13,11 +13,11 @@ string ServerPacketBuilder::addPlayerBodyPart(const Player &player){
 //    playerBody.append("id:").append(to_string(player.getID())).append(CRLF);
 //    playerBody.append("xCoord:").append(to_string(player.getX())).append(CRLF);
 //    playerBody.append("yCoord:").append(to_string(player.getY())).append(CRLF).append(CRLF);
-//    return playerBody;
+    return playerBody;
 }
 
 //TODO change to gameState object for variable types
-string ServerPacketBuilder::constructPacket(vector<Player *> &playerList) {
+string ServerPacketBuilder::buildPacket(vector<Player *> &playerList) {
     string packet;
     packet.append(BOUNDARY).append(CRLF);
     // append contentType

@@ -7,10 +7,12 @@
 
 #include <string>
 #include <vector>
+
 #define CRLF "\r\n"
 #define BOUNDARY "BOUNDARY!!!!!!!"
 
 using namespace std;
+
 class Player;
 
 class ServerPacketBuilder {
@@ -22,7 +24,7 @@ public:
      * @param player
      * @return Body component of player
      */
-    string addPlayerBodyPart(const Player &player);
+    static string addPlayerBodyPart(const Player &player);
 
     /**
      * Builds packet using given params - Initial Testing for Packet Structure
@@ -31,21 +33,21 @@ public:
      * @param yCoord y coordinate of player
      * @return Returns the completed Packet to send off.
      */
-    string addPlayerBodyPart(const int id, const int xCoord, const int yCoord);
+    static string addPlayerBodyPart(const int id, const int xCoord, const int yCoord);
 
     /**
      * Constructs Packet
      * @param playerList
      * @return Returns the Packet to send of to Client
      */
-    string constructPacket(vector<Player*> &playerList);
+    static string buildPacket(vector<Player *> &playerList);
 
     //TODO
     /**
      * Adds Ball Body Part to Packet Payload
      * @return Returns string to append onto Packet Payloac
      */
-//    string addBallBodyPart();
+//   static string addBallBodyPart();
 };
 
 

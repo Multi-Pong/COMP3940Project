@@ -27,14 +27,14 @@ public:
      * @param yCoord y coordinate of player
      * @return Returns the completed Packet to send off.
      */
-    string buildPacket(const int id, const int xCoord, const int yCoord);
+    static string buildPacket(const int id, const int xCoord, const int yCoord);
 
     /**
      *
      * @param player Player to send, in this case, the client itself.
      * @return Returns the completed Packet to send off.
      */
-    string buildPacket(const Player &player);
+    static string buildPacket(const Player &player);
 
 
 };
