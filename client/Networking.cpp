@@ -7,6 +7,7 @@
 #include <cstdio>
 #include "Networking.hpp"
 #include "packets/ClientPacketBuilder.hpp"
+#include "packets/ClientPacketReader.hpp"
 
 void connect() {
     // https://stackoverflow.com/questions/4991967/how-does-wsastartup-function-initiates-use-of-the-winsock-dll
@@ -108,8 +109,16 @@ void connect() {
     do {
 
         iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
-        if (iResult > 0)
+        if (iResult > 0){
             printf("Bytes received: %d\n", iResult);
+            ClientPacketReader reader;
+            string pack(recvbuf, recvbuf + iResult - 1);
+            reader.readPacket(pack);
+            vector<Player*> playerList = reader.getPlayers();
+            for (Player* p: playerList) {
+                cout << "Player " << p->getID() << ", X:" << p->getX() << ", Y:" << p->getY() << endl;
+            }
+        }
         else if (iResult == 0)
             printf("Connection closed\n");
         else

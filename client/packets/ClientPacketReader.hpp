@@ -8,14 +8,19 @@
 #include "../../game/Player.hpp"
 #include <vector>
 #include <string>
+
+#define BOUNDARY "BOUNDARY!!!!!!!"
+#define CRLF "\r\n"
+
+
 using namespace std;
 
 class ClientPacketReader {
 private:
-    vector<Player> players;
+    vector<Player*> players;
 public:
     void readPacket(string packet);
-    vector<Player> getPlayers();
+    vector<Player*> getPlayers();
 };
 
 

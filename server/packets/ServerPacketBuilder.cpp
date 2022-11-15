@@ -33,7 +33,7 @@ string ServerPacketBuilder::addPlayerBodyPart(const int id, const int xCoord, co
     string playerBody;
     playerBody.append(BOUNDARY).append(CRLF);
     // Header
-    playerBody.append("Content-Type: Player").append(CRLF).append(CRLF);
+    playerBody.append("Content-Type:Player").append(CRLF).append(CRLF);
     // Payload (Nothing on this line)
     playerBody.append("id:").append(to_string(id)).append(CRLF);
     playerBody.append("xCoord:").append(to_string(xCoord)).append(CRLF);
