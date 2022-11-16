@@ -20,20 +20,7 @@ SocketThread::SocketThread(Socket *sock) : Thread(this) {
 }
 
 void SocketThread::run() {
-    // TODO route thread
-//    UploadServlet endPoint;
-//
-//    switch (request.getMethod())
-//    {
-//        case 0:
-//            endPoint.doGet(request, response);
-//            break;
-//        case 1:
-//            endPoint.doPost(request, response);
-//            break;
-//        default:;
-//    }
-//
+
     // Create Container to hold message
     vector<char> result;
     // Dump every char from Payload into vector. Vector now holds entire Payload.
@@ -50,15 +37,7 @@ void SocketThread::run() {
     read.readPacket(str);
     Player p = read.getPlayer();
     cout << "RECIEVED PLAYER" << endl;
-    cout << "Player id: " << p.getID() << endl;
-    cout << "Player x: " << p.getX() << endl;
-    cout << "Player y: " << p.getY() << endl;
-
-//    for (char x: result) {
-//        buildMessage.append(reinterpret_cast<const char *>(x));
-
-//    }
-
+    cout << p << endl;
 
     //TODO Replace with buiildPacket
     string packet;
@@ -69,9 +48,8 @@ void SocketThread::run() {
 
     // Delimit End Of Packet
     packet.append(BOUNDARY).append(CRLF).append(CRLF);
-    string res = packet;
-    char responseCharArray[res.length()];
-    strncpy(responseCharArray, res.c_str(), res.length());
+    char responseCharArray[packet.length()];
+    strncpy(responseCharArray, packet.c_str(), packet.length());
     sock->sendResponse(responseCharArray);
 }
 
