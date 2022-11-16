@@ -6,9 +6,11 @@
 #include <ws2tcpip.h>
 #include <cstdio>
 #include "Networking.hpp"
+#include "packets/ClientPacketBuilder.hpp"
+#include "packets/ClientPacketReader.hpp"
 SOCKET ConnectSocket = INVALID_SOCKET;
 
-void Connect(){
+void connect() {
     // https://stackoverflow.com/questions/4991967/how-does-wsastartup-function-initiates-use-of-the-winsock-dll
     // In the WSADATA that it populates, it will tell you what version it is offering you based on your request.
     // It also fills in some other information which you are not required to look at if you aren't interested.
@@ -77,50 +79,56 @@ void Connect(){
 //        return 1;
     }
 
-//    // Send an initial buffer
-//    // TODO Change sendbuf to game logic packet
-//    const char *sendbuf = "this is a test";
-//    iResult = send(ConnectSocket, sendbuf, (int) strlen(sendbuf), 0);
-//    if (iResult == SOCKET_ERROR) {
-//        printf("send failed with error: %d\n", WSAGetLastError());
-//        closesocket(ConnectSocket);
-//        WSACleanup();
-////        return 1;
-//    }
-//
-//    printf("Bytes Sent: %ld\n", iResult);
-//
-//    // shutdown the connection since no more data will be sent
-//    // TODO Keep open until user closes connection
-//    iResult = shutdown(ConnectSocket, SD_SEND);
-//    if (iResult == SOCKET_ERROR) {
-//        printf("shutdown failed with error: %d\n", WSAGetLastError());
-//        closesocket(ConnectSocket);
-//        WSACleanup();
-////        return 1;
-//    }
-//
-//    // Receive until the peer closes the connection
-//    do {
-//
-//        iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
-//        if (iResult > 0)
-//            printf("Bytes received: %d\n", iResult);
-//        else if (iResult == 0)
-//            printf("Connection closed\n");
-//        else
-//            printf("recv failed with error: %d\n", WSAGetLastError());
-//
-//    } while (iResult > 0);
+    // Send an initial buffer
+    // TODO Change sendbuf to game logic packet
+    string packet = ClientPacketBuilder::buildPacket(1, 2, 3);
+    cout << "PACKET:" << endl;
+    cout << packet << endl;
+    const char *sendbuf = packet.c_str();
+    iResult = send(ConnectSocket, sendbuf, (int) strlen(sendbuf), 0);
+    if (iResult == SOCKET_ERROR) {
+        printf("send failed with error: %d\n", WSAGetLastError());
+        closesocket(ConnectSocket);
+        WSACleanup();
+//        return 1;
+    }
 
-}
+    printf("Bytes Sent: %ld\n", iResult);
 
-bool Connected(){
-    //This might be wrong
-    return (ConnectSocket != INVALID_SOCKET);
+    // shutdown the connection since no more data will be sent
+    // TODO Keep open until user closes connection
+    iResult = shutdown(ConnectSocket, SD_SEND);
+    if (iResult == SOCKET_ERROR) {
+        printf("shutdown failed with error: %d\n", WSAGetLastError());
+        closesocket(ConnectSocket);
+        WSACleanup();
+//        return 1;
+    }
+
+    // Receive until the peer closes the connection
+    do {
+        iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
+        if (iResult > 0) {
+            printf("Bytes received: %d\n", iResult);
+            ClientPacketReader reader;
+            string pack(recvbuf, recvbuf + iResult - 1);
+            reader.readPacket(pack);
+            vector<Player *> playerList = reader.getPlayers();
+            for (Player *p: playerList) {
+                cout << "Player " << p->getID() << ", X:" << p->getX() << ", Y:" << p->getY() << endl;
+            }
+        } else if (iResult == 0)
+            printf("Connection closed\n");
+        else
+            printf("recv failed with error: %d\n", WSAGetLastError());
+    } while (iResult > 0);
 }
 
 void Disconnect(){
     closesocket(ConnectSocket);
     WSACleanup();
 }
+        bool Connected(){
+            //This might be wrong
+            return (ConnectSocket != INVALID_SOCKET);
+        }

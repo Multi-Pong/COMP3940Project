@@ -2,14 +2,13 @@
 // Created by Admin on 2022-11-14.
 //
 
-#ifndef COMP3940PROJECT_PACKETREADER_HPP
-#define COMP3940PROJECT_PACKETREADER_HPP
+#ifndef COMP3940PROJECT_SERVERPACKETREADER_HPP
+#define COMP3940PROJECT_SERVERPACKETREADER_HPP
 #include <string>
 #include "../../game/Player.hpp"
-
 using namespace std;
 
-class PacketReader {
+class ServerPacketReader {
 private:
     Player p;
 public:
@@ -18,4 +17,4 @@ public:
 };
 
 
-#endif //COMP3940PROJECT_PACKETREADER_HPP
+#endif //COMP3940PROJECT_SERVERPACKETREADER_HPP

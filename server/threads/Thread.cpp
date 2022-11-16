@@ -1,5 +1,5 @@
 #include "Thread.hpp"
-//#include "SimpleThread.h"
+#include "SocketThread.hpp"
 #include <pthread.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,8 +8,8 @@ void* startMethodInThread(void *arg)
 {
 	if (arg == NULL)
 		return 0;
-//	SimpleThread *thread = (SimpleThread*)arg;
-//	thread->run();
+	auto *thread = (SocketThread*)arg;
+	thread->run();
 	return NULL;
 }
 
