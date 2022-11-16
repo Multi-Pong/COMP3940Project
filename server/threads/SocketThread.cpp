@@ -27,30 +27,47 @@ void SocketThread::run() {
 //    sock->dump(result);
 //    string buildMessage = "";
     string str;
-    char *buf;
-    while (*(buf = sock->getNext()) > 0) {
-        str += buf[0];
+    string pattern;
+    while (true) {
+        char *buf = new char[1];
+        str = "";
+        pattern = "";
+        while (buf[0] != '\4' && *(buf = sock->getNext()) > 0 ) {
+            cout << *buf;
+            if (buf[0] != '\r' && buf[0] != '\n') {
+                str += pattern;
+                pattern = "";
+                str += buf[0];
+            } else {
+                pattern += buf[0];
+            }
+//            cout << hex << (int) *buf << endl;
+        }
+        cout << "END OF WHILE: " <<*buf << endl;
+        str += pattern;
+        delete buf;
+        ServerPacketReader read;
+        cout << "READING PACKET" << endl;
+        cout << str << endl;
+        read.readPacket(str);
+        Player p = read.getPlayer();
+        cout << "RECIEVED PLAYER" << endl;
+        cout << p << endl;
+
+        //TODO Replace with buiildPacket
+        string packet;
+        packet.append(BOUNDARY).append(CRLF);
+        // append contentType
+
+        packet.append(ServerPacketBuilder::addPlayerBodyPart(1, 2, 3));
+
+        // Delimit End Of Packet
+        packet.append(BOUNDARY).append(CRLF).append(CRLF);
+        packet.append("\4");
+//        char responseCharArray[packet.length()];
+//        strncpy(responseCharArray, packet.c_str(), packet.length());
+        sock->sendResponse(packet);
     }
-    ServerPacketReader read;
-    cout << "READING PACKET" << endl;
-    cout << str << endl;
-    read.readPacket(str);
-    Player p = read.getPlayer();
-    cout << "RECIEVED PLAYER" << endl;
-    cout << p << endl;
-
-    //TODO Replace with buiildPacket
-    string packet;
-    packet.append(BOUNDARY).append(CRLF);
-    // append contentType
-
-    packet.append(ServerPacketBuilder::addPlayerBodyPart(1, 2, 3));
-
-    // Delimit End Of Packet
-    packet.append(BOUNDARY).append(CRLF).append(CRLF);
-    char responseCharArray[packet.length()];
-    strncpy(responseCharArray, packet.c_str(), packet.length());
-    sock->sendResponse(responseCharArray);
 }
 
 SocketThread::~SocketThread() {

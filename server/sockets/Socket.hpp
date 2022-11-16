@@ -7,6 +7,7 @@
 
 #include <winsock2.h>
 #include <vector>
+#include <string>
 
 using namespace std;
 class Socket {
@@ -17,7 +18,7 @@ public:
      * Returns next char
      */
     char *getNext();
-    void sendResponse(char *res);
+    void sendResponse(string res);
     void close() { closesocket(sock);}
     int shutDown(){return shutdown(sock, SD_SEND);}
     ~Socket();

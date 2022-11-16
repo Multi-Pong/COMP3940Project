@@ -30,9 +30,11 @@ void ClientPacketReader::readPacket(string packet) {
             p->setY(stoi(second));
         }
         if(p != nullptr && current == "BOUNDARY!!!!!!!\r"){
-            players.push_back(p);
+            //players.push_back(p);
+            cout << *p << endl;
         }
     }
+    cout << "END READER" << endl;
 }
 
 vector<Player *> ClientPacketReader::getPlayers() {

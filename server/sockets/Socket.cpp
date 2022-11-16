@@ -28,13 +28,13 @@ char *Socket::getNext() {
     return buf;
 }
 
-void Socket::sendResponse(char *res) {
+void Socket::sendResponse(string res) {
     int rval;
 
-    if ((rval = send(sock, res, strlen(res), 0)) < 0) {
+    if ((rval = send(sock, res.c_str(), strlen(res.c_str()), 0)) < 0) {
         perror("writing socket");
     } else {
-        printf("%s\n", res);
+        printf("%s\n", res.c_str());
     }
 
     return;
@@ -56,3 +56,4 @@ void Socket::dump(std::vector<char> &result) {
 
     delete buf;
 }
+

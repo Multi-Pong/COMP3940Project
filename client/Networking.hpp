@@ -30,16 +30,16 @@
 using namespace std;
 
 // TODO pass IP and port as params
-void Connect();
+void connect();
 
 // Process one frame of updates
-//void update();
+void update(double, float);
 
 // Disconnect from the server
-void Disconnect();
+void disconnect();
 
 // True if we are connected to the server and have a valid player id.
-bool Connected();
+bool isConnected();
 
 // Tell the network game play how far we wanted to move this frame
 //void updateLocalPlayer(Vector2* movementDelta, float deltaT);
