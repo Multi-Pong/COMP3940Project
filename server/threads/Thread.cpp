@@ -8,7 +8,7 @@ void* startMethodInThread(void *arg)
 {
 	if (arg == NULL)
 		return 0;
-	auto *thread = (SocketThread*)arg;
+	auto *thread = (Thread*)arg;
 	thread->run();
 	return NULL;
 }
