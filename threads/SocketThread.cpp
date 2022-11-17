@@ -6,10 +6,10 @@
 #include <unistd.h>
 #include <string>
 #include <iostream>
-#include "../packets/ServerPacketBuilder.hpp"
-#include "../packets/ServerPacketReader.hpp"
+#include "../server/packets/ServerPacketBuilder.hpp"
+#include "../server/packets/ServerPacketReader.hpp"
 
-#include "../../game/GameInstanceSingleton.hpp"
+#include "../game/GameInstanceSingleton.hpp"
 
 SocketThread::SocketThread(Socket *sock) : Thread(this) {
 //    request.setSocket(sock);
