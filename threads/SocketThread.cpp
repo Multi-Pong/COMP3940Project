@@ -28,12 +28,12 @@ void SocketThread::run() {
 //    string buildMessage = "";
     string str;
     string pattern;
-    while (true) {
-        char *buf = new char[1];
+    char *buf = new char[1];
+    do {
+        memset(buf, 0, 1);
         str = "";
         pattern = "";
-        while (buf[0] != '\4' && *(buf = sock->getNext()) > 0 ) {
-            cout << *buf;
+        while (buf[0] != '\4' && *(buf = sock->getNext()) > 0) {
             if (buf[0] != '\r' && buf[0] != '\n') {
                 str += pattern;
                 pattern = "";
@@ -43,16 +43,20 @@ void SocketThread::run() {
             }
 //            cout << hex << (int) *buf << endl;
         }
-        cout << "END OF WHILE: " <<*buf << endl;
+        cout << "END OF WHILE: " << *buf << endl;
         str += pattern;
-        delete buf;
-        ServerPacketReader read;
+//        ServerPacketReader read;
         cout << "READING PACKET" << endl;
         cout << str << endl;
-        read.readPacket(str);
-        Player p = read.getPlayer();
-        cout << "RECIEVED PLAYER" << endl;
-        cout << p << endl;
+        Player *p = ServerPacketReader::readPacket(str);
+//        Player p = read.getPlayer();
+        if (p == nullptr) {
+            cout << "NO PLAYER" << endl;
+        } else {
+
+            cout << "RECIEVED PLAYER" << endl;
+            cout << *p << endl;
+        }
 
         //TODO Replace with buiildPacket
         string packet;
@@ -67,9 +71,12 @@ void SocketThread::run() {
 //        char responseCharArray[packet.length()];
 //        strncpy(responseCharArray, packet.c_str(), packet.length());
         sock->sendResponse(packet);
-    }
+    } while (*buf > 0);
+    delete[] buf;
+    delete this;
 }
 
 SocketThread::~SocketThread() {
+    cout << "DESTRUCT SOCKET THREAD"<< endl;
     delete sock;
 }
