@@ -18,5 +18,6 @@ string ClientPacketBuilder::buildPacket(const int id, const int xCoord, const in
     packet.append(CRLF);
     packet.append("yCoord:").append(to_string(yCoord));
     packet.append(CRLF).append(CRLF);
+    packet.append("\4");
     return packet;
 }

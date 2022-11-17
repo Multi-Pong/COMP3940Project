@@ -19,7 +19,7 @@ class ClientPacketReader {
 private:
     vector<Player*> players;
 public:
-    void readPacket(string packet);
+    static void readPacket(string packet);
     vector<Player*> getPlayers();
 };
 

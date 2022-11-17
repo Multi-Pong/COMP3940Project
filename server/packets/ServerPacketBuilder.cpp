@@ -26,6 +26,7 @@ string ServerPacketBuilder::buildPacket(vector<Player *> &playerList) {
     }
     // Delimit End Of Packet
     packet.append(BOUNDARY).append(CRLF).append(CRLF);
+
     return packet;
 }
 
@@ -38,5 +39,6 @@ string ServerPacketBuilder::addPlayerBodyPart(const int id, const int xCoord, co
     playerBody.append("id:").append(to_string(id)).append(CRLF);
     playerBody.append("xCoord:").append(to_string(xCoord)).append(CRLF);
     playerBody.append("yCoord:").append(to_string(yCoord)).append(CRLF).append(CRLF);
+
     return playerBody;
 }

@@ -9,6 +9,7 @@
 #include <vector>
 
 #define CRLF "\r\n"
+#define DELIM "\r\n\r\n"
 #define BOUNDARY "BOUNDARY!!!!!!!"
 
 using namespace std;

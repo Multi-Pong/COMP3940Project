@@ -19,23 +19,37 @@ if (NOT raylib_FOUND) # If there's none, fetch and build raylib
         FetchContent_Populate(raylib)
         set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE) # don't build the supplied examples
         add_subdirectory(${raylib_SOURCE_DIR} ${raylib_BINARY_DIR})
-    endif()
-endif()
+    endif ()
+endif ()
+
+file(GLOB serverNetworkingFiles
+        "sockets/*.hpp"
+        "sockets/*.cpp"
+        "threads/Thread.hpp"
+        "threads/Thread.cpp"
+        "threads/SocketThread.cpp"
+        "threads/SocketThread.hpp"
+        )
 
 file(GLOB serverSourceFiles
         "server/*.hpp"
         "server/*.cpp"
-        "server/sockets/*.hpp"
-        "server/sockets/*.cpp"
-        "server/threads/*.hpp"
-        "server/threads/*.cpp"
         "server/packets/*.hpp"
         "server/packets/*.cpp"
         "game/*.hpp"
         "game/*.cpp"
         )
 
-add_executable(server ${serverSourceFiles} )
+add_executable(server ${serverNetworkingFiles} ${serverSourceFiles} )
+
+file(GLOB clientNetworkingFiles
+        "sockets/Socket.hpp"
+        "sockets/Socket.cpp"
+        "threads/Thread.hpp"
+        "threads/Thread.cpp"
+        "threads/ClientReaderThread.cpp"
+        "threads/ClientReaderThread.hpp"
+        )
 
 file(GLOB clientSourceFiles
         "client/*.hpp"
@@ -46,7 +60,7 @@ file(GLOB clientSourceFiles
         "game/*.cpp"
         )
 
-add_executable(client ${clientSourceFiles})
+add_executable(client ${clientNetworkingFiles} ${clientSourceFiles} )
 target_link_libraries(client raylib)
 
 
