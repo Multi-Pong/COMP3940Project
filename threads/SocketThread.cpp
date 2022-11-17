@@ -46,14 +46,13 @@ void SocketThread::run() {
         cout << "END OF WHILE: " << *buf << endl;
         str += pattern;
 //        ServerPacketReader read;
-        cout << "READING PACKET" << endl;
-        cout << str << endl;
+//        cout << "READING PACKET" << endl;
+//        cout << str << endl;
         Player *p = ServerPacketReader::readPacket(str);
 //        Player p = read.getPlayer();
         if (p == nullptr) {
             cout << "NO PLAYER" << endl;
         } else {
-
             cout << "RECIEVED PLAYER" << endl;
             cout << *p << endl;
         }

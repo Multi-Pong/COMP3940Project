@@ -113,9 +113,8 @@ void connect() {
 void update(double now, float deltaT) {
     // Send an initial buffer
     //TODO ADD if MOVED check
-    cout << "SENDING" << endl;
-    if (now - lastNow > inputUpdateInterval) {
-
+    if (now - lastNow > inputUpdateInterval) { // send based on inputUpdateInterval
+        cout << "SENDING" << endl;
         // TODO Move packet send to game update
         string packet = ClientPacketBuilder::buildPacket(n, n, n);
         n += 1;
@@ -165,8 +164,8 @@ void update(double now, float deltaT) {
 bool isConnected() {
     //This might be wrong
     int error;
-    socklen_t len = sizeof (error);
-    int retval = getsockopt(ConnectSocket, SOL_SOCKET, SO_ERROR, (char*)&error, &len);
+    socklen_t len = sizeof(error);
+    int retval = getsockopt(ConnectSocket, SOL_SOCKET, SO_ERROR, (char *) &error, &len);
     if (retval != SOCKET_ERROR) {
         /* there was a problem getting the error code */
 //        fprintf(stderr, "error getting socket error code: %s\n", strerror(retval));

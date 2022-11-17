@@ -20,7 +20,7 @@ public:
     char *getNext();
     void sendResponse(string res);
     void close() { closesocket(sock);}
-    int shutDown(){return shutdown(sock, SD_BOTH);}
+    int shutDown(){return shutdown(sock, SD_SEND);}
     ~Socket();
     void dump(vector<char> &result);
 

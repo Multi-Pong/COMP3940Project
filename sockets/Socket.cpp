@@ -21,7 +21,7 @@ char *Socket::getNext() {
     char *buf = new char[1];
 
     if ((rval = recv(sock, buf, 1, 0)) < 0) {
-//        perror("reading socket");
+        perror("reading socket");
         buf[0] = -1;
         return buf;
     }
@@ -31,6 +31,7 @@ char *Socket::getNext() {
 void Socket::sendResponse(string res) {
     int rval;
 
+    printf("SENDING: \n%s\n", res.c_str());
     if ((rval = send(sock, res.c_str(), strlen(res.c_str()), 0)) < 0) {
         perror("writing socket");
     } else {
