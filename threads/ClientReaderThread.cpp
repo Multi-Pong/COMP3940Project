@@ -18,23 +18,18 @@ void ClientReaderThread::run() {
     string str = "";
 //    string pattern = "";
     int rval;
-    while (buf[0] != '\4', (*(buf = sock->getNext()) < 0)){
+    while (buf[0] != '\4' && (*(buf = sock->getNext()) > 0)){
         cout << *buf;
         if (buf[0] != '\4') {
-//            str += pattern;
-//            pattern = "";
             str += buf[0];
         }
-//        } else {
-//            pattern += buf[0];
-//        }
-//            cout << hex << (int) *buf << endl;
     }
-//    str += pattern;
-    delete buf;
-//    ClientPacketReader::readPacket(str);
+    delete[] buf;
+    delete this;
+    ClientPacketReader::readPacket(str);
 }
 
 ClientReaderThread::~ClientReaderThread() {
-
+    cout << "DESTRUCT READER THREAD"<< endl;
+    delete sock;
 }

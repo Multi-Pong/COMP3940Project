@@ -39,7 +39,7 @@ void connect() {
     iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
     if (iResult != 0) {
         printf("WSAStartup failed with error: %d\n", iResult);
-//        return 1;
+        return;
     }
 
     ZeroMemory(&hints, sizeof(hints)); // Set bits to 0
@@ -52,7 +52,7 @@ void connect() {
     if (iResult != 0) {
         printf("getaddrinfo failed with error: %d\n", iResult);
         WSACleanup();
-//        return 1;
+        return;
     }
 
     // Attempt to connect to an address until one succeeds
@@ -64,7 +64,7 @@ void connect() {
         if (ConnectSocket == INVALID_SOCKET) {
             printf("socket failed with error: %ld\n", WSAGetLastError());
             WSACleanup();
-//            return 1;
+            return;
         }
 
         // Connect to server.
@@ -83,12 +83,13 @@ void connect() {
     if (ConnectSocket == INVALID_SOCKET) {
         printf("Unable to connect to server!\n");
         WSACleanup();
-//        return 1;
+        return;
     }
 
     sock = new Socket(ConnectSocket);
     // Receive until the peer closes the connection
     // TODO put reader into thread or something
+    cout << "Create thread" << endl;
     ClientReaderThread *thread = new ClientReaderThread(sock);
     thread->start();
 //    do {
@@ -163,7 +164,21 @@ void update(double now, float deltaT) {
 
 bool isConnected() {
     //This might be wrong
-    return (ConnectSocket != INVALID_SOCKET);
+    int error;
+    socklen_t len = sizeof (error);
+    int retval = getsockopt(ConnectSocket, SOL_SOCKET, SO_ERROR, (char*)&error, &len);
+    if (retval != SOCKET_ERROR) {
+        /* there was a problem getting the error code */
+//        fprintf(stderr, "error getting socket error code: %s\n", strerror(retval));
+        return true;
+    }
+
+    if (error != 0) {
+        /* socket has a non zero error status */
+        fprintf(stderr, "socket error: %s\n", strerror(error));
+        return false;
+    }
+    return false;
 }
 
 void disconnect() {

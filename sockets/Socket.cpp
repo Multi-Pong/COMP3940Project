@@ -21,7 +21,7 @@ char *Socket::getNext() {
     char *buf = new char[1];
 
     if ((rval = recv(sock, buf, 1, 0)) < 0) {
-        perror("reading socket");
+//        perror("reading socket");
         buf[0] = -1;
         return buf;
     }

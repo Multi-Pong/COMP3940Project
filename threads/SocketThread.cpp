@@ -73,7 +73,7 @@ void SocketThread::run() {
         sock->sendResponse(packet);
     } while (*buf > 0);
     delete[] buf;
-    delete this;
+    delete this; //Kill thread
 }
 
 SocketThread::~SocketThread() {
