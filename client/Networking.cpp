@@ -8,9 +8,11 @@
 #include "Networking.hpp"
 #include "packets/ClientPacketBuilder.hpp"
 #include "packets/ClientPacketReader.hpp"
+#include "../threads/ClientReaderThread.hpp"
 
+Socket *sock = nullptr;
 SOCKET ConnectSocket = INVALID_SOCKET;
-double inputUpdateInterval = 1.0f/20.0f;
+double inputUpdateInterval = 1.0f / 20.0f;
 double lastNow = 0;
 int n = 1;
 
@@ -84,8 +86,11 @@ void connect() {
 //        return 1;
     }
 
+    sock = new Socket(ConnectSocket);
     // Receive until the peer closes the connection
     // TODO put reader into thread or something
+    ClientReaderThread *thread = new ClientReaderThread(sock);
+    thread->start();
 //    do {
 //        iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
 //        if (iResult > 0) {
@@ -107,7 +112,7 @@ void connect() {
 void update(double now, float deltaT) {
     // Send an initial buffer
     //TODO ADD if MOVED check
-    cout << "SENDING"<< endl;
+    cout << "SENDING" << endl;
     if (now - lastNow > inputUpdateInterval) {
 
         // TODO Move packet send to game update
@@ -115,45 +120,45 @@ void update(double now, float deltaT) {
         n += 1;
         cout << "PACKET:" << endl;
         cout << packet << endl;
+        sock->sendResponse(packet);
         const char *sendbuf = packet.c_str();
-        int iResult = send(ConnectSocket, sendbuf, (int) strlen(sendbuf), 0);
-        if (iResult == SOCKET_ERROR) {
-            printf("send failed with error: %d\n", WSAGetLastError());
-            closesocket(ConnectSocket);
-            WSACleanup();
-//        return 1;
-        }
-        printf("Bytes Sent: %ld\n", iResult);
+//        int iResult = send(ConnectSocket, sendbuf, (int) strlen(sendbuf), 0);
+//        if (iResult == SOCKET_ERROR) {
+//            printf("send failed with error: %d\n", WSAGetLastError());
+//            closesocket(ConnectSocket);
+//            WSACleanup();
+////        return 1;
+//        }
+//        printf("Bytes Sent: %ld\n", iResult);
         lastNow = now;
         // shutdown the connection since no more data will be sent
     }
-    //TODO ADD PACKET READ
 
-    cout << "READING"<< endl;
-    //
-    char *buf = new char[1];
-    string str = "";
-//    string pattern = "";
-    int rval;
-    while (buf[0] != '\4'){
-        if ((rval = recv(ConnectSocket, buf, 1, 0)) < 0) {
-            perror("reading socket");
-            buf[0] = -1;
-        }
-        cout << *buf;
-        if (buf[0] != '\4') {
-//            str += pattern;
-//            pattern = "";
-            str += buf[0];
-        }
-//        } else {
-//            pattern += buf[0];
+//    cout << "READING"<< endl;
+//    //
+//    char *buf = new char[1];
+//    string str = "";
+////    string pattern = "";
+//    int rval;
+//    while (buf[0] != '\4'){
+//        if ((rval = recv(ConnectSocket, buf, 1, 0)) < 0) {
+//            perror("reading socket");
+//            buf[0] = -1;
 //        }
-//            cout << hex << (int) *buf << endl;
-    }
-//    str += pattern;
-    delete buf;
-    ClientPacketReader::readPacket(str);
+//        cout << *buf;
+//        if (buf[0] != '\4') {
+////            str += pattern;
+////            pattern = "";
+//            str += buf[0];
+//        }
+////        } else {
+////            pattern += buf[0];
+////        }
+////            cout << hex << (int) *buf << endl;
+//    }
+////    str += pattern;
+//    delete buf;
+//    ClientPacketReader::readPacket(str);
 }
 
 bool isConnected() {
@@ -162,13 +167,16 @@ bool isConnected() {
 }
 
 void disconnect() {
-    int iResult = shutdown(ConnectSocket, SD_SEND);
-    if (iResult == SOCKET_ERROR) {
-        printf("shutdown failed with error: %d\n", WSAGetLastError());
-        closesocket(ConnectSocket);
-        WSACleanup();
-//        return 1;
-    }
-    closesocket(ConnectSocket);
+//    int iResult = shutdown(ConnectSocket, SD_SEND);
+//    if (iResult == SOCKET_ERROR) {
+//        printf("shutdown failed with error: %d\n", WSAGetLastError());
+//        closesocket(ConnectSocket);
+//        WSACleanup();
+////        return 1;
+//    }
+//    closesocket(ConnectSocket);
+    sock->shutDown();
+    sock->close();
     WSACleanup();
+    delete sock;
 }

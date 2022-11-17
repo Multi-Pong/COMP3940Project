@@ -9,8 +9,8 @@
 #include <cstdio>
 #include <iostream>
 
-#include "sockets/ServerSocket.hpp"
-#include "threads/SocketThread.hpp"
+#include "../sockets/ServerSocket.hpp"
+#include "../threads/SocketThread.hpp"
 
 // Need to link with Ws2_32.lib
 #pragma comment (lib, "Ws2_32.lib")
