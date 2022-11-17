@@ -163,25 +163,29 @@ void update(double now, float deltaT) {
 
 bool isConnected() {
     //This might be wrong
-    int error;
-    socklen_t len = sizeof(error);
-    int retval = getsockopt(ConnectSocket, SOL_SOCKET, SO_ERROR, (char *) &error, &len);
-    if (retval != SOCKET_ERROR) {
-        /* there was a problem getting the error code */
-//        fprintf(stderr, "error getting socket error code: %s\n", strerror(retval));
-        return true;
-    }
-
-    if (error != 0) {
-        /* socket has a non zero error status */
-        fprintf(stderr, "socket error: %s\n", strerror(error));
-        return false;
-    }
-    return false;
+//    int error;
+//    socklen_t len = sizeof(error);
+//    int retval = getsockopt(ConnectSocket, SOL_SOCKET, SO_ERROR, (char *) &error, &len);
+//    if (retval != SOCKET_ERROR) {
+//        /* there was a problem getting the error code */
+////        fprintf(stderr, "error getting socket error code: %s\n", strerror(retval));
+//        return true;
+//    }
+//
+//    if (error != 0) {
+//        /* socket has a non zero error status */
+//        fprintf(stderr, "socket error: %s\n", strerror(error));
+//        return false;
+//    }
+//    return false;
+//    FD_SET m_readFds;
+//    FD_ZERO(&m_readFds);
+//    return (select(sock, &m_readFds, NULL, NULL, NULL) > 0);
+    return (sock == nullptr) || (sock->isConnected());
 }
 
 void disconnect() {
-//    int iResult = shutdown(ConnectSocket, SD_SEND);
+//    int iResult = sock->shutDown();
 //    if (iResult == SOCKET_ERROR) {
 //        printf("shutdown failed with error: %d\n", WSAGetLastError());
 //        closesocket(ConnectSocket);

@@ -22,6 +22,7 @@ void ClientReaderThread::run() {
         str = "";
 //    string pattern = "";
         int rval;
+
         while (buf[0] != '\4' && (*(buf = sock->getNext()) > 0)) {
 //            cout << (int) *buf;
             if (buf[0] != '\4') {
@@ -38,4 +39,6 @@ void ClientReaderThread::run() {
 ClientReaderThread::~ClientReaderThread() {
     cout << "DESTRUCT READER THREAD" << endl;
     delete sock;
+    SOCKET s = INVALID_SOCKET;
+    sock = new Socket(s);
 }
