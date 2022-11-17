@@ -6,6 +6,8 @@
 #define COMP3940PROJECT_PLAYER_HPP
 
 #include <ostream>
+#include "GameInstanceSingleton.hpp"
+#include "../client/packets/ClientPacketBuilder.hpp"
 
 using namespace std;
 
