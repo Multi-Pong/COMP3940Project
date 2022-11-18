@@ -16,11 +16,8 @@
 using namespace std;
 
 class ClientPacketReader {
-private:
-    vector<Player*> players;
 public:
     static void readPacket(string packet);
-    vector<Player*> getPlayers();
 };
 
 

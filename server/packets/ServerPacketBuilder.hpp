@@ -43,6 +43,12 @@ public:
      */
     static string buildPacket(vector<Player *> &playerList);
 
+    /**
+     * Constructs Packet
+     * @return Returns the Packet to send of to Client
+     */
+    static string buildPacket();
+
     //TODO
     /**
      * Adds Ball Body Part to Packet Payload

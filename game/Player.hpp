@@ -6,6 +6,7 @@
 #define COMP3940PROJECT_PLAYER_HPP
 
 #include <ostream>
+#include "../client/packets/ClientPacketBuilder.hpp"
 
 using namespace std;
 
@@ -26,6 +27,10 @@ public:
     void setX(int x) { posX = x; };
 
     void setY(int y) { posY = y; };
+
+    void changeX(int x){posX += x;};
+
+    void changeY(int y){posY += y;};
 
     void setID(int ID) { id = ID; };
 
