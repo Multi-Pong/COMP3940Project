@@ -52,3 +52,7 @@ ClientReaderThread::~ClientReaderThread() {
     }
 
 }
+
+void ClientReaderThread::send(string) {
+    //DO NOTHING
+}

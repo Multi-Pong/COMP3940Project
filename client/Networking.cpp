@@ -32,12 +32,6 @@ void connect() {
     int iResult;
     int recvbuflen = DEFAULT_BUFLEN;
 
-    // Validate the parameters
-//    if (argc != 2) {
-//        printf("usage: %s server-name\n", argv[0]);
-//        return 1;
-//    }
-
     // Initialize Winsock
     iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
     if (iResult != 0) {
@@ -96,28 +90,12 @@ void connect() {
     delete thread;
     thread = new ClientReaderThread(&sock, threadRunning);
     thread->start();
-//    do {
-//        iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
-//        if (iResult > 0) {
-//            printf("Bytes received: %d\n", iResult);
-//            ClientPacketReader reader;
-//            string pack(recvbuf, recvbuf + iResult - 1);
-//            reader.readPacket(pack);
-//            vector<Player *> playerList = reader.getPlayers();
-//            for (Player *p: playerList) {
-//                cout << "Player " << p->getID() << ", X:" << p->getX() << ", Y:" << p->getY() << endl;
-//            }
-//        } else if (iResult == 0)
-//            printf("Connection closed\n");
-//        else
-//            printf("recv failed with error: %d\n", WSAGetLastError());
-//    } while (iResult > 0);
 }
 
 void update(double now, float deltaT) {
     // Send an initial buffer
     //TODO ADD if MOVED check
-    if (now - lastNow > inputUpdateInterval) { // send based on inputUpdateInterval
+    if (now - lastNow > inputUpdateInterval && (GameInstanceSingleton::getGameInstance().localHasMoved())) { // send based on inputUpdateInterval
         cout << "SENDING" << endl;
         // TODO Move packet send to game update
         string packet = ClientPacketBuilder::buildPacket(*GameInstanceSingleton::getGameInstance().getLocalPlayer());
@@ -125,66 +103,12 @@ void update(double now, float deltaT) {
         cout << "PACKET:" << endl;
         cout << packet << endl;
         sock->sendResponse(packet);
-        const char *sendbuf = packet.c_str();
-//        int iResult = send(ConnectSocket, sendbuf, (int) strlen(sendbuf), 0);
-//        if (iResult == SOCKET_ERROR) {
-//            printf("send failed with error: %d\n", WSAGetLastError());
-//            closesocket(ConnectSocket);
-//            WSACleanup();
-////        return 1;
-//        }
-//        printf("Bytes Sent: %ld\n", iResult);
         lastNow = now;
-        // shutdown the connection since no more data will be sent
     }
-
-//    cout << "READING"<< endl;
-//    //
-//    char *buf = new char[1];
-//    string str = "";
-////    string pattern = "";
-//    int rval;
-//    while (buf[0] != '\4'){
-//        if ((rval = recv(ConnectSocket, buf, 1, 0)) < 0) {
-//            perror("reading socket");
-//            buf[0] = -1;
-//        }
-//        cout << *buf;
-//        if (buf[0] != '\4') {
-////            str += pattern;
-////            pattern = "";
-//            str += buf[0];
-//        }
-////        } else {
-////            pattern += buf[0];
-////        }
-////            cout << hex << (int) *buf << endl;
-//    }
-////    str += pattern;
-//    delete buf;
-//    ClientPacketReader::readPacket(str);
 }
 
 bool isConnected() {
     //This might be wrong
-//    int error;
-//    socklen_t len = sizeof(error);
-//    int retval = getsockopt(ConnectSocket, SOL_SOCKET, SO_ERROR, (char *) &error, &len);
-//    if (retval != SOCKET_ERROR) {
-//        /* there was a problem getting the error code */
-////        fprintf(stderr, "error getting socket error code: %s\n", strerror(retval));
-//        return true;
-//    }
-//
-//    if (error != 0) {
-//        /* socket has a non zero error status */
-//        fprintf(stderr, "socket error: %s\n", strerror(error));
-//        return false;
-//    }
-//    return false;
-//    FD_SET m_readFds;
-//    FD_ZERO(&m_readFds);
-//    return (select(sock, &m_readFds, NULL, NULL, NULL) > 0);
     cout << sock << endl;
     if (sock != nullptr && sock->isConnected()) {
         return true;
@@ -192,23 +116,9 @@ bool isConnected() {
     delete sock;
     sock = nullptr;
     return false;
-
 }
 
 void disconnect() {
-//    int iResult = sock->shutDown();
-//    if (iResult == SOCKET_ERROR) {
-//        printf("shutdown failed with error: %d\n", WSAGetLastError());
-//        closesocket(ConnectSocket);
-//        WSACleanup();
-////        return 1;
-//    }
-//    closesocket(ConnectSocket);
-//    if (*threadRunning != 0) {
-//        delete thread;
-//        *threadRunning = 0;
-//    }
-//    delete sock;
     if (sock != NULL) {
         sock->shutDown();
         sock->close();

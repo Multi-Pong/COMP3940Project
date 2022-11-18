@@ -19,9 +19,13 @@ SocketThread::SocketThread(Socket *sock) : Thread(this) {
 void SocketThread::run() {
     string str;
     string pattern;
+    Player *p = nullptr;
+    int playerId;
     char *buf = new char[1];
     do {
         memset(buf, 0, 1);
+        delete p;
+        p = nullptr;
         str = "";
         pattern = "";
         while (buf[0] != '\4' && *(buf = sock->getNext()) > 0) {
@@ -35,27 +39,39 @@ void SocketThread::run() {
         }
         cout << "END OF WHILE: " << *buf << endl;
         str += pattern;
-        Player *p = ServerPacketReader::readPacket(str);
+        p = ServerPacketReader::readPacket(str);
         if (p == nullptr) {
             cout << "NO PLAYER" << endl;
         } else {
             cout << "RECIEVED PLAYER" << endl;
             cout << *p << endl;
-            if(GameInstanceSingleton::getGameInstance().getThreadList().find(p->getID()) == GameInstanceSingleton::getGameInstance().getThreadList().end()){
-                GameInstanceSingleton::getGameInstance().getThreadList().insert(make_pair(p->getID(), this));
+            playerId = p->getID();
+            if (GameInstanceSingleton::getGameInstance().getThreadList().count(playerId) == 0) {
+                pair<int, Thread *> pair = make_pair(playerId, this);
+                GameInstanceSingleton::getGameInstance().insertThread(pair);
             }
             GameInstanceSingleton::getGameInstance().updatePlayerList(p);
         }
 
-        //TODO Move to notifyPlayers()
+//        //TODO Move to notifyPlayers()
         string packet = ServerPacketBuilder::buildPacket();
-        sock->sendResponse(packet);
+        GameInstanceSingleton::getGameInstance().notifyPlayers(packet);
     } while (*buf > 0);
+    GameInstanceSingleton::getGameInstance().removePlayer(playerId);
+    GameInstanceSingleton::getGameInstance().removeThread(playerId);
+    if (p != nullptr) {
+        delete p;
+    }
     delete[] buf;
     delete this; //Kill thread
 }
 
+
 SocketThread::~SocketThread() {
-    cout << "DESTRUCT SOCKET THREAD"<< endl;
+    cout << "DESTRUCT SOCKET THREAD" << endl;
     delete sock;
+}
+
+void SocketThread::send(string packet) {
+    sock->sendResponse(packet);
 }

@@ -3,7 +3,7 @@
 //
 
 #include "GameInstanceSingleton.hpp"
-#include "../threads/SocketThread.hpp"
+#include "../server/packets/ServerPacketBuilder.hpp"
 
 
 GameInstanceSingleton::GameInstanceSingleton() {
@@ -27,4 +27,25 @@ void GameInstanceSingleton::updatePlayerList(Player *p) {
     } catch (exception &e) {
         printf("Error: %s\n", e.what());
     }
+}
+
+bool GameInstanceSingleton::localHasMoved() {
+    if (localPlayer == nullptr) {
+        return false;
+    }
+    try {
+        Player *p = &playerList.at(localPlayer->getID());
+        return !(p->getX() == localPlayer->getX() && p->getY() == localPlayer->getY());
+    } catch (out_of_range e) {
+        return false;
+    }
+}
+
+void GameInstanceSingleton::notifyPlayers(string packet) {
+//TODO Move to notifyPlayers()
+
+    for(pair<int, Thread*> pair : threadList){
+        pair.second->send(packet);
+    }
+
 }

@@ -5,12 +5,11 @@
 #ifndef COMP3940PROJECT_GAMEINSTANCESINGLETON_HPP
 #define COMP3940PROJECT_GAMEINSTANCESINGLETON_HPP
 
-#include "Player.hpp"
 #include <vector>
 #include <map>
 #include <iostream>
-
-class SocketThread;
+#include "Player.hpp"
+#include "../threads/Thread.hpp"
 
 using namespace std;
 
@@ -36,7 +35,7 @@ private:
 
     // Container of currently connected Players in the Server.
     map<int,Player> playerList;
-    map<int,SocketThread*> threadList;
+    map<int,Thread*> threadList;
 
     // TODO Implement Ball.
     // Ball ball;
@@ -73,19 +72,36 @@ public:
         this->localPlayer = p;
     }
 
+    void insertThread(pair<int, Thread*> &pair){
+        threadList.insert(pair);
+    }
+
     // Getters
     Player* getLocalPlayer(){ return this->localPlayer;}
 
 
     map<int,Player> getPlayerList(){return this->playerList;}
-    map<int,SocketThread*> getThreadList(){return this->threadList;}
+    map<int,Thread*> getThreadList(){return this->threadList;}
+
+    void removePlayer(int id){
+        if (playerList.count(id) > 0) playerList.erase(id);
+    }
+    void removeThread(int id){
+        if (threadList.count(id) > 0) threadList.erase(id);
+    }
 
     // TODO: For Server to update playerList, Calls notifyAll after Update
     void updatePlayerList(Player *p);
 
+    /**
+     * Check if local player position is different to matching player in playerList
+     * @return
+     */
+    bool localHasMoved();
+
 //
 //    // TODO: Update all Players in playerList of Server's state of the game.
-//    void notifyPlayers();
+    void notifyPlayers(string packet);
 
     ~GameInstanceSingleton(){
         if(localPlayer != nullptr){
