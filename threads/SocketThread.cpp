@@ -54,6 +54,7 @@ void SocketThread::run() {
             cout << "NO PLAYER" << endl;
         } else {
             cout << "RECIEVED PLAYER" << endl;
+            GameInstanceSingleton::getGameInstance().updatePlayerList(p);
             cout << *p << endl;
         }
 
