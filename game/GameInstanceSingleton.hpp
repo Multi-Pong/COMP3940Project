@@ -8,6 +8,7 @@
 #include "Player.hpp"
 #include <vector>
 #include <map>
+#include <iostream>
 
 using namespace std;
 
@@ -50,6 +51,23 @@ public:
 
     // Getter for the GameInstance
     static GameInstanceSingleton& getGameInstance();
+
+    void setPlayer(Player* p){
+        auto pos = playerList.find(p->getID());
+        if(pos != playerList.end()){
+            pos->second = *p;
+        } else {
+            playerList.insert(make_pair(p->getID(), *p));
+        }
+        if (p->getID() == localPlayer->getID()){
+            localPlayer = p;
+        }
+
+//        std::cout << "--CURRENT PLAYER LIST-----" << endl;
+//        for (auto curr: playerList){
+//            cout << curr.second << endl;
+//        }
+    }
 
     // Setters
     void setLocalPlayer(Player* p){

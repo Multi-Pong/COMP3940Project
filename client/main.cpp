@@ -34,7 +34,7 @@ void clientUpdateGameInstance(){
 
 int __cdecl main(int argc, char **argv) {
     GameInstanceSingleton::getGameInstance();
-    Player clientPlayer{};
+    Player clientPlayer{1, 5, 5};
     GameInstanceSingleton::getGameInstance().setLocalPlayer(&clientPlayer);
     // set up raylib
     InitWindow(FieldSizeWidth, FieldSizeHeight, "Client");
