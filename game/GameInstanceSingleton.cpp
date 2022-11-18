@@ -4,28 +4,12 @@
 
 #include "GameInstanceSingleton.hpp"
 
-void GameInstanceSingleton::serverUpdateGameInstance() {
-
-
-
-    // TODO: Notify  all Players when any update is made.
-    notifyPlayers();
+GameInstanceSingleton::GameInstanceSingleton() {
+//    localPlayer = new Player;
 }
 
-void GameInstanceSingleton::notifyPlayers() {
-
+GameInstanceSingleton& GameInstanceSingleton::getGameInstance(){
+    // Returning static instance of this class
+    static GameInstanceSingleton instance;
+    return instance;
 }
-
-void GameInstanceSingleton::getGameState() {
-
-}
-
-void GameInstanceSingleton::receiveServerState() {
-
-}
-
-void GameInstanceSingleton::clientUpdateGameInstance() {
-
-}
-
-

@@ -7,40 +7,64 @@
 
 #include "Player.hpp"
 #include <vector>
+#include <map>
+
+using namespace std;
 
 /*
  * Holds the current instance of the game, to be referenced by multiple clients.
  * Observer - Subject Model.
  */
 class GameInstanceSingleton {
-public:
+private:
+
+    // Hiding Default Constructor
+    // TODO Write default game state
+    GameInstanceSingleton();
+
+//    static volatile GameInstanceSingleton instance = NULL;
+
     // Member Variables
     int teamOnePoints;
     int teamTwoPoints;
 
+    // For clients to update their current position to this Singleton
+    Player* localPlayer;
+
     // Container of currently connected Players in the Server.
-    vector<Player> playerList;
+    map<int,Player> playerList;
 
     // TODO Implement Ball.
     // Ball ball;
+public:
 
-    // For clients to update their current position to this Singleton
-    Player localPlayer;
+    /*
+     * Delete the Copy Constructor
+     */
+    GameInstanceSingleton(GameInstanceSingleton&) = delete;
 
-    // TODO: For Server to update playerList, Calls notifyAll after Update
-    void serverUpdateGameInstance();
+    /*
+     * Delete the ability to use the assignment operator
+     */
+    void operator=(GameInstanceSingleton const&) = delete;
 
-    // TODO: Update all Players in playerList of Server's state of the game.
-    void notifyPlayers();
+    // Getter for the GameInstance
+    static GameInstanceSingleton& getGameInstance();
 
-    // TODO: For Client to pull Game State
-    void getGameState();
+    // Setters
+    void setLocalPlayer(Player* p){
+        playerList.insert(make_pair(p->getID(), *p));
+        this->localPlayer = p;
+    }
 
-    // TODO For Client to update Local Player
-    void clientUpdateGameInstance();
+    // Getters
+    Player* getLocalPlayer(){ return this->localPlayer;}
 
-    // TODO: For Client to update their Game State
-    void receiveServerState();
+//    // TODO: For Server to update playerList, Calls notifyAll after Update
+//    void serverUpdateGameInstance();
+//
+//    // TODO: Update all Players in playerList of Server's state of the game.
+//    void notifyPlayers();
 
 };
 
