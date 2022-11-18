@@ -9,6 +9,7 @@
 #include <cstdio>
 #include <iostream>
 
+#include "../game/GameInstanceSingleton.hpp"
 #include "../sockets/ServerSocket.hpp"
 #include "../threads/SocketThread.hpp"
 
@@ -37,7 +38,7 @@ int __cdecl main(void) {
         printf("WSAStartup failed with error: %d\n", iResult);
         return 1;
     }
-
+    GameInstanceSingleton::getGameInstance();
     // Create a SOCKET for the server to listen for client connections.
     ListenSocket = new ServerSocket(DEFAULT_PORT);
     while (!isShutDown) {
