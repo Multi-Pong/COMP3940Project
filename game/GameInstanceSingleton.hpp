@@ -60,8 +60,8 @@ public:
     // Getters
     Player* getLocalPlayer(){ return this->localPlayer;}
 
-//    // TODO: For Server to update playerList, Calls notifyAll after Update
-//    void serverUpdateGameInstance();
+    // TODO: For Server to update playerList, Calls notifyAll after Update
+    void updatePlayerList(Player *p);
 //
 //    // TODO: Update all Players in playerList of Server's state of the game.
 //    void notifyPlayers();
