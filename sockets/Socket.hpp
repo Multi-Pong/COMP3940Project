@@ -21,11 +21,12 @@ public:
     void sendResponse(string res);
     void close() { closesocket(sock);}
     int shutDown(){return shutdown(sock, SD_SEND);}
+    bool isConnected();
     ~Socket();
     void dump(vector<char> &result);
 
 private:
-    SOCKET sock;
+    SOCKET sock = INVALID_SOCKET;
 };
 
 

@@ -1,6 +1,7 @@
 #define WIN32_LEAN_AND_MEAN
 
 // include raylib
+#include <unistd.h>
 #include "raylib.h"
 #include "Networking.hpp"
 #include "../game/GameInstanceSingleton.hpp"
@@ -42,7 +43,9 @@ int __cdecl main(int argc, char **argv) {
 
     connect(); // Connect to server
     while (!WindowShouldClose()) {
+        cout << endl;
         cout << "MAIN LOOP" << endl;
+
         if (isConnected()) {
             connected = true;
             clientUpdateGameInstance();
@@ -62,18 +65,21 @@ int __cdecl main(int argc, char **argv) {
 //            if (IsKeyDown(KEY_RIGHT))
 //                movement.x += speed;
              */
+
+            cout << "UPDATING: " << connected << endl;
+            update(GetTime(), GetFrameTime());
+
         } else {
             cout << "RECONNECTING" << endl;
             connect();
-            connected = false;
+//            connected = false;
         }
-        cout << "UPDATING" << endl;
-        update(GetTime(), GetFrameTime());
+
         cout << "DRAWING" << endl;
         BeginDrawing();
         ClearBackground(BLACK);
 
-        if (!isConnected()) {
+        if (!connected) {
             // we are not connected, so just wait until we are, this can take some time
             DrawText("Connecting", 0, 20, 20, RED);
         } else {
@@ -82,10 +88,12 @@ int __cdecl main(int argc, char **argv) {
         }
         DrawFPS(0, 0);
         EndDrawing();
+//        sleep(5);
     }
 
     CloseWindow();
     disconnect();
+    sleep(3);
     return 0;
 }
 
