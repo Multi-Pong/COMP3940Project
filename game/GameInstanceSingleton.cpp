@@ -3,3 +3,13 @@
 //
 
 #include "GameInstanceSingleton.hpp"
+
+GameInstanceSingleton::GameInstanceSingleton() {
+//    localPlayer = new Player;
+}
+
+GameInstanceSingleton& GameInstanceSingleton::getGameInstance(){
+    // Returning static instance of this class
+    static GameInstanceSingleton instance;
+    return instance;
+}
