@@ -3,6 +3,7 @@
 //
 
 #include "ServerPacketBuilder.hpp"
+#include "../../game/GameInstanceSingleton.hpp"
 
 string ServerPacketBuilder::addPlayerBodyPart(const Player &player){
     string playerBody;
@@ -41,4 +42,13 @@ string ServerPacketBuilder::addPlayerBodyPart(const int id, const int xCoord, co
     playerBody.append("yCoord:").append(to_string(yCoord)).append(CRLF).append(CRLF);
 
     return playerBody;
+}
+
+string ServerPacketBuilder::buildPacket() {
+    string output;
+    for (pair<const int, Player> x : GameInstanceSingleton::getGameInstance().getPlayerList()){
+        output.append(addPlayerBodyPart(x.second));
+    }
+
+    return output;
 }
