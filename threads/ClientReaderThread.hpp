@@ -11,9 +11,10 @@
 
 class ClientReaderThread : public Thread{
 private:
-    Socket * sock;
+    Socket * sock = nullptr;
+    int *threadRunning;
 public:
-    ClientReaderThread(Socket * sock);
+    ClientReaderThread(Socket ** sock, int *threadRunning);
     void run() override;
     ~ClientReaderThread();
 };

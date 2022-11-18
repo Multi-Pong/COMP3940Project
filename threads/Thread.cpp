@@ -1,7 +1,8 @@
 #include "Thread.hpp"
 #include <pthread.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <string>
+#include <iostream>
 
 void* startMethodInThread(void *arg)
 {
@@ -25,4 +26,5 @@ void Thread::start() {
 
 Thread::~Thread() {
 	free(this->state);
+    std::cout << "Freed" << std::endl;
 }
