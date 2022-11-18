@@ -8,11 +8,13 @@
 
 using namespace std;
 
-ClientReaderThread::ClientReaderThread(Socket *sock) : Thread(this) {
-    this->sock = sock;
+ClientReaderThread::ClientReaderThread(Socket **sock, int* threadRunning) : Thread(this) {
+    this->sock = *sock;
+    this->threadRunning = threadRunning;
 }
 
 void ClientReaderThread::run() {
+    *threadRunning = 1;
     cout << "READING" << endl;
     //
     char *buf = new char[1];
@@ -38,7 +40,13 @@ void ClientReaderThread::run() {
 
 ClientReaderThread::~ClientReaderThread() {
     cout << "DESTRUCT READER THREAD" << endl;
-    delete sock;
-    SOCKET s = INVALID_SOCKET;
-    sock = new Socket(s);
+    if(*threadRunning){
+        *threadRunning = 0;
+        SOCKET s = INVALID_SOCKET;
+        Socket * deadS  = new Socket(s);
+        Socket tmp = *sock;
+        *sock = *deadS;
+        cout << sock << " "<< sock->isConnected() << endl;
+    }
+
 }

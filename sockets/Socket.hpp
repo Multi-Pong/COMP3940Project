@@ -26,7 +26,7 @@ public:
     void dump(vector<char> &result);
 
 private:
-    SOCKET sock;
+    SOCKET sock = INVALID_SOCKET;
 };
 
 

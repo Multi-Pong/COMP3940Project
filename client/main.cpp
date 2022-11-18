@@ -1,6 +1,7 @@
 #define WIN32_LEAN_AND_MEAN
 
 // include raylib
+#include <unistd.h>
 #include "raylib.h"
 #include "Networking.hpp"
 
@@ -34,7 +35,7 @@ int __cdecl main(int argc, char **argv) {
             if (IsKeyDown(KEY_RIGHT))
                 movement.x += speed;
 
-            cout << "UPDATING" << endl;
+            cout << "UPDATING: " << connected << endl;
             update(GetTime(), GetFrameTime());
         } else {
             cout << "RECONNECTING" << endl;
@@ -55,10 +56,12 @@ int __cdecl main(int argc, char **argv) {
         }
         DrawFPS(0, 0);
         EndDrawing();
+//        sleep(5);
     }
 
     CloseWindow();
     disconnect();
+    sleep(3);
     return 0;
 }
 

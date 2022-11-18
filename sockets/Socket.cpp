@@ -59,10 +59,12 @@ bool Socket::isConnected() {
 //    return false;
 //    FD_SET m_readFds;
 //    FD_ZERO(&m_readFds);
-    return (this->sock != INVALID_SOCKET);
+    return (sock != INVALID_SOCKET);
 }
 
-Socket::~Socket() {}
+Socket::~Socket() {
+    fprintf(stdout, "FREE SOCKET\n");
+}
 
 /**
  * DAAMM code you got a lot of DUMP!
