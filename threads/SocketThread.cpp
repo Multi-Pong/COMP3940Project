@@ -21,6 +21,8 @@ SocketThread::SocketThread(Socket *sock) : Thread(this) {
 
 void SocketThread::run() {
 
+    GameInstanceSingleton::getGameInstance();
+
     // Create Container to hold message
     vector<char> result;
     // Dump every char from Payload into vector. Vector now holds entire Payload.
@@ -54,20 +56,22 @@ void SocketThread::run() {
             cout << "NO PLAYER" << endl;
         } else {
             cout << "RECIEVED PLAYER" << endl;
+
             GameInstanceSingleton::getGameInstance().updatePlayerList(p);
+
             cout << *p << endl;
         }
 
         //TODO Replace with buiildPacket
-        string packet;
-        packet.append(BOUNDARY).append(CRLF);
-        // append contentType
-
-        packet.append(ServerPacketBuilder::addPlayerBodyPart(1, 2, 3));
-
-        // Delimit End Of Packet
-        packet.append(BOUNDARY).append(CRLF).append(CRLF);
-        packet.append("\4");
+        string packet = ServerPacketBuilder::buildPacket();
+//        packet.append(BOUNDARY).append(CRLF);
+//        // append contentType
+//
+//        packet.append(ServerPacketBuilder::addPlayerBodyPart(1, 2, 3));
+//
+//        // Delimit End Of Packet
+//        packet.append(BOUNDARY).append(CRLF).append(CRLF);
+//        packet.append("\4");
 //        char responseCharArray[packet.length()];
 //        strncpy(responseCharArray, packet.c_str(), packet.length());
         sock->sendResponse(packet);

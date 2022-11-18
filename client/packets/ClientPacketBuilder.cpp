@@ -3,10 +3,17 @@
 //
 
 #include "ClientPacketBuilder.hpp"
+#include "../../game/Player.hpp"
+string ClientPacketBuilder::buildPacket(const Player& player) {
 
-string ClientPacketBuilder::buildPacket(const Player &player) {
     string packet;
-
+    packet.append("id:").append(to_string(player.getID()));
+    packet.append(CRLF);
+    packet.append("xCoord:").append(to_string(player.getX()));
+    packet.append(CRLF);
+    packet.append("yCoord:").append(to_string(player.getY()));
+    packet.append(CRLF).append(CRLF);
+    packet.append("\4");
     return packet;
 }
 
