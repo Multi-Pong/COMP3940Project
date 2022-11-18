@@ -14,7 +14,6 @@ const float MOVE_SPEED = 10;
  * Update Observer - GameInstance
  */
 void clientUpdateGameInstance(){
-
     float speed = MOVE_SPEED;
 
     // see what axes we move in

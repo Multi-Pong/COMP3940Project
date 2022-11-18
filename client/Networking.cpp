@@ -9,6 +9,7 @@
 #include "packets/ClientPacketBuilder.hpp"
 #include "packets/ClientPacketReader.hpp"
 #include "../threads/ClientReaderThread.hpp"
+#include "../game/GameInstanceSingleton.hpp"
 
 Socket *sock = nullptr;
 SOCKET ConnectSocket = INVALID_SOCKET;
@@ -119,7 +120,7 @@ void update(double now, float deltaT) {
     if (now - lastNow > inputUpdateInterval) { // send based on inputUpdateInterval
         cout << "SENDING" << endl;
         // TODO Move packet send to game update
-        string packet = ClientPacketBuilder::buildPacket(n, n, n);
+        string packet = ClientPacketBuilder::buildPacket(*GameInstanceSingleton::getGameInstance().getLocalPlayer());
         n += 1;
         cout << "PACKET:" << endl;
         cout << packet << endl;
