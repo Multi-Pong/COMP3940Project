@@ -26,11 +26,13 @@ void ClientReaderThread::run() {
         int rval;
 
         while (buf[0] != '\4' && (*(buf = sock->getNext()) > 0)) {
-//            cout << (int) *buf;
+//            cout <<  str;
             if (buf[0] != '\4') {
                 str += buf[0];
             }
         }
+        cout << "RECV" << endl;
+        cout << str << endl;
         if (!str.empty())ClientPacketReader::readPacket(str);
 
     } while (*buf > 0);

@@ -2,6 +2,7 @@
 
 // include raylib
 #include <unistd.h>
+#include <cmath>
 #include "raylib.h"
 #include "Networking.hpp"
 #include "../game/GameInstanceSingleton.hpp"
@@ -9,11 +10,12 @@
 using namespace std;
 
 const float MOVE_SPEED = 10;
+
 /*
  * TODO For Client to update Local Player
  * Update Observer - GameInstance
  */
-void clientUpdateGameInstance(){
+void clientUpdateGameInstance() {
     float speed = MOVE_SPEED;
 
     // see what axes we move in
@@ -33,7 +35,8 @@ void clientUpdateGameInstance(){
 
 int __cdecl main(int argc, char **argv) {
     GameInstanceSingleton::getGameInstance();
-    Player clientPlayer{1, 5, 5};
+    srand(time(nullptr));
+    Player clientPlayer{(int) floor(rand() * 10.0), 5, 5};
     GameInstanceSingleton::getGameInstance().setLocalPlayer(&clientPlayer);
     // set up raylib
     InitWindow(FieldSizeWidth, FieldSizeHeight, "Client");
@@ -83,7 +86,10 @@ int __cdecl main(int argc, char **argv) {
             DrawText("Connecting", 0, 20, 20, RED);
         } else {
             DrawText("Connected", 0, 20, 20, LIME);
-            DrawRectangle((int) GameInstanceSingleton::getGameInstance().getLocalPlayer()->getX(), (int) GameInstanceSingleton::getGameInstance().getLocalPlayer()->getY(), PlayerSize, PlayerSize, WHITE);
+            for (pair<const int, Player> x: GameInstanceSingleton::getGameInstance().getPlayerList()) {
+                cout << x.second.getID() << endl;
+                DrawRectangle((int) x.second.getX(), (int) x.second.getY(), PlayerSize, PlayerSize, WHITE);
+            }
         }
         DrawFPS(0, 0);
         EndDrawing();

@@ -17,7 +17,7 @@ void ClientPacketReader::readPacket(string packet) {
         string first;
         getline(breaker, first, ':');
         string second;
-        getline(breaker, second);
+        getline(breaker, second, '\r');
         if (current == "Content-Type:Player\r"){
             p = new Player();
         }
@@ -33,8 +33,9 @@ void ClientPacketReader::readPacket(string packet) {
         if(p != nullptr && current == "BOUNDARY!!!!!!!\r"){
             //players.push_back(p);
             //TODO add ball and score as well, once those are being sent
+            cout << "PLAYER RECV" << endl;
+            cout << *p << endl;
             GameInstanceSingleton::getGameInstance().setPlayer(p);
-//            cout << *p << endl;
         }
     }
     cout << "END READER" << endl;

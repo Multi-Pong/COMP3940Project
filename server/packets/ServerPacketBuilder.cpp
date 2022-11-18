@@ -7,13 +7,13 @@
 
 string ServerPacketBuilder::addPlayerBodyPart(const Player &player){
     string playerBody;
-//    playerBody.append(BOUNDARY).append(CRLF);
-//    // Header
-//    playerBody.append("Content-Type: Player").append(CRLF).append(CRLF);
-//    // Payload (Nothing on this line)
-//    playerBody.append("id:").append(to_string(player.getID())).append(CRLF);
-//    playerBody.append("xCoord:").append(to_string(player.getX())).append(CRLF);
-//    playerBody.append("yCoord:").append(to_string(player.getY())).append(CRLF).append(CRLF);
+    playerBody.append(BOUNDARY).append(CRLF);
+    // Header
+    playerBody.append("Content-Type:Player").append(CRLF).append(CRLF);
+    // Payload (Nothing on this line)
+    playerBody.append("id:").append(to_string(player.getID())).append(CRLF);
+    playerBody.append("xCoord:").append(to_string(player.getX())).append(CRLF);
+    playerBody.append("yCoord:").append(to_string(player.getY())).append(CRLF);
     return playerBody;
 }
 
@@ -49,6 +49,8 @@ string ServerPacketBuilder::buildPacket() {
     for (pair<const int, Player> x : GameInstanceSingleton::getGameInstance().getPlayerList()){
         output.append(addPlayerBodyPart(x.second));
     }
-
+    // Delimit End Of Packet
+    output.append(BOUNDARY).append(CRLF).append(CRLF);
+    output.append("\4");
     return output;
 }

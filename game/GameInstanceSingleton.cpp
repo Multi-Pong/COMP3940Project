@@ -16,9 +16,9 @@ GameInstanceSingleton &GameInstanceSingleton::getGameInstance() {
 
 void GameInstanceSingleton::updatePlayerList(Player *p) {
     try {
-        Player player = playerList.at(p->getID());
-        player.setX(p->getX());
-        player.setY(p->getY());
+        Player *player = &playerList.at(p->getID());
+        player->setX(p->getX());
+        player->setY(p->getY());
     } catch (out_of_range &e) {
         printf("ADDING PLAYER\n");
         playerList.insert(make_pair(p->getID(), *p));
