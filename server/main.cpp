@@ -44,47 +44,17 @@ int __cdecl main(void) {
     while (!isShutDown) {
         cout << "waiting" << endl;
         ClientSocket = ListenSocket->Accept();
-        SocketThread *thread = new SocketThread(ClientSocket);
-        thread->start();
+        if (ClientSocket != nullptr) {
+            SocketThread *thread = new SocketThread(ClientSocket);
+            thread->start();
+        }
 //      shutDownServer();
     }
 
     // No longer need server socket
 //    closesocket(ListenSocket);
 //    ListenSocket->close();
-
-    // TODO Put in game thread
-//    // Receive until the peer shuts down the connection
-//    int iSendResult;
-//    char recvbuf[DEFAULT_BUFLEN];
-//    int recvbuflen = DEFAULT_BUFLEN;
-//    do {
 //
-//        iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
-//        if (iResult > 0) {
-//            printf("Bytes received: %d\n", iResult);
-//
-//            // Echo the buffer back to the sender
-//            iSendResult = send(ClientSocket, recvbuf, iResult, 0);
-//            if (iSendResult == SOCKET_ERROR) {
-//                printf("send failed with error: %d\n", WSAGetLastError());
-//                closesocket(ClientSocket);
-//                ClientSocket->close();
-//                WSACleanup();
-//                return 1;
-//            }
-//            printf("Bytes sent: %d\n", iSendResult);
-//        } else if (iResult == 0)
-//            printf("Connection closing...\n");
-//        else {
-//            printf("recv failed with error: %d\n", WSAGetLastError());
-//            closesocket(ClientSocket);
-//            ClientSocket->close();
-//            WSACleanup();
-//            return 1;
-//        }
-//
-//    } while (iResult > 0);
 //
 //    // shutdown the connection since we're done
 //    iResult = ClientSocket->shutDown();
@@ -95,7 +65,7 @@ int __cdecl main(void) {
 //        WSACleanup();
 //        return 1;
 //    }
-
+//
 //     cleanup
 //    closesocket(ClientSocket);
     ClientSocket->close();

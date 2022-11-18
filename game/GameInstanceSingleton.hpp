@@ -10,6 +10,8 @@
 #include <map>
 #include <iostream>
 
+class SocketThread;
+
 using namespace std;
 
 /*
@@ -30,10 +32,11 @@ private:
     int teamTwoPoints;
 
     // For clients to update their current position to this Singleton
-    Player* localPlayer;
+    Player* localPlayer = nullptr;
 
     // Container of currently connected Players in the Server.
     map<int,Player> playerList;
+    map<int,SocketThread*> threadList;
 
     // TODO Implement Ball.
     // Ball ball;
@@ -62,11 +65,6 @@ public:
         if (p->getID() == localPlayer->getID()){
             localPlayer = p;
         }
-
-//        std::cout << "--CURRENT PLAYER LIST-----" << endl;
-//        for (auto curr: playerList){
-//            cout << curr.second << endl;
-//        }
     }
 
     // Setters
@@ -80,6 +78,7 @@ public:
 
 
     map<int,Player> getPlayerList(){return this->playerList;}
+    map<int,SocketThread*> getThreadList(){return this->threadList;}
 
     // TODO: For Server to update playerList, Calls notifyAll after Update
     void updatePlayerList(Player *p);
@@ -88,6 +87,11 @@ public:
 //    // TODO: Update all Players in playerList of Server's state of the game.
 //    void notifyPlayers();
 
+    ~GameInstanceSingleton(){
+        if(localPlayer != nullptr){
+            delete localPlayer;
+        }
+    }
 };
 
 

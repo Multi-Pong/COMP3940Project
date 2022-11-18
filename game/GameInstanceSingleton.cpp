@@ -3,6 +3,8 @@
 //
 
 #include "GameInstanceSingleton.hpp"
+#include "../threads/SocketThread.hpp"
+
 
 GameInstanceSingleton::GameInstanceSingleton() {
 //    localPlayer = new Player;

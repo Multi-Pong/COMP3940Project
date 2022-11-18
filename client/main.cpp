@@ -51,22 +51,6 @@ int __cdecl main(int argc, char **argv) {
         if (isConnected()) {
             connected = true;
             clientUpdateGameInstance();
-            /*
-//            float speed = moveSpeed;
-//
-//            // see what axes we move in
-//            if (IsKeyDown(KEY_UP))
-////                movement.y -= speed;
-//            GameInstanceSingleton::getGameInstance().getLocalPlayer()->changeY(-speed);
-////                GameInstanceSingleton::getGameInstance().setLocalPlayer(clientPlayer);
-//            if (IsKeyDown(KEY_DOWN))
-//                movement.y += speed;
-//
-//            if (IsKeyDown(KEY_LEFT))
-//                movement.x -= speed;
-//            if (IsKeyDown(KEY_RIGHT))
-//                movement.x += speed;
-             */
 
             cout << "UPDATING: " << connected << endl;
             update(GetTime(), GetFrameTime());

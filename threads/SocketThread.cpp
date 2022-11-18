@@ -12,22 +12,11 @@
 #include "../game/GameInstanceSingleton.hpp"
 
 SocketThread::SocketThread(Socket *sock) : Thread(this) {
-//    request.setSocket(sock);
-//    request.parse();
-
     // All input from socket is read at this point.
     this->sock = sock;
 }
 
 void SocketThread::run() {
-
-    GameInstanceSingleton::getGameInstance();
-
-    // Create Container to hold message
-    vector<char> result;
-    // Dump every char from Payload into vector. Vector now holds entire Payload.
-//    sock->dump(result);
-//    string buildMessage = "";
     string str;
     string pattern;
     char *buf = new char[1];
@@ -43,37 +32,23 @@ void SocketThread::run() {
             } else {
                 pattern += buf[0];
             }
-//            cout << hex << (int) *buf << endl;
         }
         cout << "END OF WHILE: " << *buf << endl;
         str += pattern;
-//        ServerPacketReader read;
-//        cout << "READING PACKET" << endl;
-//        cout << str << endl;
         Player *p = ServerPacketReader::readPacket(str);
-//        Player p = read.getPlayer();
         if (p == nullptr) {
             cout << "NO PLAYER" << endl;
         } else {
             cout << "RECIEVED PLAYER" << endl;
-
-            GameInstanceSingleton::getGameInstance().updatePlayerList(p);
-
             cout << *p << endl;
+            if(GameInstanceSingleton::getGameInstance().getThreadList().find(p->getID()) == GameInstanceSingleton::getGameInstance().getThreadList().end()){
+                GameInstanceSingleton::getGameInstance().getThreadList().insert(make_pair(p->getID(), this));
+            }
+            GameInstanceSingleton::getGameInstance().updatePlayerList(p);
         }
 
-        //TODO Replace with buiildPacket
+        //TODO Move to notifyPlayers()
         string packet = ServerPacketBuilder::buildPacket();
-//        packet.append(BOUNDARY).append(CRLF);
-//        // append contentType
-//
-//        packet.append(ServerPacketBuilder::addPlayerBodyPart(1, 2, 3));
-//
-//        // Delimit End Of Packet
-//        packet.append(BOUNDARY).append(CRLF).append(CRLF);
-//        packet.append("\4");
-//        char responseCharArray[packet.length()];
-//        strncpy(responseCharArray, packet.c_str(), packet.length());
         sock->sendResponse(packet);
     } while (*buf > 0);
     delete[] buf;
