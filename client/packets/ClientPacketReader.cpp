@@ -3,6 +3,7 @@
 //
 
 #include "ClientPacketReader.hpp"
+#include "../../game/GameInstanceSingleton.hpp"
 #include <sstream>
 #include <iostream>
 
@@ -31,12 +32,10 @@ void ClientPacketReader::readPacket(string packet) {
         }
         if(p != nullptr && current == "BOUNDARY!!!!!!!\r"){
             //players.push_back(p);
-            cout << *p << endl;
+            //TODO add ball and score as well, once those are being sent
+            GameInstanceSingleton::getGameInstance().setPlayer(p);
+//            cout << *p << endl;
         }
     }
     cout << "END READER" << endl;
-}
-
-vector<Player *> ClientPacketReader::getPlayers() {
-    return players;
 }
