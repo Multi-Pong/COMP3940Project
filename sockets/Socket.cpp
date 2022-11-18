@@ -38,11 +38,11 @@ char *Socket::getNext() {
 void Socket::sendResponse(string res) {
     int rval;
 
-    printf("SENDING: \n%s\n", res.c_str());
+//    printf("SENDING: \n%s\n", res.c_str());
     if ((rval = send(sock, res.c_str(), strlen(res.c_str()), 0)) < 0) {
         perror("writing socket");
     } else {
-        printf("%s\n", res.c_str());
+//        printf("%s\n", res.c_str());
     }
 
     return;

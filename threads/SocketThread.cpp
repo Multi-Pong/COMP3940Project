@@ -37,31 +37,29 @@ void SocketThread::run() {
                 pattern += buf[0];
             }
         }
-        cout << "END OF WHILE: " << *buf << endl;
+//        cout << "END OF WHILE: " << *buf << endl;
         str += pattern;
         p = ServerPacketReader::readPacket(str);
         if (p == nullptr) {
-            cout << "NO PLAYER" << endl;
+//            cout << "NO PLAYER" << endl;
         } else {
-            cout << "RECIEVED PLAYER" << endl;
-            cout << *p << endl;
+//            cout << "RECIEVED/ PLAYER" << endl;
+//            cout << *p << endl;
             playerId = p->getID();
             if (GameInstanceSingleton::getGameInstance().getThreadList().count(playerId) == 0) {
                 pair<int, Thread *> pair = make_pair(playerId, this);
                 GameInstanceSingleton::getGameInstance().insertThread(pair);
             }
             GameInstanceSingleton::getGameInstance().updatePlayerList(p);
-        }
-
 //        //TODO Move to notifyPlayers()
         string packet = ServerPacketBuilder::buildPacket();
         GameInstanceSingleton::getGameInstance().notifyPlayers(packet);
+        }
+
     } while (*buf > 0);
     GameInstanceSingleton::getGameInstance().removePlayer(playerId);
     GameInstanceSingleton::getGameInstance().removeThread(playerId);
-    if (p != nullptr) {
-        delete p;
-    }
+    delete p;
     delete[] buf;
     delete this; //Kill thread
 }

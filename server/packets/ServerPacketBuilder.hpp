@@ -34,14 +34,14 @@ public:
      * @param yCoord y coordinate of player
      * @return Returns the completed Packet to send off.
      */
-    static string addPlayerBodyPart(const int id, const int xCoord, const int yCoord);
+//    static string addPlayerBodyPart(const int id, const int xCoord, const int yCoord);
 
     /**
      * Constructs Packet
      * @param playerList
      * @return Returns the Packet to send of to Client
      */
-    static string buildPacket(vector<Player *> &playerList);
+//    static string buildPacket(vector<Player *> &playerList);
 
     /**
      * Constructs Packet

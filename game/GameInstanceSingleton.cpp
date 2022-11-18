@@ -22,7 +22,7 @@ void GameInstanceSingleton::updatePlayerList(Player *p) {
         player->setX(p->getX());
         player->setY(p->getY());
     } catch (out_of_range &e) {
-        printf("ADDING PLAYER\n");
+//        printf("ADDING PLAYER\n");
         playerList.insert(make_pair(p->getID(), *p));
     } catch (exception &e) {
         printf("Error: %s\n", e.what());

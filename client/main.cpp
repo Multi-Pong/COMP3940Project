@@ -71,7 +71,7 @@ int __cdecl main(int argc, char **argv) {
         } else {
             DrawText("Connected", 0, 20, 20, LIME);
             for (pair<const int, Player> x: GameInstanceSingleton::getGameInstance().getPlayerList()) {
-                cout << x.second.getID() << endl;
+//                cout << x.second.getID() << endl;
                 DrawRectangle((int) x.second.getX(), (int) x.second.getY(), PlayerSize, PlayerSize, WHITE);
             }
         }

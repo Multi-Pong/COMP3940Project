@@ -100,8 +100,8 @@ void update(double now, float deltaT) {
         // TODO Move packet send to game update
         string packet = ClientPacketBuilder::buildPacket(*GameInstanceSingleton::getGameInstance().getLocalPlayer());
         n += 1;
-        cout << "PACKET:" << endl;
-        cout << packet << endl;
+//        cout << "PACKET:" << endl;
+//        cout << packet << endl;
         sock->sendResponse(packet);
         lastNow = now;
     }
@@ -109,7 +109,7 @@ void update(double now, float deltaT) {
 
 bool isConnected() {
     //This might be wrong
-    cout << sock << endl;
+//    cout << sock << endl;
     if (sock != nullptr && sock->isConnected()) {
         return true;
     }
