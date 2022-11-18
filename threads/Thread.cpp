@@ -1,15 +1,15 @@
 #include "Thread.hpp"
-//#include "SimpleThread.h"
 #include <pthread.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <string>
+#include <iostream>
 
 void* startMethodInThread(void *arg)
 {
 	if (arg == NULL)
 		return 0;
-//	SimpleThread *thread = (SimpleThread*)arg;
-//	thread->run();
+	auto *thread = (Thread*)arg;
+	thread->run();
 	return NULL;
 }
 
@@ -26,4 +26,5 @@ void Thread::start() {
 
 Thread::~Thread() {
 	free(this->state);
+    std::cout << "Freed" << std::endl;
 }
