@@ -12,6 +12,8 @@
 
 Socket *sock = nullptr;
 SOCKET ConnectSocket = INVALID_SOCKET;
+ClientReaderThread *thread = nullptr;
+int *threadRunning = new int;
 double inputUpdateInterval = 1.0f / 20.0f;
 double lastNow = 0;
 int n = 1;
@@ -90,7 +92,8 @@ void connect() {
     // Receive until the peer closes the connection
     // TODO put reader into thread or something
     cout << "Create thread" << endl;
-    ClientReaderThread *thread = new ClientReaderThread(sock);
+    delete thread;
+    thread = new ClientReaderThread(&sock, threadRunning);
     thread->start();
 //    do {
 //        iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
@@ -181,7 +184,14 @@ bool isConnected() {
 //    FD_SET m_readFds;
 //    FD_ZERO(&m_readFds);
 //    return (select(sock, &m_readFds, NULL, NULL, NULL) > 0);
-    return (sock == nullptr) || (sock->isConnected());
+    cout << sock << endl;
+    if (sock != nullptr && sock->isConnected()) {
+        return true;
+    }
+    delete sock;
+    sock = nullptr;
+    return false;
+
 }
 
 void disconnect() {
@@ -193,8 +203,14 @@ void disconnect() {
 ////        return 1;
 //    }
 //    closesocket(ConnectSocket);
-    sock->shutDown();
-    sock->close();
+//    if (*threadRunning != 0) {
+//        delete thread;
+//        *threadRunning = 0;
+//    }
+//    delete sock;
+    if (sock != NULL) {
+        sock->shutDown();
+        sock->close();
+    }
     WSACleanup();
-    delete sock;
 }
