@@ -17,39 +17,24 @@ string ServerPacketBuilder::addPlayerBodyPart(const Player &player){
     return playerBody;
 }
 
-//TODO change to gameState object for variable types
-//string ServerPacketBuilder::buildPacket(vector<Player *> &playerList) {
-//    string packet;
-//    packet.append(BOUNDARY).append(CRLF);
-//    // append contentType
-//    for(Player *p : playerList){
-//        packet.append(addPlayerBodyPart(*p));
-//    }
-//    // Delimit End Of Packet
-//    packet.append(BOUNDARY).append(CRLF).append(CRLF);
-//
-//    return packet;
-//}
-
-//string ServerPacketBuilder::addPlayerBodyPart(const int id, const int xCoord, const int yCoord) {
-//    string playerBody;
-//    playerBody.append(BOUNDARY).append(CRLF);
-//    // Header
-//    playerBody.append("Content-Type:Player").append(CRLF).append(CRLF);
-//    // Payload (Nothing on this line)
-//    playerBody.append("id:").append(to_string(id)).append(CRLF);
-//    playerBody.append("xCoord:").append(to_string(xCoord)).append(CRLF);
-//    playerBody.append("yCoord:").append(to_string(yCoord)).append(CRLF).append(CRLF);
-//
-//    return playerBody;
-//}
-
-string ServerPacketBuilder::buildPacket() {
+string ServerPacketBuilder::buildGameStatePacket() {
     string output;
     for (pair<const int, Player> x : GameInstanceSingleton::getGameInstance().getPlayerList()){
         output.append(addPlayerBodyPart(x.second));
     }
     // Delimit End Of Packet
+    output.append(BOUNDARY).append(CRLF).append(CRLF);
+    output.append("\4");
+    return output;
+}
+
+string ServerPacketBuilder::buildDisconnectPacket(const int &playerId) {
+    string output;
+    output.append(BOUNDARY).append(CRLF);
+    // Header
+    output.append("Content-Type:Disconnect").append(CRLF).append(CRLF);
+    // Payload (Nothing on this line)
+    output.append("id:").append(to_string(playerId)).append(CRLF);
     output.append(BOUNDARY).append(CRLF).append(CRLF);
     output.append("\4");
     return output;

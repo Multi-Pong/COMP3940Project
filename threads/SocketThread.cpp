@@ -52,13 +52,15 @@ void SocketThread::run() {
             }
             GameInstanceSingleton::getGameInstance().updatePlayerList(p);
 //        //TODO Move to notifyPlayers()
-        string packet = ServerPacketBuilder::buildPacket();
+        string packet = ServerPacketBuilder::buildGameStatePacket();
         GameInstanceSingleton::getGameInstance().notifyPlayers(packet);
         }
 
     } while (*buf > 0);
     GameInstanceSingleton::getGameInstance().removePlayer(playerId);
     GameInstanceSingleton::getGameInstance().removeThread(playerId);
+    string packet = ServerPacketBuilder::buildDisconnectPacket(playerId);
+    GameInstanceSingleton::getGameInstance().notifyPlayers(packet);
     delete p;
     delete[] buf;
     delete this; //Kill thread
