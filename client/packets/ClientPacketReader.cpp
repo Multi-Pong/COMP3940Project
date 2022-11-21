@@ -21,6 +21,15 @@ void ClientPacketReader::readPacket(string packet) {
         if (current == "Content-Type:Player\r") {
             readPlayer(stream, current);
         }
+        if (current == "Content-Type:Ball\r") {
+//            readBall(stream, current);
+        }
+        if (current == "Content-Type:Score\r") {
+//            readScore(stream, current);
+        }
+        if (current == "Content-Type:Disconnect\r") {
+            readDisconnect(stream, current);
+        }
     }
 //    cout << "END READER" << endl;
 }
@@ -51,5 +60,18 @@ void ClientPacketReader::readPlayer(std::istringstream &stream , std::string &cu
     if (GameInstanceSingleton::getGameInstance().getLocalPlayer()->getID() == p->getID()) {
         GameInstanceSingleton::getGameInstance().setLocalPlayer(p);
 //                }
+    }
+}
+
+void ClientPacketReader::readDisconnect(istringstream &stream, string &current) {
+    while (getline(stream, current) && current != "BOUNDARY!!!!!!!\r") {
+        istringstream playerBreaker{current};
+        string first;
+        getline(playerBreaker, first, ':');
+        string second;
+        getline(playerBreaker, second, '\r');
+        if (first == "id") {
+            GameInstanceSingleton::getGameInstance().removePlayer(stoi(second));
+        }
     }
 }
