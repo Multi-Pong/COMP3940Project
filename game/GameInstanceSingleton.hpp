@@ -31,62 +31,63 @@ private:
     int teamTwoPoints;
 
     // For clients to update their current position to this Singleton
-    Player* localPlayer = nullptr;
+    Player *localPlayer = nullptr;
 
     // Container of currently connected Players in the Server.
-    map<int,Player> playerList;
-    map<int,Thread*> threadList;
+    map<int, Player> playerList;
+    map<int, Thread *> threadList;
 
     // TODO Implement Ball.
     // Ball ball;
 public:
-
     /*
      * Delete the Copy Constructor
      */
-    GameInstanceSingleton(GameInstanceSingleton&) = delete;
+    GameInstanceSingleton(GameInstanceSingleton &) = delete;
 
     /*
      * Delete the ability to use the assignment operator
      */
-    void operator=(GameInstanceSingleton const&) = delete;
+    void operator=(GameInstanceSingleton const &) = delete;
 
     // Getter for the GameInstance
-    static GameInstanceSingleton& getGameInstance();
+    static GameInstanceSingleton &getGameInstance();
 
-    void setPlayer(Player* p){
+    void setPlayer(Player *p) {
         auto pos = playerList.find(p->getID());
-        if(pos != playerList.end()){
+        if (pos != playerList.end()) {
             pos->second = *p;
         } else {
             playerList.insert(make_pair(p->getID(), *p));
         }
-        if (p->getID() == localPlayer->getID()){
+        if (p->getID() == localPlayer->getID()) {
             localPlayer = p;
         }
     }
 
     // Setters
-    void setLocalPlayer(Player* p){
+    void setLocalPlayer(Player *p) {
         playerList.insert(make_pair(p->getID(), *p));
         this->localPlayer = p;
     }
 
-    void insertThread(pair<int, Thread*> &pair){
+    void insertThread(pair<int, Thread *> &pair) {
         threadList.insert(pair);
     }
 
     // Getters
-    Player* getLocalPlayer(){ return this->localPlayer;}
+    Player *getLocalPlayer() { return this->localPlayer; }
 
 
-    map<int,Player> getPlayerList(){return this->playerList;}
-    map<int,Thread*> getThreadList(){return this->threadList;}
+    map<int, Player> getPlayerList() { return this->playerList; }
 
-    void removePlayer(int id){
+    map<int, Thread *> getThreadList() { return this->threadList; }
+
+    void removePlayer(int id) {
         if (playerList.count(id) > 0) playerList.erase(id);
     }
-    void removeThread(int id){
+
+    void removeThread(int id) {
         if (threadList.count(id) > 0) threadList.erase(id);
     }
 
@@ -103,10 +104,8 @@ public:
 //    // TODO: Update all Players in playerList of Server's state of the game.
     void notifyPlayers(string packet);
 
-    ~GameInstanceSingleton(){
-        if(localPlayer != nullptr){
-            delete localPlayer;
-        }
+    ~GameInstanceSingleton() {
+        delete localPlayer;
     }
 };
 

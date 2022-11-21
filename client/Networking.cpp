@@ -17,7 +17,7 @@ ClientReaderThread *thread = nullptr;
 int *threadRunning = new int;
 double inputUpdateInterval = 1.0f / 20.0f;
 double lastNow = 0;
-int n = 1;
+//int n = 1;
 
 void connect() {
     // https://stackoverflow.com/questions/4991967/how-does-wsastartup-function-initiates-use-of-the-winsock-dll
@@ -25,12 +25,10 @@ void connect() {
     // It also fills in some other information which you are not required to look at if you aren't interested.
     // You never have to submit this WSADATA struct to WinSock again, because it is used purely to give you feedback on your WSAStartup request.
     WSADATA wsaData;
-    struct addrinfo *result = NULL,
-            *ptr = NULL,
-            hints;
-    char recvbuf[DEFAULT_BUFLEN];
+    struct addrinfo *result = nullptr,
+            *ptr = nullptr,
+            hints{};
     int iResult;
-    int recvbuflen = DEFAULT_BUFLEN;
 
     // Initialize Winsock
     iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
@@ -53,13 +51,13 @@ void connect() {
     }
 
     // Attempt to connect to an address until one succeeds
-    for (ptr = result; ptr != NULL; ptr = ptr->ai_next) {
+    for (ptr = result; ptr != nullptr; ptr = ptr->ai_next) {
 
         // Create a SOCKET for connecting to server
         ConnectSocket = socket(ptr->ai_family, ptr->ai_socktype,
                                ptr->ai_protocol);
         if (ConnectSocket == INVALID_SOCKET) {
-            printf("socket failed with error: %ld\n", WSAGetLastError());
+            printf("socket failed with error: %d\n", WSAGetLastError());
             WSACleanup();
             return;
         }
@@ -90,6 +88,8 @@ void connect() {
     delete thread;
     thread = new ClientReaderThread(&sock, threadRunning);
     thread->start();
+    string packet = ClientPacketBuilder::buildPacket(*GameInstanceSingleton::getGameInstance().getLocalPlayer());
+    sock->sendResponse(packet);
 }
 
 void update(double now, float deltaT) {
@@ -99,7 +99,7 @@ void update(double now, float deltaT) {
         cout << "SENDING" << endl;
         // TODO Move packet send to game update
         string packet = ClientPacketBuilder::buildPacket(*GameInstanceSingleton::getGameInstance().getLocalPlayer());
-        n += 1;
+//        n += 1;
 //        cout << "PACKET:" << endl;
 //        cout << packet << endl;
         sock->sendResponse(packet);
@@ -119,7 +119,7 @@ bool isConnected() {
 }
 
 void disconnect() {
-    if (sock != NULL) {
+    if (sock != nullptr) {
         sock->shutDown();
         sock->close();
     }

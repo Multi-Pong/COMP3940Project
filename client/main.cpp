@@ -82,7 +82,7 @@ int __cdecl main(int argc, char **argv) {
 
     CloseWindow();
     disconnect();
-    sleep(3);
+    sleep(3); // ENSURE PROPER SHUTDOWN OF THREADS
     return 0;
 }
 
