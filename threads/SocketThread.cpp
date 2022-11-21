@@ -12,27 +12,20 @@
 #include "../game/GameInstanceSingleton.hpp"
 
 SocketThread::SocketThread(Socket *sock) : Thread(this) {
-//    request.setSocket(sock);
-//    request.parse();
-
     // All input from socket is read at this point.
     this->sock = sock;
 }
 
 void SocketThread::run() {
-
-    GameInstanceSingleton::getGameInstance();
-
-    // Create Container to hold message
-    vector<char> result;
-    // Dump every char from Payload into vector. Vector now holds entire Payload.
-//    sock->dump(result);
-//    string buildMessage = "";
     string str;
     string pattern;
+    Player *p = nullptr;
+    int playerId;
     char *buf = new char[1];
     do {
         memset(buf, 0, 1);
+        delete p;
+        p = nullptr;
         str = "";
         pattern = "";
         while (buf[0] != '\4' && *(buf = sock->getNext()) > 0) {
@@ -43,44 +36,40 @@ void SocketThread::run() {
             } else {
                 pattern += buf[0];
             }
-//            cout << hex << (int) *buf << endl;
         }
-        cout << "END OF WHILE: " << *buf << endl;
+//        cout << "END OF WHILE: " << *buf << endl;
         str += pattern;
-//        ServerPacketReader read;
-//        cout << "READING PACKET" << endl;
-//        cout << str << endl;
-        Player *p = ServerPacketReader::readPacket(str);
-//        Player p = read.getPlayer();
+        p = ServerPacketReader::readPacket(str);
         if (p == nullptr) {
-            cout << "NO PLAYER" << endl;
+//            cout << "NO PLAYER" << endl;
         } else {
-            cout << "RECIEVED PLAYER" << endl;
-
+//            cout << "RECIEVED/ PLAYER" << endl;
+//            cout << *p << endl;
+            playerId = p->getID();
+            if (GameInstanceSingleton::getGameInstance().getThreadList().count(playerId) == 0) {
+                pair<int, Thread *> pair = make_pair(playerId, this);
+                GameInstanceSingleton::getGameInstance().insertThread(pair);
+            }
             GameInstanceSingleton::getGameInstance().updatePlayerList(p);
-
-            cout << *p << endl;
+//        //TODO Move to notifyPlayers()
+        string packet = ServerPacketBuilder::buildPacket();
+        GameInstanceSingleton::getGameInstance().notifyPlayers(packet);
         }
 
-        //TODO Replace with buiildPacket
-        string packet = ServerPacketBuilder::buildPacket();
-//        packet.append(BOUNDARY).append(CRLF);
-//        // append contentType
-//
-//        packet.append(ServerPacketBuilder::addPlayerBodyPart(1, 2, 3));
-//
-//        // Delimit End Of Packet
-//        packet.append(BOUNDARY).append(CRLF).append(CRLF);
-//        packet.append("\4");
-//        char responseCharArray[packet.length()];
-//        strncpy(responseCharArray, packet.c_str(), packet.length());
-        sock->sendResponse(packet);
     } while (*buf > 0);
+    GameInstanceSingleton::getGameInstance().removePlayer(playerId);
+    GameInstanceSingleton::getGameInstance().removeThread(playerId);
+    delete p;
     delete[] buf;
     delete this; //Kill thread
 }
 
+
 SocketThread::~SocketThread() {
-    cout << "DESTRUCT SOCKET THREAD"<< endl;
+    cout << "DESTRUCT SOCKET THREAD" << endl;
     delete sock;
+}
+
+void SocketThread::send(string packet) {
+    sock->sendResponse(packet);
 }

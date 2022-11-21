@@ -5,10 +5,11 @@
 #ifndef COMP3940PROJECT_GAMEINSTANCESINGLETON_HPP
 #define COMP3940PROJECT_GAMEINSTANCESINGLETON_HPP
 
-#include "Player.hpp"
 #include <vector>
 #include <map>
 #include <iostream>
+#include "Player.hpp"
+#include "../threads/Thread.hpp"
 
 using namespace std;
 
@@ -30,64 +31,82 @@ private:
     int teamTwoPoints;
 
     // For clients to update their current position to this Singleton
-    Player* localPlayer;
+    Player *localPlayer = nullptr;
 
     // Container of currently connected Players in the Server.
-    map<int,Player> playerList;
+    map<int, Player> playerList;
+    map<int, Thread *> threadList;
 
     // TODO Implement Ball.
     // Ball ball;
 public:
-
     /*
      * Delete the Copy Constructor
      */
-    GameInstanceSingleton(GameInstanceSingleton&) = delete;
+    GameInstanceSingleton(GameInstanceSingleton &) = delete;
 
     /*
      * Delete the ability to use the assignment operator
      */
-    void operator=(GameInstanceSingleton const&) = delete;
+    void operator=(GameInstanceSingleton const &) = delete;
 
     // Getter for the GameInstance
-    static GameInstanceSingleton& getGameInstance();
+    static GameInstanceSingleton &getGameInstance();
 
-    void setPlayer(Player* p){
+    void setPlayer(Player *p) {
         auto pos = playerList.find(p->getID());
-        if(pos != playerList.end()){
+        if (pos != playerList.end()) {
             pos->second = *p;
         } else {
             playerList.insert(make_pair(p->getID(), *p));
         }
-        if (p->getID() == localPlayer->getID()){
+        if (p->getID() == localPlayer->getID()) {
             localPlayer = p;
         }
-
-//        std::cout << "--CURRENT PLAYER LIST-----" << endl;
-//        for (auto curr: playerList){
-//            cout << curr.second << endl;
-//        }
     }
 
     // Setters
-    void setLocalPlayer(Player* p){
+    void setLocalPlayer(Player *p) {
         playerList.insert(make_pair(p->getID(), *p));
         this->localPlayer = p;
     }
 
+    void insertThread(pair<int, Thread *> &pair) {
+        threadList.insert(pair);
+    }
+
     // Getters
-    Player* getLocalPlayer(){ return this->localPlayer;}
+    Player *getLocalPlayer() { return this->localPlayer; }
 
 
-    map<int,Player> getPlayerList(){return this->playerList;}
+    map<int, Player> getPlayerList() { return this->playerList; }
+
+    map<int, Thread *> getThreadList() { return this->threadList; }
+
+    void removePlayer(int id) {
+        if (playerList.count(id) > 0) playerList.erase(id);
+    }
+
+    void removeThread(int id) {
+        if (threadList.count(id) > 0) threadList.erase(id);
+    }
 
     // TODO: For Server to update playerList, Calls notifyAll after Update
     void updatePlayerList(Player *p);
 
+    /**
+     * Check if local player position is different to matching player in playerList
+     * @return
+     */
+    bool localHasMoved();
+
 //
 //    // TODO: Update all Players in playerList of Server's state of the game.
-//    void notifyPlayers();
+    void notifyPlayers(string packet);
 
+    ~GameInstanceSingleton() {
+        delete localPlayer;
+    }
 };
 
 

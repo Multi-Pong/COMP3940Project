@@ -51,22 +51,6 @@ int __cdecl main(int argc, char **argv) {
         if (isConnected()) {
             connected = true;
             clientUpdateGameInstance();
-            /*
-//            float speed = moveSpeed;
-//
-//            // see what axes we move in
-//            if (IsKeyDown(KEY_UP))
-////                movement.y -= speed;
-//            GameInstanceSingleton::getGameInstance().getLocalPlayer()->changeY(-speed);
-////                GameInstanceSingleton::getGameInstance().setLocalPlayer(clientPlayer);
-//            if (IsKeyDown(KEY_DOWN))
-//                movement.y += speed;
-//
-//            if (IsKeyDown(KEY_LEFT))
-//                movement.x -= speed;
-//            if (IsKeyDown(KEY_RIGHT))
-//                movement.x += speed;
-             */
 
             cout << "UPDATING: " << connected << endl;
             update(GetTime(), GetFrameTime());
@@ -87,7 +71,7 @@ int __cdecl main(int argc, char **argv) {
         } else {
             DrawText("Connected", 0, 20, 20, LIME);
             for (pair<const int, Player> x: GameInstanceSingleton::getGameInstance().getPlayerList()) {
-                cout << x.second.getID() << endl;
+//                cout << x.second.getID() << endl;
                 DrawRectangle((int) x.second.getX(), (int) x.second.getY(), PlayerSize, PlayerSize, WHITE);
             }
         }
@@ -98,7 +82,7 @@ int __cdecl main(int argc, char **argv) {
 
     CloseWindow();
     disconnect();
-    sleep(3);
+    sleep(3); // ENSURE PROPER SHUTDOWN OF THREADS
     return 0;
 }
 

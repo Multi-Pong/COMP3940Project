@@ -2,7 +2,7 @@
 // Created by Admin on 2022-11-14.
 //
 
-#ifndef COMP3940PROJECT_CLIENTPACKETBUILDER_HPP
+#ifndef COMP3940PROJECT_SERVERPACKETBUILDER_HPP
 #define COMP3940PROJECT_PACKETBUILDER_HPP
 
 #include <string>
@@ -34,14 +34,14 @@ public:
      * @param yCoord y coordinate of player
      * @return Returns the completed Packet to send off.
      */
-    static string addPlayerBodyPart(const int id, const int xCoord, const int yCoord);
+//    static string addPlayerBodyPart(const int id, const int xCoord, const int yCoord);
 
     /**
      * Constructs Packet
      * @param playerList
      * @return Returns the Packet to send of to Client
      */
-    static string buildPacket(vector<Player *> &playerList);
+//    static string buildPacket(vector<Player *> &playerList);
 
     /**
      * Constructs Packet
@@ -58,4 +58,4 @@ public:
 };
 
 
-#endif //COMP3940PROJECT_CLIENTPACKETBUILDER_HPP
+#endif //COMP3940PROJECT_SERVERPACKETBUILDER_HPP

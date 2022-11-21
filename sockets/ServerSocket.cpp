@@ -23,6 +23,7 @@ ServerSocket::ServerSocket(int port) {
     if ((iResult = getaddrinfo(NULL, to_string(port).c_str(), &hints, &result)) != 0) {
         perror(("getaddrinfo failed with error: " + to_string(iResult) + "\n").c_str());
         WSACleanup();
+        return;
     }
 
     // Create a SOCKET for the server to listen for client connections.
@@ -31,41 +32,36 @@ ServerSocket::ServerSocket(int port) {
         perror(("socket failed with error: " + to_string(WSAGetLastError()) + "\n").c_str());
         freeaddrinfo(result);
         WSACleanup();
+        return;
     }
 
-    // Setup the TCP listening socket
+    // Set up the TCP listening socket
     if ((iResult = bind(sock, result->ai_addr, (int) result->ai_addrlen)) == SOCKET_ERROR) {
         perror(("bind failed with error: " + to_string(WSAGetLastError()) + "\n").c_str());
         freeaddrinfo(result);
         closesocket(sock);
         WSACleanup();
-//        return 1;
+        return;
     }
 
-//    if (bind(sock, (struct sockaddr *) &server, sizeof server) < 0) {
-//        perror("binding stream socket");
-//    }
+
     freeaddrinfo(result);
-//    listen(sock, 5);
     if ((iResult = listen(sock, SOMAXCONN)) == SOCKET_ERROR) {
         perror(("listen failed with error: " + to_string(WSAGetLastError()) + "\n").c_str());
         closesocket(sock);
         WSACleanup();
+        return;
     }
 }
 
 Socket *ServerSocket::Accept() {
-//    sockaddr_in localAddr, remoteAddr;
-//    int addrLen = sizeof(remoteAddr);
-//    int cSock = accept(sock, (struct sockaddr *) &remoteAddr, reinterpret_cast<socklen_t *>(&addrLen));
-//    Socket *cs = new Socket(cSock);
-//    return cs;
 // Accept a client socket
     SOCKET cSock = accept(sock, NULL, NULL);
     if (cSock == INVALID_SOCKET) {
         printf("accept failed with error: %d\n", WSAGetLastError());
         closesocket(cSock);
         WSACleanup();
+        return nullptr;
     }
     Socket *cs = new Socket(cSock);
     return cs;
