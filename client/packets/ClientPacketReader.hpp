@@ -18,6 +18,7 @@ using namespace std;
 class ClientPacketReader {
 public:
     static void readPacket(string packet);
+    static void readPlayer(istringstream&, string &);
 };
 
 
