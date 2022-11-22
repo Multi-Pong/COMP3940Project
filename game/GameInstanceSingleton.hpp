@@ -19,16 +19,9 @@ using namespace std;
  */
 class GameInstanceSingleton {
 private:
-
     // Hiding Default Constructor
     // TODO Write default game state
     GameInstanceSingleton();
-
-//    static volatile GameInstanceSingleton instance = NULL;
-
-    // Member Variables
-    int teamOnePoints;
-    int teamTwoPoints;
 
     // For clients to update their current position to this Singleton
     Player *localPlayer = nullptr;
@@ -38,7 +31,12 @@ private:
     map<int, Thread *> threadList;
 
     // TODO Implement Ball.
-    // Ball ball;
+    // Ball* ball;
+
+    // Member Variables
+    int teamOnePoints;
+    int teamTwoPoints;
+
 public:
     /*
      * Delete the Copy Constructor
@@ -79,19 +77,37 @@ public:
     Player *getLocalPlayer() { return this->localPlayer; }
 
 
+    /**
+     * @return List of all players
+     */
     map<int, Player> getPlayerList() { return this->playerList; }
 
+    /**
+     * @return List of all threads
+     */
     map<int, Thread *> getThreadList() { return this->threadList; }
 
+    /**
+     * Removes player by given id
+     * @param id Id of player
+     */
     void removePlayer(int id) {
         if (playerList.count(id) > 0) playerList.erase(id);
     }
 
+    /**
+     * Removes Thread by associated player id
+     * @param id Id of player attached to thread
+     */
     void removeThread(int id) {
         if (threadList.count(id) > 0) threadList.erase(id);
     }
 
-    // TODO: For Server to update playerList, Calls notifyAll after Update
+    /**
+     * Updates playerList with given player pointer
+     * Adds if player does not already exist in list
+     * @param p Pointer to player to be updated in list
+     */
     void updatePlayerList(Player *p);
 
     /**
@@ -100,8 +116,10 @@ public:
      */
     bool localHasMoved();
 
-//
-//    // TODO: Update all Players in playerList of Server's state of the game.
+    /**
+     * Sends packet to all connected players
+     * @param packet Packet to be sent
+     */
     void notifyPlayers(string packet);
 
     ~GameInstanceSingleton() {

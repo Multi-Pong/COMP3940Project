@@ -51,7 +51,6 @@ void SocketThread::run() {
                 GameInstanceSingleton::getGameInstance().insertThread(pair);
             }
             GameInstanceSingleton::getGameInstance().updatePlayerList(p);
-//        //TODO Move to notifyPlayers()
         string packet = ServerPacketBuilder::buildGameStatePacket();
         GameInstanceSingleton::getGameInstance().notifyPlayers(packet);
         }

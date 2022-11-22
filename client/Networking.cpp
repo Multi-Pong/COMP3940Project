@@ -83,7 +83,7 @@ void connect() {
 
     sock = new Socket(ConnectSocket);
     // Receive until the peer closes the connection
-    // TODO put reader into thread or something
+    // Put reader into thread or something
     cout << "Create thread" << endl;
     delete thread;
     thread = new ClientReaderThread(&sock, threadRunning);
@@ -94,10 +94,8 @@ void connect() {
 
 void update(double now, float deltaT) {
     // Send an initial buffer
-    //TODO ADD if MOVED check
     if (now - lastNow > inputUpdateInterval && (GameInstanceSingleton::getGameInstance().localHasMoved())) { // send based on inputUpdateInterval
         cout << "SENDING" << endl;
-        // TODO Move packet send to game update
         string packet = ClientPacketBuilder::buildPacket(*GameInstanceSingleton::getGameInstance().getLocalPlayer());
 //        n += 1;
 //        cout << "PACKET:" << endl;

@@ -12,7 +12,6 @@ using namespace std;
 const float MOVE_SPEED = 10;
 
 /*
- * TODO For Client to update Local Player
  * Update Observer - GameInstance
  */
 void clientUpdateGameInstance() {
@@ -28,10 +27,6 @@ void clientUpdateGameInstance() {
     if (IsKeyDown(KEY_RIGHT))
         GameInstanceSingleton::getGameInstance().getLocalPlayer()->changeX(speed);
 }
-
-//
-//    // TODO: [Response as Client updates theirs]For Client to update their Game State
-//    void receiveServerState();
 
 int __cdecl main(int argc, char **argv) {
     GameInstanceSingleton::getGameInstance();
@@ -74,10 +69,11 @@ int __cdecl main(int argc, char **argv) {
 //                cout << x.second.getID() << endl;
                 DrawRectangle((int) x.second.getX(), (int) x.second.getY(), PlayerSize, PlayerSize, WHITE);
             }
+            //TODO Draw Ball
+            //TODO Draw Score
         }
         DrawFPS(0, 0);
         EndDrawing();
-//        sleep(5);
     }
 
     CloseWindow();
