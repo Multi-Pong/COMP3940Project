@@ -86,6 +86,7 @@ int __cdecl main() {
     SetTargetFPS(60);
     while (!WindowShouldClose()) {
 
+        //TODO Implement game logic
 //        update(GetTime(), GetFrameTime());
 
 

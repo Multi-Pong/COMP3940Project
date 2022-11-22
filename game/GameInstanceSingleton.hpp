@@ -38,9 +38,14 @@ private:
     map<int, Player> playerList;
     map<int, Thread *> threadList;
 
+    //TODO Implement player availability array
+    //TODO Implement player number ie. Player 1, Player 2, etc.
+    bool isPlayerAvailable[MAX_PLAYERS];
+
     // TODO Implement Ball.
     // Ball* ball;
 
+    // TODO Implement Score.
     // Member Variables
     int teamOnePoints;
     int teamTwoPoints;
