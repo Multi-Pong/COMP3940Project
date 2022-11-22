@@ -36,7 +36,6 @@ void ListenThread::run() {
     // You never have to submit this WSADATA struct to WinSock again, because it is used purely to give you feedback on your WSAStartup request.
     WSADATA wsaData;
     int iResult;
-    bool isShutDown = false;
 
     Socket *ClientSocket;
 
@@ -49,7 +48,7 @@ void ListenThread::run() {
     GameInstanceSingleton::getGameInstance();
     // Create a SOCKET for the server to listen for client connections.
     ListenSocket = new ServerSocket(DEFAULT_PORT);
-    while (!isShutDown) {
+    while (WSAGetLastError() == 0) {
         cout << "waiting" << endl;
         ClientSocket = ListenSocket->Accept();
         if (ClientSocket != nullptr) {

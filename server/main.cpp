@@ -107,6 +107,7 @@ int __cdecl main() {
 
     CloseWindow();
     shutdown();
+    delete listenThread;
     sleep(3); // ENSURE PROPER SHUTDOWN OF THREADS
     return 0;
 }
