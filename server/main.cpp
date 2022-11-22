@@ -112,15 +112,15 @@ int __cdecl main() {
         Ball* b = GameInstanceSingleton::getGameInstance().getBall();
         if (GameInstanceSingleton::getGameInstance().getPlayerList().size() > 1){
             if (b->getXSpeed() == 0 && b->getYSpeed() == 0){
-                b->setXSpeed(1);
+                b->setXSpeed(3);
             }
         }
         DrawCircle(b->getXCoord(), b->getYCoord(), BallRadius, WHITE);
         Rectangle ballHitbox{static_cast<float>(b->getXCoord()), static_cast<float>(b->getYCoord()), BallRadius*2, BallRadius*2};
         for(Rectangle* hb : playerHitboxes){
             if(CheckCollisionRecs(*hb, ballHitbox)){
-                b->setXSpeed(b->getXSpeed() * -1.1);
-                b->setYSpeed(b->getYSpeed() * -1.1);
+                b->setXSpeed(b->getXSpeed() * -1.2);
+                b->setYSpeed(b->getYSpeed() * -1.2);
             }
         }
         if (b->getYCoord() < BallRadius){

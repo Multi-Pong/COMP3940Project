@@ -84,7 +84,6 @@ void ClientPacketReader::readBall(std::istringstream &stream , std::string &curr
             b->setYSpeed(stoi(second));
         }
     }
-    GameInstanceSingleton::getGameInstance().setBall(b);
 }
 
 void ClientPacketReader::readDisconnect(istringstream &stream, string &current) {
