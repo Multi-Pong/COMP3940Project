@@ -62,7 +62,7 @@ file(GLOB clientSourceFiles
         "game/*.cpp"
         )
 
-add_executable(client ${clientNetworkingFiles} ${clientSourceFiles} )
+add_executable(client ${clientNetworkingFiles} ${clientSourceFiles} game/Ball.cpp game/Ball.hpp game/Points.cpp game/Points.hpp)
 target_link_libraries(client raylib)
 
 
