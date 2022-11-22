@@ -22,16 +22,18 @@ void clientUpdateGameInstance() {
         GameInstanceSingleton::getGameInstance().getLocalPlayer()->changeY(-speed);
     if (IsKeyDown(KEY_DOWN))
         GameInstanceSingleton::getGameInstance().getLocalPlayer()->changeY(speed);
-    if (IsKeyDown(KEY_LEFT))
-        GameInstanceSingleton::getGameInstance().getLocalPlayer()->changeX(-speed);
-    if (IsKeyDown(KEY_RIGHT))
-        GameInstanceSingleton::getGameInstance().getLocalPlayer()->changeX(speed);
+//    if (IsKeyDown(KEY_LEFT))
+//        GameInstanceSingleton::getGameInstance().getLocalPlayer()->changeX(-speed);
+//    if (IsKeyDown(KEY_RIGHT))
+//        GameInstanceSingleton::getGameInstance().getLocalPlayer()->changeX(speed);
 }
 
 int __cdecl main(int argc, char **argv) {
     GameInstanceSingleton::getGameInstance();
+    Ball* startBall = new Ball(5, 5);
+    GameInstanceSingleton::getGameInstance().setBall(startBall);
     srand(time(nullptr));
-    Player clientPlayer{(int) floor(rand() * 10.0), 5, 5};
+    Player clientPlayer{(int) floor(rand() * 10.0), (int)floor(rand() % FieldSizeWidth), FieldSizeHeight/2};
     GameInstanceSingleton::getGameInstance().setLocalPlayer(&clientPlayer);
     // set up raylib
     InitWindow(FieldSizeWidth, FieldSizeHeight, "Client");
@@ -67,9 +69,11 @@ int __cdecl main(int argc, char **argv) {
             DrawText("Connected", 0, 20, 20, LIME);
             for (pair<const int, Player> x: GameInstanceSingleton::getGameInstance().getPlayerList()) {
 //                cout << x.second.getID() << endl;
-                DrawRectangle((int) x.second.getX(), (int) x.second.getY(), PlayerSize, PlayerSize, WHITE);
+                DrawRectangle((int) x.second.getX(), (int) x.second.getY(), PlayerWidth, PlayerHeight, WHITE);
             }
             //TODO Draw Ball
+            Ball* b = GameInstanceSingleton::getGameInstance().getBall();
+            DrawCircle(b->getXCoord(), b->getYCoord(), BallRadius, WHITE);
             //TODO Draw Score
         }
         DrawFPS(0, 0);

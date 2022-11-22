@@ -84,6 +84,8 @@ int __cdecl main() {
 
     InitWindow(FieldSizeWidth, FieldSizeHeight, "Server");
     SetTargetFPS(60);
+    Ball* startBall = new Ball(FieldSizeWidth/2, FieldSizeHeight/2);
+    GameInstanceSingleton::getGameInstance().setBall(startBall);
     while (!WindowShouldClose()) {
 
         //TODO Implement game logic
@@ -97,9 +99,11 @@ int __cdecl main() {
 
         for (pair<const int, Player> x: GameInstanceSingleton::getGameInstance().getPlayerList()) {
 //                cout << x.second.getID() << endl;
-            DrawRectangle((int) x.second.getX(), (int) x.second.getY(), PlayerSize, PlayerSize, WHITE);
+            DrawRectangle((int) x.second.getX(), (int) x.second.getY(), PlayerWidth, PlayerHeight, WHITE);
         }
         //TODO Draw Ball
+        Ball* b = GameInstanceSingleton::getGameInstance().getBall();
+        DrawCircle(b->getXCoord(), b->getYCoord(), BallRadius, WHITE);
         //TODO Draw Score
 
         DrawFPS(0, 0);

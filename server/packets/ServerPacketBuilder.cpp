@@ -22,6 +22,7 @@ string ServerPacketBuilder::buildGameStatePacket() {
     for (pair<const int, Player> x : GameInstanceSingleton::getGameInstance().getPlayerList()){
         output.append(addPlayerBodyPart(x.second));
     }
+    output.append(addBallBodyPart(*(GameInstanceSingleton::getGameInstance().getBall())));
     // Delimit End Of Packet
     output.append(BOUNDARY).append(CRLF).append(CRLF);
     output.append("\4");

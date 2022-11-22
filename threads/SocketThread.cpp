@@ -45,6 +45,12 @@ void SocketThread::run() {
         } else {
 //            cout << "RECIEVED/ PLAYER" << endl;
 //            cout << *p << endl;
+            if(p->getY() < 0){
+                p->setY(0);
+            }
+            if(p->getY() + PlayerHeight > FieldSizeHeight){
+                p->setY(FieldSizeHeight - PlayerHeight);
+            }
             playerId = p->getID();
             if (GameInstanceSingleton::getGameInstance().getThreadList().count(playerId) == 0) {
                 pair<int, Thread *> pair = make_pair(playerId, this);
