@@ -96,14 +96,43 @@ int __cdecl main() {
         BeginDrawing();
         ClearBackground(BLACK);
 
-
+        vector<Rectangle*> playerHitboxes;
         for (pair<const int, Player> x: GameInstanceSingleton::getGameInstance().getPlayerList()) {
 //                cout << x.second.getID() << endl;
             DrawRectangle((int) x.second.getX(), (int) x.second.getY(), PlayerWidth, PlayerHeight, WHITE);
+            Rectangle* r = new Rectangle();
+            r->x = x.second.getX();
+            r->y = x.second.getY();
+            r->height = PlayerHeight;
+            r->width = PlayerWidth;
+            playerHitboxes.push_back(r);
         }
+
         //TODO Draw Ball
         Ball* b = GameInstanceSingleton::getGameInstance().getBall();
+        if (GameInstanceSingleton::getGameInstance().getPlayerList().size() > 1){
+            if (b->getXSpeed() == 0 && b->getYSpeed() == 0){
+                b->setXSpeed(1);
+            }
+        }
         DrawCircle(b->getXCoord(), b->getYCoord(), BallRadius, WHITE);
+        Rectangle ballHitbox{static_cast<float>(b->getXCoord()), static_cast<float>(b->getYCoord()), BallRadius*2, BallRadius*2};
+        for(Rectangle* hb : playerHitboxes){
+            if(CheckCollisionRecs(*hb, ballHitbox)){
+                b->setXSpeed(b->getXSpeed() * -1.1);
+                b->setYSpeed(b->getYSpeed() * -1.1);
+            }
+        }
+        if (b->getYCoord() < BallRadius){
+            b->setYCoord(BallRadius);
+            b->setYSpeed(b->getYSpeed() * -1);
+        }
+        if (b->getYCoord() + BallRadius > FieldSizeHeight){
+            b->setYCoord(FieldSizeHeight - BallRadius);
+            b->setYSpeed(b->getYSpeed() * -1);
+        }
+        b->setXCoord(b->getXCoord() + b->getXSpeed());
+        b->setYCoord(b->getYCoord() + b->getYSpeed());
         //TODO Draw Score
 
         DrawFPS(0, 0);

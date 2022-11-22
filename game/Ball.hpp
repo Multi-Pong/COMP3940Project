@@ -11,8 +11,10 @@ using namespace std;
 
 class Ball {
 private:
-    int xCoord;
-    int yCoord;
+    int xCoord = 0;
+    int yCoord = 0;
+    int speedX = 0;
+    int speedY = 0;
 public:
     // Default Constructor
     Ball() = default;
@@ -22,10 +24,14 @@ public:
     // Getters
     int getXCoord(){ return xCoord; }
     int getYCoord(){ return yCoord; }
+    int getXSpeed(){return speedX;}
+    int getYSpeed(){return speedY;}
 
     // Setters
     void setXCoord(int X){ xCoord = X; }
     void setYCoord(int Y){ yCoord = Y; }
+    void setXSpeed(int X){ speedX = X; }
+    void setYSpeed(int Y){ speedY = Y; }
 
 };
 

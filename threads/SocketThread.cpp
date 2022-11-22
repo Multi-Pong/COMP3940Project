@@ -57,10 +57,10 @@ void SocketThread::run() {
                 GameInstanceSingleton::getGameInstance().insertThread(pair);
             }
             GameInstanceSingleton::getGameInstance().updatePlayerList(p);
+
+        }
         string packet = ServerPacketBuilder::buildGameStatePacket();
         GameInstanceSingleton::getGameInstance().notifyPlayers(packet);
-        }
-
     } while (*buf > 0);
     GameInstanceSingleton::getGameInstance().removePlayer(playerId);
     GameInstanceSingleton::getGameInstance().removeThread(playerId);

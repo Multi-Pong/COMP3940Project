@@ -77,6 +77,12 @@ void ClientPacketReader::readBall(std::istringstream &stream , std::string &curr
         if (first == "yCoord") {
             b->setYCoord(stoi(second));
         }
+        if (first == "xSpeed") {
+            b->setXSpeed(stoi(second));
+        }
+        if (first == "ySpeed") {
+            b->setYSpeed(stoi(second));
+        }
     }
     GameInstanceSingleton::getGameInstance().setBall(b);
 }

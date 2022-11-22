@@ -49,6 +49,8 @@ string ServerPacketBuilder::addBallBodyPart(Ball ball) {
     // Payload (Nothing on this line)
     output.append("xCoord:").append(to_string(ball.getXCoord())).append(CRLF);
     output.append("yCoord:").append(to_string(ball.getYCoord())).append(CRLF);
+    output.append("xSpeed:").append(to_string(ball.getXSpeed())).append(CRLF);
+    output.append("ySpeed:").append(to_string(ball.getYSpeed())).append(CRLF);
     return output;
 }
 
