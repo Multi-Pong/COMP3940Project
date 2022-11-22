@@ -16,6 +16,10 @@ Socket::Socket(SOCKET &sock) {
     this->sock = sock;
 }
 
+/**
+ * Reads the next character in the socket, blocks until character is received
+ * @return Character received
+ */
 char *Socket::getNext() {
     int rval; // Return value
     char *buf = new char[1];
@@ -27,38 +31,29 @@ char *Socket::getNext() {
     return buf;
 }
 
+/**
+ * Writes string to socket
+ * @param res String to write
+ */
 void Socket::sendResponse(string res) {
     int rval;
 
-    printf("SENDING: \n%s\n", res.c_str());
+//    printf("SENDING: \n%s\n", res.c_str());
     if ((rval = send(sock, res.c_str(), strlen(res.c_str()), 0)) < 0) {
         perror("writing socket");
     } else {
-        printf("%s\n", res.c_str());
+//        printf("%s\n", res.c_str());
     }
 
     return;
 }
 
+/**
+* Checks if current socket is of type INVALID_SOCKET
+* @return True if not INVALID_SOCKET
+*/
 bool Socket::isConnected() {
     //This might be wrong
-//    int error;
-//    socklen_t len = sizeof(error);
-//    int retval = getsockopt(this->sock, SOL_SOCKET, SO_ERROR, (char *) &error, &len);
-//    if (retval != SOCKET_ERROR) {
-//        /* there was a problem getting the error code */
-////        fprintf(stderr, "error getting socket error code: %s\n", strerror(retval));
-//        return true;
-//    }
-////
-//    if (error != 0) {
-//        /* socket has a non zero error status */
-//        fprintf(stderr, "socket error: %s\n", strerror(error));
-//        return false;
-//    }
-//    return false;
-//    FD_SET m_readFds;
-//    FD_ZERO(&m_readFds);
     return (sock != INVALID_SOCKET);
 }
 

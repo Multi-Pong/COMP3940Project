@@ -8,14 +8,14 @@
 
 using namespace std;
 
-ClientReaderThread::ClientReaderThread(Socket **sock, int* threadRunning) : Thread(this) {
+ClientReaderThread::ClientReaderThread(Socket **sock, int *threadRunning) : Thread(this) {
     this->sock = *sock;
     this->threadRunning = threadRunning;
 }
 
 void ClientReaderThread::run() {
     *threadRunning = 1;
-    cout << "READING" << endl;
+//    cout << "READING" << endl;
     //
     char *buf = new char[1];
     string str;
@@ -31,9 +31,9 @@ void ClientReaderThread::run() {
                 str += buf[0];
             }
         }
-        cout << "RECV" << endl;
-        cout << str << endl;
-        if (!str.empty())ClientPacketReader::readPacket(str);
+//        cout << "RECV" << endl;
+//        cout << str << endl;
+        if (!str.empty()) { ClientPacketReader::readPacket(str); }
 
     } while (*buf > 0);
     delete[] buf;
@@ -42,13 +42,17 @@ void ClientReaderThread::run() {
 
 ClientReaderThread::~ClientReaderThread() {
     cout << "DESTRUCT READER THREAD" << endl;
-    if(*threadRunning){
+    if (*threadRunning) {
         *threadRunning = 0;
-        SOCKET s = INVALID_SOCKET;
-        Socket * deadS  = new Socket(s);
+        auto s = INVALID_SOCKET;
+        auto *deadS = new Socket(s);
         Socket tmp = *sock;
         *sock = *deadS;
-        cout << sock << " "<< sock->isConnected() << endl;
+//        cout << sock << " "<< sock->isConnected() << endl;
     }
 
+}
+
+void ClientReaderThread::send(string) {
+    //DO NOTHING
 }

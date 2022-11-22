@@ -5,12 +5,16 @@
 #ifndef COMP3940PROJECT_GAMEINSTANCESINGLETON_HPP
 #define COMP3940PROJECT_GAMEINSTANCESINGLETON_HPP
 
+
 #include "Player.hpp"
 #include "Ball.hpp"
 #include "Points.hpp"
+
 #include <vector>
 #include <map>
 #include <iostream>
+#include "Player.hpp"
+#include "../threads/Thread.hpp"
 
 using namespace std;
 
@@ -20,76 +24,112 @@ using namespace std;
  */
 class GameInstanceSingleton {
 private:
-
     // Hiding Default Constructor
     // TODO Write default game state
     GameInstanceSingleton();
 
-//    static volatile GameInstanceSingleton instance = NULL;
+    // For clients to update their current position to this Singleton
+    Player *localPlayer = nullptr;
+
+    // Container of currently connected Players in the Server.
+    map<int, Player> playerList;
+    map<int, Thread *> threadList;
+
+    // TODO Implement Ball.
+    // Ball* ball;
 
     // Member Variables
     int teamOnePoints;
     int teamTwoPoints;
 
-    // For clients to update their current position to this Singleton
-    Player* localPlayer;
-
-    // Container of currently connected Players in the Server.
-    map<int,Player> playerList;
-
-    // TODO Implement Ball.
-    // Ball ball;
 public:
-
     /*
      * Delete the Copy Constructor
      */
-    GameInstanceSingleton(GameInstanceSingleton&) = delete;
+    GameInstanceSingleton(GameInstanceSingleton &) = delete;
 
     /*
      * Delete the ability to use the assignment operator
      */
-    void operator=(GameInstanceSingleton const&) = delete;
+    void operator=(GameInstanceSingleton const &) = delete;
 
     // Getter for the GameInstance
-    static GameInstanceSingleton& getGameInstance();
+    static GameInstanceSingleton &getGameInstance();
 
-    void setPlayer(Player* p){
+    void setPlayer(Player *p) {
         auto pos = playerList.find(p->getID());
-        if(pos != playerList.end()){
+        if (pos != playerList.end()) {
             pos->second = *p;
         } else {
             playerList.insert(make_pair(p->getID(), *p));
         }
-        if (p->getID() == localPlayer->getID()){
+        if (p->getID() == localPlayer->getID()) {
             localPlayer = p;
         }
-
-//        std::cout << "--CURRENT PLAYER LIST-----" << endl;
-//        for (auto curr: playerList){
-//            cout << curr.second << endl;
-//        }
     }
 
     // Setters
-    void setLocalPlayer(Player* p){
+    void setLocalPlayer(Player *p) {
         playerList.insert(make_pair(p->getID(), *p));
         this->localPlayer = p;
     }
 
+    void insertThread(pair<int, Thread *> &pair) {
+        threadList.insert(pair);
+    }
+
     // Getters
-    Player* getLocalPlayer(){ return this->localPlayer;}
+    Player *getLocalPlayer() { return this->localPlayer; }
 
 
-    map<int,Player> getPlayerList(){return this->playerList;}
+    /**
+     * @return List of all players
+     */
+    map<int, Player> getPlayerList() { return this->playerList; }
 
-    // TODO: For Server to update playerList, Calls notifyAll after Update
+    /**
+     * @return List of all threads
+     */
+    map<int, Thread *> getThreadList() { return this->threadList; }
+
+    /**
+     * Removes player by given id
+     * @param id Id of player
+     */
+    void removePlayer(int id) {
+        if (playerList.count(id) > 0) playerList.erase(id);
+    }
+
+    /**
+     * Removes Thread by associated player id
+     * @param id Id of player attached to thread
+     */
+    void removeThread(int id) {
+        if (threadList.count(id) > 0) threadList.erase(id);
+    }
+
+    /**
+     * Updates playerList with given player pointer
+     * Adds if player does not already exist in list
+     * @param p Pointer to player to be updated in list
+     */
     void updatePlayerList(Player *p);
 
-//
-//    // TODO: Update all Players in playerList of Server's state of the game.
-//    void notifyPlayers();
+    /**
+     * Check if local player position is different to matching player in playerList
+     * @return
+     */
+    bool localHasMoved();
 
+    /**
+     * Sends packet to all connected players
+     * @param packet Packet to be sent
+     */
+    void notifyPlayers(string packet);
+
+    ~GameInstanceSingleton() {
+        delete localPlayer;
+    }
 };
 
 

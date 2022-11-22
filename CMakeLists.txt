@@ -3,6 +3,8 @@ project(COMP3940Project LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 11)
 SET(CMAKE_CXX_FLAGS -pthread)
+set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++ -lwsock32 -lws2_32 ${CMAKE_CXX_STANDARD_LIBRARIES}")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-Bstatic,--whole-archive -lwinpthread -Wl,--no-whole-archive")
 
 # Dependencies
 set(RAYLIB_VERSION 4.2.0)
