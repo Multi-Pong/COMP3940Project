@@ -6,6 +6,8 @@
 #define COMP3940PROJECT_GAMEINSTANCESINGLETON_HPP
 
 #include "Player.hpp"
+#include "Ball.hpp"
+#include "Points.hpp"
 #include <vector>
 #include <map>
 #include <iostream>
