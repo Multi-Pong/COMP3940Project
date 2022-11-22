@@ -8,6 +8,8 @@
 
 #include "Thread.hpp"
 
+class ServerSocket;
+
 class ListenThread : public Thread {
 private:
     ServerSocket *ListenSocket;
@@ -15,7 +17,7 @@ public:
     ListenThread();
     void run() override;
     void send(std::string) override;
-    ~ListenThread();
+    ~ListenThread() override;
 };
 
 

@@ -19,14 +19,6 @@
 #pragma comment (lib, "Mswsock.lib")
 #pragma comment (lib, "AdvApi32.lib")
 
-#define MAX_PLAYERS 8
-// how big the screen is for all players
-#define FieldSizeWidth 1280
-#define FieldSizeHeight  800
-
-// how big a player is
-#define PlayerSize 10
-
 using namespace std;
 
 // TODO pass IP and port as params

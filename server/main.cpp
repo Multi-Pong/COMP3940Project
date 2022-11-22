@@ -20,11 +20,14 @@
 //#define DEFAULT_BUFLEN 512
 //#define DEFAULT_PORT 8888
 
+#include <unistd.h>
 #include "raylib.h"
 #include "../threads/ListenThread.hpp"
 #include "../game/GameInstanceSingleton.hpp"
 
-int __cdecl main(void) {
+void shutdown();
+
+int __cdecl main() {
     // https://stackoverflow.com/questions/4991967/how-does-wsastartup-function-initiates-use-of-the-winsock-dll
     // In the WSADATA that it populates, it will tell you what version it is offering you based on your request.
     // It also fills in some other information which you are not required to look at if you aren't interested.
@@ -76,14 +79,14 @@ int __cdecl main(void) {
 //    WSACleanup();
 
     GameInstanceSingleton::getGameInstance();
-    ListenThread listenThread;
-    listenThread.run();
+    auto *listenThread = new ListenThread{};
+    listenThread->start();
 
-    InitWindow(FieldSizeWidth, FieldSizeHeight, "Client");
+    InitWindow(FieldSizeWidth, FieldSizeHeight, "Server");
     SetTargetFPS(60);
     while (!WindowShouldClose()) {
 
-        update(GetTime(), GetFrameTime());
+//        update(GetTime(), GetFrameTime());
 
 
         cout << "DRAWING" << endl;
@@ -103,8 +106,13 @@ int __cdecl main(void) {
     }
 
     CloseWindow();
-    disconnect();
+    shutdown();
     sleep(3); // ENSURE PROPER SHUTDOWN OF THREADS
     return 0;
-    return 0;
+}
+
+void shutdown(){
+    for(pair<int, Thread*> thread : GameInstanceSingleton::getGameInstance().getThreadList()){
+        delete thread.second;
+    }
 }

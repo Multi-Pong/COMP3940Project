@@ -11,8 +11,16 @@
 #include "Player.hpp"
 #include "../threads/Thread.hpp"
 
-using namespace std;
 
+#define MAX_PLAYERS 8
+// how big the screen is for all players
+#define FieldSizeWidth 1280
+#define FieldSizeHeight  800
+
+// how big a player is
+#define PlayerSize 10
+
+using namespace std;
 /*
  * Holds the current instance of the game, to be referenced by multiple clients.
  * Observer - Subject Model.

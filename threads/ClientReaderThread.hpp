@@ -17,7 +17,7 @@ public:
     ClientReaderThread(Socket ** sock, int *threadRunning);
     void run() override;
     void send(string) override;
-    ~ClientReaderThread();
+    ~ClientReaderThread() override;
 };
 
 
