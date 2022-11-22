@@ -39,3 +39,25 @@ string ServerPacketBuilder::buildDisconnectPacket(const int &playerId) {
     output.append("\4");
     return output;
 }
+
+string ServerPacketBuilder::addBallBodyPart(Ball ball) {
+    string output;
+    output.append(BOUNDARY).append(CRLF);
+    // Header
+    output.append("Content-Type:Ball").append(CRLF).append(CRLF);
+    // Payload (Nothing on this line)
+    output.append("xCoord:").append(to_string(ball.getXCoord())).append(CRLF);
+    output.append("yCoord:").append(to_string(ball.getYCoord())).append(CRLF);
+    return output;
+}
+
+string ServerPacketBuilder::addPointsBodyPart(Points points) {
+    string output;
+    output.append(BOUNDARY).append(CRLF);
+    // Header
+    output.append("Content-Type:Points").append(CRLF).append(CRLF);
+    // Payload (Nothing on this line)
+    output.append("TeamOnePoints:").append(to_string(points.getTeamOnePoints())).append(CRLF);
+    output.append("TeamTwoPoints:").append(to_string(points.getTeamTwoPoints())).append(CRLF);
+    return output;
+}

@@ -15,6 +15,8 @@
 using namespace std;
 
 class Player;
+class Ball;
+class Points;
 
 class ServerPacketBuilder {
 private:
@@ -43,9 +45,15 @@ public:
     //TODO
     /**
      * Adds Ball Body Part to Packet Payload
-     * @return Returns string to append onto Packet Payloac
+     * @return Returns string to append onto Packet Payload
      */
-//   static string addBallBodyPart();
+    static string addBallBodyPart(Ball);
+
+    /**
+     * Adds Points Body Part to Packet Payload
+     * @return Returns string to append onto packet Payload
+     */
+     static string addPointsBodyPart(Points);
 };
 
 
