@@ -16,8 +16,16 @@
 #include "Player.hpp"
 #include "../threads/Thread.hpp"
 
-using namespace std;
 
+#define MAX_PLAYERS 8
+// how big the screen is for all players
+#define FieldSizeWidth 1280
+#define FieldSizeHeight  800
+
+// how big a player is
+#define PlayerSize 10
+
+using namespace std;
 /*
  * Holds the current instance of the game, to be referenced by multiple clients.
  * Observer - Subject Model.
@@ -35,9 +43,14 @@ private:
     map<int, Player> playerList;
     map<int, Thread *> threadList;
 
+    //TODO Implement player availability array
+    //TODO Implement player number ie. Player 1, Player 2, etc.
+    bool isPlayerAvailable[MAX_PLAYERS];
+
     // TODO Implement Ball.
     // Ball* ball;
 
+    // TODO Implement Score.
     // Member Variables
     int teamOnePoints;
     int teamTwoPoints;
