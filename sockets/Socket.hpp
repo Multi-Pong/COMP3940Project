@@ -10,19 +10,30 @@
 #include <string>
 
 using namespace std;
+
 class Socket {
 public:
     Socket(SOCKET &sock);
 
-    /**
-     * Returns next char
-     */
     char *getNext();
+
     void sendResponse(string res);
-    void close() { closesocket(sock);}
-    int shutDown(){return shutdown(sock, SD_SEND);}
+
+    /**
+     * Closes socket
+     */
+    void close() { closesocket(sock); }
+
+    /**
+     * Shutsdown socket
+     * @return Int
+     */
+    int shutDown() { return shutdown(sock, SD_SEND); }
+
     bool isConnected();
+
     ~Socket();
+
     void dump(vector<char> &result);
 
 private:

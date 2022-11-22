@@ -20,15 +20,15 @@ Player *ServerPacketReader::readPacket(string packet) {
         getline(breaker, second);
         if (first == "id") {
             id = stoi(second);
-            cout << "HERE1 : " << second;
+//            cout << "HERE1 : " << second;
         }
         if (first == "xCoord") {
             x = stoi(second);
-            cout << "HERE2 : " << second;
+//            cout << "HERE2 : " << second;
         }
         if (first == "yCoord") {
             y = stoi(second);
-            cout << "HERE3 : " << second;
+//            cout << "HERE3 : " << second;
         }
     }
     if ((id + x + y) > 0) p = new Player{id, x, y};
