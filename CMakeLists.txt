@@ -31,6 +31,8 @@ file(GLOB serverNetworkingFiles
         "threads/Thread.cpp"
         "threads/SocketThread.cpp"
         "threads/SocketThread.hpp"
+        "threads/ListenThread.cpp"
+        "threads/ListenThread.hpp"
         )
 
 file(GLOB serverSourceFiles
@@ -43,6 +45,7 @@ file(GLOB serverSourceFiles
         )
 
 add_executable(server ${serverNetworkingFiles} ${serverSourceFiles} )
+target_link_libraries(server raylib)
 
 file(GLOB clientNetworkingFiles
         "sockets/Socket.hpp"
