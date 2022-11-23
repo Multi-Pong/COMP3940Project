@@ -118,10 +118,24 @@ int __cdecl main() {
         DrawCircle(b->getXCoord(), b->getYCoord(), BallRadius, WHITE);
         Rectangle ballHitbox{static_cast<float>(b->getXCoord()), static_cast<float>(b->getYCoord()), BallRadius*2, BallRadius*2};
         for(Rectangle* hb : playerHitboxes){
-            if(CheckCollisionRecs(*hb, ballHitbox)){
-                b->setXSpeed(b->getXSpeed() * -1.2);
-                b->setYSpeed(b->getYSpeed() * -1.2);
+            if(hb->x <= ballHitbox.x && hb->x + hb->width >= ballHitbox.x){
+                if (hb->y <= ballHitbox.y && hb->y + hb->height/3 > ballHitbox.y){
+                    b->setXSpeed(b->getXSpeed() * -1.3);
+                    b->setYSpeed((b->getYSpeed() * -1.2) - 5);
+                }
+                if (hb->y + hb->height/3 <= ballHitbox.y && (hb->y + (2 * hb->height/3)) > ballHitbox.y){
+                    b->setXSpeed(b->getXSpeed() * -1.3);
+                    b->setYSpeed(b->getYSpeed() * -1.2);
+                }
+                if (hb->y + (2 * hb->height/3) <= ballHitbox.y && hb->y + hb->height > ballHitbox.y){
+                    b->setXSpeed(b->getXSpeed() * -1.3);
+                    b->setYSpeed((b->getYSpeed() * -1.2) + 5);
+                }
             }
+//            if(CheckCollisionRecs(*hb, ballHitbox)){
+//                b->setXSpeed(b->getXSpeed() * -1.2);
+//                b->setYSpeed(b->getYSpeed() * -1.2);
+//            }
         }
         if (b->getYCoord() < BallRadius){
             b->setYCoord(BallRadius);
@@ -131,7 +145,21 @@ int __cdecl main() {
             b->setYCoord(FieldSizeHeight - BallRadius);
             b->setYSpeed(b->getYSpeed() * -1);
         }
+
+        if (b->getXCoord() < BallRadius){
+            //Increment team 1 score here
+            b->setXCoord(FieldSizeWidth/2);
+            b->setYSpeed(0);
+            b->setXSpeed(3);
+        }
+        if (b->getXCoord() + BallRadius > FieldSizeWidth){
+            //Increment team 2 score here
+            b->setXCoord(FieldSizeWidth/2);
+            b->setYSpeed(0);
+            b->setXSpeed(-3);
+        }
         b->setXCoord(b->getXCoord() + b->getXSpeed());
+
         b->setYCoord(b->getYCoord() + b->getYSpeed());
         //TODO Draw Score
 
