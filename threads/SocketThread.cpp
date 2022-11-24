@@ -46,13 +46,20 @@ void SocketThread::run() {
 //            cout << "RECIEVED/ PLAYER" << endl;
 //            cout << *p << endl;
             playerId = p->getID();
-            if (GameInstanceSingleton::getGameInstance().getThreadList().count(playerId) == 0) {
-                pair<int, Thread *> pair = make_pair(playerId, this);
-                GameInstanceSingleton::getGameInstance().insertThread(pair);
+            if (!GameInstanceSingleton::getGameInstance().playerExist(playerId)) {
+                if (GameInstanceSingleton::getGameInstance().availableSpot() > -1) {
+                    pair < int, Thread * > pair = make_pair(playerId, this);
+                    GameInstanceSingleton::getGameInstance().insertThread(pair);
+                    GameInstanceSingleton::getGameInstance().assignSpot(p);
+                    GameInstanceSingleton::getGameInstance().updatePlayerList(p);
+                }else{
+                    *buf = 0;
+                }
+            } else {
+                GameInstanceSingleton::getGameInstance().updatePlayerList(p);
             }
-            GameInstanceSingleton::getGameInstance().updatePlayerList(p);
-        string packet = ServerPacketBuilder::buildGameStatePacket();
-        GameInstanceSingleton::getGameInstance().notifyPlayers(packet);
+            string packet = ServerPacketBuilder::buildGameStatePacket();
+            GameInstanceSingleton::getGameInstance().notifyPlayers(packet);
         }
 
     } while (*buf > 0);
@@ -71,6 +78,6 @@ SocketThread::~SocketThread() {
     delete sock;
 }
 
-void SocketThread::send(string packet) {
+void SocketThread::send(string &packet) {
     sock->sendResponse(packet);
 }

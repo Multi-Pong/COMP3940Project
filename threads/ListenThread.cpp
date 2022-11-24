@@ -58,7 +58,7 @@ void ListenThread::run() {
     }
 }
 
-void ListenThread::send(std::string) {
+void ListenThread::send(std::string&) {
 // DO NOTHING
 }
 

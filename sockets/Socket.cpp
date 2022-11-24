@@ -35,7 +35,7 @@ char *Socket::getNext() {
  * Writes string to socket
  * @param res String to write
  */
-void Socket::sendResponse(string res) {
+void Socket::sendResponse(string &res) {
     int rval;
 
 //    printf("SENDING: \n%s\n", res.c_str());

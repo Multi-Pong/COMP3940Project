@@ -26,6 +26,7 @@
 #define PlayerSize 10
 
 using namespace std;
+
 /*
  * Holds the current instance of the game, to be referenced by multiple clients.
  * Observer - Subject Model.
@@ -45,7 +46,7 @@ private:
 
     //TODO Implement player availability array
     //TODO Implement player number ie. Player 1, Player 2, etc.
-    bool isPlayerAvailable[MAX_PLAYERS];
+    int playerSpots[MAX_PLAYERS];
 
     // TODO Implement Ball.
     // Ball* ball;
@@ -106,6 +107,26 @@ public:
     map<int, Thread *> getThreadList() { return this->threadList; }
 
     /**
+     *
+     * @param playerId
+     * @return
+     */
+    bool playerExist(const int playerId) const ;
+
+    /**
+     * Gets first available spot in playerSpots
+     * @return Index of first available spot, -1 otherwise
+     */
+    int availableSpot();
+
+    /**
+     * Assigns given player a player spot
+     * @param p Player to assign
+     * @return True if player was given position in playerSpots
+     */
+    bool assignSpot(Player *p);
+
+    /**
      * Removes player by given id
      * @param id Id of player
      */
@@ -138,7 +159,7 @@ public:
      * Sends packet to all connected players
      * @param packet Packet to be sent
      */
-    void notifyPlayers(string packet);
+    void notifyPlayers(string &packet);
 
     ~GameInstanceSingleton() {
         delete localPlayer;

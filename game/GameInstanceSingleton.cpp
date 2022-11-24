@@ -36,14 +36,38 @@ bool GameInstanceSingleton::localHasMoved() {
     try {
         Player *p = &playerList.at(localPlayer->getID());
         return !(p->getX() == localPlayer->getX() && p->getY() == localPlayer->getY());
-    } catch (out_of_range e) {
+    } catch (out_of_range &e) {
         return false;
     }
 }
 
-void GameInstanceSingleton::notifyPlayers(string packet) {
-    for(pair<int, Thread*> pair : threadList){
+void GameInstanceSingleton::notifyPlayers(string &packet) {
+    for (pair<int, Thread *> pair: threadList) {
         pair.second->send(packet);
     }
 
+}
+
+bool GameInstanceSingleton::assignSpot(Player *p) {
+    int spot;
+    if ((spot = availableSpot()) > -1) {
+        playerSpots[spot] = p->getID();
+        p->setPlayerNumber(spot);
+        return true;
+    }
+    return false;
+}
+
+bool GameInstanceSingleton::playerExist(const int playerId) const {
+    for (int playerSpot: playerSpots) {
+        if (playerSpot == playerId) return true;
+    }
+    return false;
+}
+
+int GameInstanceSingleton::availableSpot() {
+    for (int i = 0; i < MAX_PLAYERS; ++i) {
+        if (playerSpots[i] <= 0) return i;
+    }
+    return -1;
 }

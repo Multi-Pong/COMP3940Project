@@ -14,6 +14,7 @@ string ServerPacketBuilder::addPlayerBodyPart(const Player &player){
     playerBody.append("id:").append(to_string(player.getID())).append(CRLF);
     playerBody.append("xCoord:").append(to_string(player.getX())).append(CRLF);
     playerBody.append("yCoord:").append(to_string(player.getY())).append(CRLF);
+    playerBody.append("playerNumber:").append(to_string(player.getPlayerNumber())).append(CRLF);
     return playerBody;
 }
 

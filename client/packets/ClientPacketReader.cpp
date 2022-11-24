@@ -51,6 +51,9 @@ void ClientPacketReader::readPlayer(std::istringstream &stream , std::string &cu
         if (first == "yCoord") {
             p->setY(stoi(second));
         }
+        if (first == "playerNum") {
+            p->setPlayerNumber(stoi(second));
+        }
     }
 //            if (p != nullptr) {
     //players.push_back(p);
