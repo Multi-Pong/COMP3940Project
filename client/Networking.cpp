@@ -85,7 +85,7 @@ void connect() {
     // Receive until the peer closes the connection
     // Put reader into thread or something
     cout << "Create thread" << endl;
-    delete thread;
+//    delete thread;
     thread = new ClientReaderThread(&sock, threadRunning);
     thread->start();
     string packet = ClientPacketBuilder::buildPacket(*GameInstanceSingleton::getGameInstance().getLocalPlayer());

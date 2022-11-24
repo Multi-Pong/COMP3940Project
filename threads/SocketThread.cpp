@@ -21,6 +21,7 @@ void SocketThread::run() {
     string pattern;
     Player *p = nullptr;
     int playerId;
+    bool connected = false;
     char *buf = new char[1];
     do {
         memset(buf, 0, 1);
@@ -46,26 +47,32 @@ void SocketThread::run() {
 //            cout << "RECIEVED/ PLAYER" << endl;
 //            cout << *p << endl;
             playerId = p->getID();
-            if (!GameInstanceSingleton::getGameInstance().playerExist(playerId)) {
-                if (GameInstanceSingleton::getGameInstance().availableSpot() > -1) {
-                    pair < int, Thread * > pair = make_pair(playerId, this);
+            connected = GameInstanceSingleton::getGameInstance().playerExist(playerId);
+            if (!connected) {
+                if (GameInstanceSingleton::getGameInstance().availableSpot() == -1) {
+                    *buf = 0;
+                } else {
+                    pair<int, Thread *> pair = make_pair(playerId, this);
                     GameInstanceSingleton::getGameInstance().insertThread(pair);
                     GameInstanceSingleton::getGameInstance().assignSpot(p);
                     GameInstanceSingleton::getGameInstance().updatePlayerList(p);
-                }else{
-                    *buf = 0;
+                    //TODO move packet and notify into server main.cpp update()
+                    string packet = ServerPacketBuilder::buildGameStatePacket();
+                    GameInstanceSingleton::getGameInstance().notifyPlayers(packet);
                 }
             } else {
                 GameInstanceSingleton::getGameInstance().updatePlayerList(p);
+                string packet = ServerPacketBuilder::buildGameStatePacket();
+                GameInstanceSingleton::getGameInstance().notifyPlayers(packet);
             }
-            string packet = ServerPacketBuilder::buildGameStatePacket();
-            GameInstanceSingleton::getGameInstance().notifyPlayers(packet);
         }
 
     } while (*buf > 0);
-    GameInstanceSingleton::getGameInstance().playerDisconnect(playerId);
-    string packet = ServerPacketBuilder::buildDisconnectPacket(playerId);
-    GameInstanceSingleton::getGameInstance().notifyPlayers(packet);
+    if (connected) {
+        GameInstanceSingleton::getGameInstance().playerDisconnect(playerId);
+        string packet = ServerPacketBuilder::buildDisconnectPacket(playerId);
+        GameInstanceSingleton::getGameInstance().notifyPlayers(packet);
+    }
     delete p;
     delete[] buf;
     delete this; //Kill thread
@@ -74,6 +81,7 @@ void SocketThread::run() {
 
 SocketThread::~SocketThread() {
     cout << "DESTRUCT SOCKET THREAD" << endl;
+    sock->close();
     delete sock;
 }
 

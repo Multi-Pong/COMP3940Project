@@ -42,9 +42,8 @@ int __cdecl main(int argc, char **argv) {
     while (!WindowShouldClose()) {
         cout << endl;
         cout << "MAIN LOOP" << endl;
-
-        if (isConnected()) {
-            connected = true;
+        connected = isConnected();
+        if (connected) {
             clientUpdateGameInstance();
 
             cout << "UPDATING: " << connected << endl;
