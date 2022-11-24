@@ -71,3 +71,9 @@ int GameInstanceSingleton::availableSpot() {
     }
     return -1;
 }
+
+void GameInstanceSingleton::playerDisconnect(int id) {
+   playerSpots[getPlayerList().at(id).getPlayerNumber()] = 0;
+   removePlayer(id);
+   removeThread(id);
+}

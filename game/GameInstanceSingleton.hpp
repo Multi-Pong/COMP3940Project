@@ -127,6 +127,12 @@ public:
     bool assignSpot(Player *p);
 
     /**
+     * Clears instance of given player id
+     * @param id
+     */
+    void playerDisconnect(int id);
+
+    /**
      * Removes player by given id
      * @param id Id of player
      */

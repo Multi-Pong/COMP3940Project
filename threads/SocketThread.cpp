@@ -63,8 +63,7 @@ void SocketThread::run() {
         }
 
     } while (*buf > 0);
-    GameInstanceSingleton::getGameInstance().removePlayer(playerId);
-    GameInstanceSingleton::getGameInstance().removeThread(playerId);
+    GameInstanceSingleton::getGameInstance().playerDisconnect(playerId);
     string packet = ServerPacketBuilder::buildDisconnectPacket(playerId);
     GameInstanceSingleton::getGameInstance().notifyPlayers(packet);
     delete p;
