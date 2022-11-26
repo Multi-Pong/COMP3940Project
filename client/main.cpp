@@ -71,8 +71,39 @@ int __cdecl main(int argc, char **argv) {
             DrawLineEx(Vector2{FieldSizeWidth / 2, 0}, Vector2{FieldSizeWidth / 2, FieldSizeHeight}, 5, WHITE);
             //Players
             for (pair<const int, Player> x: GameInstanceSingleton::getGameInstance().getPlayerList()) {
-                //TODO SET PLAYER COLOUR
-                DrawRectangle((int) x.second.getX(), (int) x.second.getY(), PlayerWidth, PlayerHeight, WHITE);
+
+                Color col;
+                switch(x.second.getPlayerNumber()){
+                    case 0:
+                        col = RED;
+                        break;
+                    case 1:
+                        col = GREEN;
+                        break;
+                    case 2:
+                        col = BLUE;
+                        break;
+                    case 3:
+                        col = YELLOW;
+                        break;
+                    case 4:
+                        col = SKYBLUE;
+                        break;
+                    case 5:
+                        col = PURPLE;
+                        break;
+                    case 6:
+                        col = PINK;
+                        break;
+                    case 7:
+                        col = VIOLET;
+                        break;
+                    case 8:
+                        col = DARKGREEN;
+                        break;
+                }
+                DrawRectangle((int) x.second.getX(), (int) x.second.getY(), PlayerWidth, PlayerHeight, col);
+
             }
             //Draw Ball
             Ball* b = GameInstanceSingleton::getGameInstance().getBall();

@@ -111,6 +111,8 @@ public:
     }
 
     // Getters
+    int* getPlayerSpots(){ return this->playerSpots; }
+
     Player *getLocalPlayer() { return this->localPlayer; }
 
 
