@@ -44,9 +44,8 @@ int __cdecl main(int argc, char **argv) {
     while (!WindowShouldClose()) {
         cout << endl;
         cout << "MAIN LOOP" << endl;
-
-        if (isConnected()) {
-            connected = true;
+        connected = isConnected();
+        if (connected) {
             clientUpdateGameInstance();
 
             cout << "UPDATING: " << connected << endl;
@@ -66,7 +65,8 @@ int __cdecl main(int argc, char **argv) {
             // we are not connected, so just wait until we are, this can take some time
             DrawText("Connecting", 0, 20, 20, RED);
         } else {
-            DrawText("Connected", 0, 20, 20, LIME);
+//            DrawText("Connected", 0, 20, 20, LIME);
+            DrawText(TextFormat("Player %d", GameInstanceSingleton::getGameInstance().getLocalPlayer()->getPlayerNumber()), 0, 20, 20, LIME);
             for (pair<const int, Player> x: GameInstanceSingleton::getGameInstance().getPlayerList()) {
 //                cout << x.second.getID() << endl;
                 DrawRectangle((int) x.second.getX(), (int) x.second.getY(), PlayerWidth, PlayerHeight, WHITE);

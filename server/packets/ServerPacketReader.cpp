@@ -31,7 +31,9 @@ Player *ServerPacketReader::readPacket(string packet) {
 //            cout << "HERE3 : " << second;
         }
     }
-    if ((id + x + y) > 0) p = new Player{id, x, y};
+    if ((id + x + y) > 0) {
+        p = new Player{id, x, y};
+    }
     return p;
 }
 

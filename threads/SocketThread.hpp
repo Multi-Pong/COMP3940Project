@@ -14,7 +14,7 @@ private:
 public:
     SocketThread(Socket * sock);
     void run() override;
-    void send(string) override;
+    void send(string&) override;
     ~SocketThread() override;
 };
 
