@@ -22,6 +22,7 @@ string ServerPacketBuilder::buildGameStatePacket() {
     for (pair<const int, Player> x : GameInstanceSingleton::getGameInstance().getPlayerList()){
         output.append(addPlayerBodyPart(x.second));
     }
+    output.append(addBallBodyPart(*(GameInstanceSingleton::getGameInstance().getBall())));
     // Delimit End Of Packet
     output.append(BOUNDARY).append(CRLF).append(CRLF);
     output.append("\4");
@@ -48,6 +49,8 @@ string ServerPacketBuilder::addBallBodyPart(Ball ball) {
     // Payload (Nothing on this line)
     output.append("xCoord:").append(to_string(ball.getXCoord())).append(CRLF);
     output.append("yCoord:").append(to_string(ball.getYCoord())).append(CRLF);
+    output.append("xSpeed:").append(to_string(ball.getXSpeed())).append(CRLF);
+    output.append("ySpeed:").append(to_string(ball.getYSpeed())).append(CRLF);
     return output;
 }
 
