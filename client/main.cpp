@@ -29,6 +29,12 @@ void clientUpdateGameInstance() {
 }
 
 int __cdecl main(int argc, char **argv) {
+    static string IPAddress ="";
+    static string PORT;
+    cout << "Enter IP Address:" << endl;
+    cin >> IPAddress;
+    cout << "Enter Port: " << endl;
+    cin >> PORT;
     GameInstanceSingleton::getGameInstance();
 //    Ball* startBall = new Ball(5, 5);
 //    GameInstanceSingleton::getGameInstance().setBall(startBall);
@@ -40,7 +46,7 @@ int __cdecl main(int argc, char **argv) {
     SetTargetFPS(60);
     bool connected = false;
 
-    connect(); // Connect to server
+    connect(PORT,IPAddress); // Connect to server
     while (!WindowShouldClose()) {
         cout << endl;
 //        cout << "MAIN LOOP" << endl;
@@ -53,7 +59,7 @@ int __cdecl main(int argc, char **argv) {
 
         } else {
 //            cout << "RECONNECTING" << endl;
-            connect();
+            connect(PORT,IPAddress);
 //            connected = false;
         }
 

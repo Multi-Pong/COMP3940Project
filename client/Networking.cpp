@@ -19,7 +19,7 @@ int *threadRunning = new int;
 double lastNow = 0;
 //int n = 1;
 
-void connect() {
+void connect(string PORT = to_string(DEFAULT_PORT), string IPAddress= DEFAULT_IP) {
     // https://stackoverflow.com/questions/4991967/how-does-wsastartup-function-initiates-use-of-the-winsock-dll
     // In the WSADATA that it populates, it will tell you what version it is offering you based on your request.
     // It also fills in some other information which you are not required to look at if you aren't interested.
@@ -43,7 +43,7 @@ void connect() {
     hints.ai_protocol = IPPROTO_TCP;
 
     // Resolve the server address and port
-    iResult = getaddrinfo(DEFAULT_IP, to_string(DEFAULT_PORT).c_str(), &hints, &result);
+    iResult = getaddrinfo(IPAddress.c_str(), PORT.c_str(), &hints, &result);
     if (iResult != 0) {
         printf("getaddrinfo failed with error: %d\n", iResult);
         WSACleanup();

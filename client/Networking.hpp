@@ -22,7 +22,7 @@
 using namespace std;
 
 // TODO pass IP and port as params
-void connect();
+void connect(string, string);
 
 // Process one frame of updates
 void update(double, float);
