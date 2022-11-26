@@ -23,7 +23,9 @@
 #define FieldSizeHeight  800
 
 // how big a player is
-#define PlayerSize 10
+#define PlayerWidth 10
+#define PlayerHeight 80
+#define BallRadius 5
 
 using namespace std;
 
@@ -49,7 +51,7 @@ private:
     int playerSpots[MAX_PLAYERS];
 
     // TODO Implement Ball.
-    // Ball* ball;
+     Ball* ball = nullptr;
 
     // TODO Implement Score.
     // Member Variables
@@ -81,6 +83,14 @@ public:
             localPlayer = p;
         }
     }
+
+    void setBall(Ball *b) {
+        ball = b;
+    }
+
+    Ball* getBall(){
+        return ball;
+    };
 
     // Setters
     void setLocalPlayer(Player *p) {
@@ -169,6 +179,7 @@ public:
 
     ~GameInstanceSingleton() {
         delete localPlayer;
+        delete ball;
     }
 };
 

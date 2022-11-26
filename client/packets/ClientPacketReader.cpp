@@ -22,7 +22,7 @@ void ClientPacketReader::readPacket(string packet) {
             readPlayer(stream, current);
         }
         if (current == "Content-Type:Ball\r") {
-//            readBall(stream, current);
+            readBall(stream, current);
         }
         if (current == "Content-Type:Score\r") {
 //            readScore(stream, current);
@@ -63,6 +63,29 @@ void ClientPacketReader::readPlayer(std::istringstream &stream , std::string &cu
     if (GameInstanceSingleton::getGameInstance().getLocalPlayer()->getID() == p->getID()) {
         GameInstanceSingleton::getGameInstance().setLocalPlayer(p);
 //                }
+    }
+}
+
+void ClientPacketReader::readBall(std::istringstream &stream , std::string &current) {
+    Ball* b = GameInstanceSingleton::getGameInstance().getBall();
+    while (getline(stream, current) && current != "BOUNDARY!!!!!!!\r") {
+        istringstream playerBreaker{current};
+        string first;
+        getline(playerBreaker, first, ':');
+        string second;
+        getline(playerBreaker, second, '\r');
+        if (first == "xCoord") {
+            b->setXCoord(stoi(second));
+        }
+        if (first == "yCoord") {
+            b->setYCoord(stoi(second));
+        }
+        if (first == "xSpeed") {
+            b->setXSpeed(stoi(second));
+        }
+        if (first == "ySpeed") {
+            b->setYSpeed(stoi(second));
+        }
     }
 }
 

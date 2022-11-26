@@ -94,7 +94,8 @@ void connect() {
 
 void update(double now, float deltaT) {
     // Send an initial buffer
-    if (now - lastNow > inputUpdateInterval && (GameInstanceSingleton::getGameInstance().localHasMoved())) { // send based on inputUpdateInterval
+//    if (now - lastNow > inputUpdateInterval && (GameInstanceSingleton::getGameInstance().localHasMoved())) { // send based on inputUpdateInterval
+    if (now - lastNow > inputUpdateInterval) {
         cout << "SENDING" << endl;
         string packet = ClientPacketBuilder::buildPacket(*GameInstanceSingleton::getGameInstance().getLocalPlayer());
 //        n += 1;

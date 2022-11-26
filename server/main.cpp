@@ -84,6 +84,8 @@ int __cdecl main() {
 
     InitWindow(FieldSizeWidth, FieldSizeHeight, "Server");
     SetTargetFPS(60);
+    Ball* startBall = new Ball(FieldSizeWidth/2, FieldSizeHeight/2);
+    GameInstanceSingleton::getGameInstance().setBall(startBall);
     while (!WindowShouldClose()) {
 
         //TODO Implement game logic
@@ -94,12 +96,71 @@ int __cdecl main() {
         BeginDrawing();
         ClearBackground(BLACK);
 
-
+        vector<Rectangle*> playerHitboxes;
         for (pair<const int, Player> x: GameInstanceSingleton::getGameInstance().getPlayerList()) {
 //                cout << x.second.getID() << endl;
-            DrawRectangle((int) x.second.getX(), (int) x.second.getY(), PlayerSize, PlayerSize, WHITE);
+            DrawRectangle((int) x.second.getX(), (int) x.second.getY(), PlayerWidth, PlayerHeight, WHITE);
+            Rectangle* r = new Rectangle();
+            r->x = x.second.getX();
+            r->y = x.second.getY();
+            r->height = PlayerHeight;
+            r->width = PlayerWidth;
+            playerHitboxes.push_back(r);
         }
+
         //TODO Draw Ball
+        Ball* b = GameInstanceSingleton::getGameInstance().getBall();
+        if (GameInstanceSingleton::getGameInstance().getPlayerList().size() > 1){
+            if (b->getXSpeed() == 0 && b->getYSpeed() == 0){
+                b->setXSpeed(3);
+            }
+        }
+        DrawCircle(b->getXCoord(), b->getYCoord(), BallRadius, WHITE);
+        Rectangle ballHitbox{static_cast<float>(b->getXCoord()), static_cast<float>(b->getYCoord()), BallRadius*2, BallRadius*2};
+        for(Rectangle* hb : playerHitboxes){
+            if(hb->x <= ballHitbox.x && hb->x + hb->width >= ballHitbox.x){
+                if (hb->y <= ballHitbox.y && hb->y + hb->height/3 > ballHitbox.y){
+                    b->setXSpeed(b->getXSpeed() * -1.3);
+                    b->setYSpeed((b->getYSpeed() * -1.2) - 5);
+                }
+                if (hb->y + hb->height/3 <= ballHitbox.y && (hb->y + (2 * hb->height/3)) > ballHitbox.y){
+                    b->setXSpeed(b->getXSpeed() * -1.3);
+                    b->setYSpeed(b->getYSpeed() * -1.2);
+                }
+                if (hb->y + (2 * hb->height/3) <= ballHitbox.y && hb->y + hb->height > ballHitbox.y){
+                    b->setXSpeed(b->getXSpeed() * -1.3);
+                    b->setYSpeed((b->getYSpeed() * -1.2) + 5);
+                }
+            }
+//            if(CheckCollisionRecs(*hb, ballHitbox)){
+//                b->setXSpeed(b->getXSpeed() * -1.2);
+//                b->setYSpeed(b->getYSpeed() * -1.2);
+//            }
+        }
+        if (b->getYCoord() < BallRadius){
+            b->setYCoord(BallRadius);
+            b->setYSpeed(b->getYSpeed() * -1);
+        }
+        if (b->getYCoord() + BallRadius > FieldSizeHeight){
+            b->setYCoord(FieldSizeHeight - BallRadius);
+            b->setYSpeed(b->getYSpeed() * -1);
+        }
+
+        if (b->getXCoord() < BallRadius){
+            //Increment team 1 score here
+            b->setXCoord(FieldSizeWidth/2);
+            b->setYSpeed(0);
+            b->setXSpeed(3);
+        }
+        if (b->getXCoord() + BallRadius > FieldSizeWidth){
+            //Increment team 2 score here
+            b->setXCoord(FieldSizeWidth/2);
+            b->setYSpeed(0);
+            b->setXSpeed(-3);
+        }
+        b->setXCoord(b->getXCoord() + b->getXSpeed());
+
+        b->setYCoord(b->getYCoord() + b->getYSpeed());
         //TODO Draw Score
 
         DrawFPS(0, 0);
