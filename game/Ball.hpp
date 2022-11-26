@@ -11,27 +11,27 @@ using namespace std;
 
 class Ball {
 private:
-    int xCoord;
-    int yCoord;
-    float radius;
-    string color;
+    double xCoord = 0;
+    double yCoord = 0;
+    double speedX = 0;
+    double speedY = 0;
 public:
     // Default Constructor
     Ball() = default;
     // Overloaded Constructor
-    Ball(int xCoord, int yCoord, float radius, string color):xCoord(xCoord),yCoord(yCoord),radius(radius),color(color){};
+    Ball(int xCoord, int yCoord):xCoord(xCoord),yCoord(yCoord){};
 
     // Getters
-    int getXCoord(){ return xCoord; }
-    int getYCoord(){ return yCoord; }
-    float getRadius() { return radius; }
-    string getColor() { return color; }
+    double getXCoord(){ return xCoord; }
+    double getYCoord(){ return yCoord; }
+    double getXSpeed(){return speedX;}
+    double getYSpeed(){return speedY;}
 
     // Setters
-    void setXCoord(int X){ xCoord = X; }
-    void setYCoord(int Y){ yCoord = Y; }
-    void setRadius(float rad){ radius = rad; }
-    void setColor(string col){ color = col; }
+    void setXCoord(double X){ xCoord = X; }
+    void setYCoord(double Y){ yCoord = Y; }
+    void setXSpeed(double X){ speedX = X; }
+    void setYSpeed(double Y){ speedY = Y; }
 
 };
 

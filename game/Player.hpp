@@ -15,24 +15,29 @@ private:
     int posX;
     int posY;
     int id;
+    int playerNumber = -1;
 public:
     Player(int id = 0, int posX = 0, int posY = 0) : id(id), posX(posX), posY(posY) {};
 
-    int getX() const { return posX; };
+    int getX() const { return posX; }
 
-    int getY() const { return posY; };
+    int getY() const { return posY; }
 
-    int getID() const { return id; };
+    int getID() const { return id; }
 
-    void setX(int x) { posX = x; };
+    int getPlayerNumber() const { return playerNumber;}
 
-    void setY(int y) { posY = y; };
+    void setX(int x) { posX = x; }
 
-    void changeX(int x){posX += x;};
+    void setY(int y) { posY = y; }
 
-    void changeY(int y){posY += y;};
+    void changeX(int x){posX += x;}
 
-    void setID(int ID) { id = ID; };
+    void changeY(int y){posY += y;}
+
+    void setID(int ID) { id = ID; }
+
+    void setPlayerNumber(int num) { playerNumber = num;}
 
     friend ostream &operator<<(ostream &os, const Player &player) {
         os << "Player id: " << player.getID() << endl;

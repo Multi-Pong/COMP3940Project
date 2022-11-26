@@ -22,10 +22,10 @@ void ClientPacketReader::readPacket(string packet) {
             readPlayer(stream, current);
         }
         if (current == "Content-Type:Ball\r") {
-//            readBall(stream, current);
+            readBall(stream, current);
         }
-        if (current == "Content-Type:Score\r") {
-//            readScore(stream, current);
+        if (current == "Content-Type:Points\r") {
+            readPoints(stream, current);
         }
         if (current == "Content-Type:Disconnect\r") {
             readDisconnect(stream, current);
@@ -34,7 +34,7 @@ void ClientPacketReader::readPacket(string packet) {
 //    cout << "END READER" << endl;
 }
 
-void ClientPacketReader::readPlayer(std::istringstream &stream , std::string &current) {
+void ClientPacketReader::readPlayer(std::istringstream &stream, std::string &current) {
     auto *p = new Player();
     while (getline(stream, current) && current != "BOUNDARY!!!!!!!\r") {
         istringstream playerBreaker{current};
@@ -51,6 +51,9 @@ void ClientPacketReader::readPlayer(std::istringstream &stream , std::string &cu
         if (first == "yCoord") {
             p->setY(stoi(second));
         }
+        if (first == "playerNumber") {
+            p->setPlayerNumber(stoi(second));
+        }
     }
 //            if (p != nullptr) {
     //players.push_back(p);
@@ -60,6 +63,46 @@ void ClientPacketReader::readPlayer(std::istringstream &stream , std::string &cu
     if (GameInstanceSingleton::getGameInstance().getLocalPlayer()->getID() == p->getID()) {
         GameInstanceSingleton::getGameInstance().setLocalPlayer(p);
 //                }
+    }
+}
+
+void ClientPacketReader::readBall(std::istringstream &stream, std::string &current) {
+    Ball *b = GameInstanceSingleton::getGameInstance().getBall();
+    while (getline(stream, current) && current != "BOUNDARY!!!!!!!\r") {
+        istringstream playerBreaker{current};
+        string first;
+        getline(playerBreaker, first, ':');
+        string second;
+        getline(playerBreaker, second, '\r');
+        if (first == "xCoord") {
+            b->setXCoord(stoi(second));
+        }
+        if (first == "yCoord") {
+            b->setYCoord(stoi(second));
+        }
+        if (first == "xSpeed") {
+            b->setXSpeed(stoi(second));
+        }
+        if (first == "ySpeed") {
+            b->setYSpeed(stoi(second));
+        }
+    }
+}
+
+void ClientPacketReader::readPoints(istringstream &stream, string &current) {
+    Points *p = GameInstanceSingleton::getGameInstance().getPoints();
+    while (getline(stream, current) && current != "BOUNDARY!!!!!!!\r") {
+        istringstream playerBreaker{current};
+        string first;
+        getline(playerBreaker, first, ':');
+        string second;
+        getline(playerBreaker, second, '\r');
+        if (first == "TeamOnePoints") {
+            p->setTeamOnePoints(stoi(second));
+        }
+        if (first == "TeamTwoPoints") {
+            p->setTeamTwoPoints(stoi(second));
+        }
     }
 }
 
@@ -75,3 +118,5 @@ void ClientPacketReader::readDisconnect(istringstream &stream, string &current) 
         }
     }
 }
+
+

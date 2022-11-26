@@ -17,7 +17,7 @@ public:
 
     char *getNext();
 
-    void sendResponse(string res);
+    void sendResponse(string &res);
 
     /**
      * Closes socket

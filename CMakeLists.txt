@@ -29,8 +29,8 @@ file(GLOB serverNetworkingFiles
         "sockets/*.cpp"
         "threads/Thread.hpp"
         "threads/Thread.cpp"
-        "threads/SocketThread.cpp"
-        "threads/SocketThread.hpp"
+        "threads/ServerReaderThread.cpp"
+        "threads/ServerReaderThread.hpp"
         "threads/ListenThread.cpp"
         "threads/ListenThread.hpp"
         )

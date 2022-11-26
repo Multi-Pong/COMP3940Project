@@ -23,9 +23,14 @@
 #define FieldSizeHeight  800
 
 // how big a player is
-#define PlayerSize 10
+#define PlayerWidth 10
+#define PlayerHeight 80
+#define BallRadius 5
+
+#define INPUT_UPDATE_INTERVAL 1.0f / 120.0f
 
 using namespace std;
+
 /*
  * Holds the current instance of the game, to be referenced by multiple clients.
  * Observer - Subject Model.
@@ -45,15 +50,13 @@ private:
 
     //TODO Implement player availability array
     //TODO Implement player number ie. Player 1, Player 2, etc.
-    bool isPlayerAvailable[MAX_PLAYERS];
+    int playerSpots[MAX_PLAYERS];
 
     // TODO Implement Ball.
-    // Ball* ball;
+     Ball* ball = nullptr;
 
     // TODO Implement Score.
-    // Member Variables
-    int teamOnePoints;
-    int teamTwoPoints;
+    Points* points = nullptr;
 
 public:
     /*
@@ -81,6 +84,22 @@ public:
         }
     }
 
+    void setBall(Ball *b) {
+        ball = b;
+    }
+
+    Ball* getBall(){
+        return ball;
+    };
+
+    void setPoints(Points *p) {
+        points = p;
+    }
+
+    Points* getPoints(){
+        return points;
+    };
+
     // Setters
     void setLocalPlayer(Player *p) {
         playerList.insert(make_pair(p->getID(), *p));
@@ -104,6 +123,32 @@ public:
      * @return List of all threads
      */
     map<int, Thread *> getThreadList() { return this->threadList; }
+
+    /**
+     *
+     * @param playerId
+     * @return
+     */
+    bool playerExist(const int playerId) const ;
+
+    /**
+     * Gets first available spot in playerSpots
+     * @return Index of first available spot, -1 otherwise
+     */
+    int availableSpot();
+
+    /**
+     * Assigns given player a player spot
+     * @param p Player to assign
+     * @return True if player was given position in playerSpots
+     */
+    bool assignSpot(Player *p);
+
+    /**
+     * Clears instance of given player id
+     * @param id
+     */
+    void playerDisconnect(int id);
 
     /**
      * Removes player by given id
@@ -138,10 +183,12 @@ public:
      * Sends packet to all connected players
      * @param packet Packet to be sent
      */
-    void notifyPlayers(string packet);
+    void notifyPlayers(string &packet);
 
     ~GameInstanceSingleton() {
         delete localPlayer;
+        delete ball;
+        delete points;
     }
 };
 

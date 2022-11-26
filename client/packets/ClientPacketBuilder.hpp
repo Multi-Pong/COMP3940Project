@@ -35,8 +35,6 @@ public:
      * @return Returns the completed Packet to send off.
      */
     static string buildPacket(const Player &player);
-
-
 };
 
 

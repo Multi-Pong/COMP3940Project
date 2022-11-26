@@ -16,7 +16,7 @@ private:
 public:
     ListenThread();
     void run() override;
-    void send(std::string) override;
+    void send(std::string&) override;
     ~ListenThread() override;
 };
 

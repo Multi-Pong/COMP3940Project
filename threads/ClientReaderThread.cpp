@@ -53,6 +53,6 @@ ClientReaderThread::~ClientReaderThread() {
 
 }
 
-void ClientReaderThread::send(string) {
+void ClientReaderThread::send(string&) {
     //DO NOTHING
 }
