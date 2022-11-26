@@ -73,7 +73,7 @@ void ServerReaderThread::run() {
 
 
 ServerReaderThread::~ServerReaderThread() {
-    cout << "DESTRUCT SOCKET THREAD" << endl;
+//    cout << "DESTRUCT SOCKET THREAD" << endl;
     sock->close();
     delete sock;
 }

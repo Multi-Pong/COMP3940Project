@@ -24,8 +24,8 @@ void ClientPacketReader::readPacket(string packet) {
         if (current == "Content-Type:Ball\r") {
             readBall(stream, current);
         }
-        if (current == "Content-Type:Score\r") {
-//            readScore(stream, current);
+        if (current == "Content-Type:Points\r") {
+            readPoints(stream, current);
         }
         if (current == "Content-Type:Disconnect\r") {
             readDisconnect(stream, current);
@@ -34,7 +34,7 @@ void ClientPacketReader::readPacket(string packet) {
 //    cout << "END READER" << endl;
 }
 
-void ClientPacketReader::readPlayer(std::istringstream &stream , std::string &current) {
+void ClientPacketReader::readPlayer(std::istringstream &stream, std::string &current) {
     auto *p = new Player();
     while (getline(stream, current) && current != "BOUNDARY!!!!!!!\r") {
         istringstream playerBreaker{current};
@@ -66,8 +66,8 @@ void ClientPacketReader::readPlayer(std::istringstream &stream , std::string &cu
     }
 }
 
-void ClientPacketReader::readBall(std::istringstream &stream , std::string &current) {
-    Ball* b = GameInstanceSingleton::getGameInstance().getBall();
+void ClientPacketReader::readBall(std::istringstream &stream, std::string &current) {
+    Ball *b = GameInstanceSingleton::getGameInstance().getBall();
     while (getline(stream, current) && current != "BOUNDARY!!!!!!!\r") {
         istringstream playerBreaker{current};
         string first;
@@ -89,6 +89,23 @@ void ClientPacketReader::readBall(std::istringstream &stream , std::string &curr
     }
 }
 
+void ClientPacketReader::readPoints(istringstream &stream, string &current) {
+    Points *p = GameInstanceSingleton::getGameInstance().getPoints();
+    while (getline(stream, current) && current != "BOUNDARY!!!!!!!\r") {
+        istringstream playerBreaker{current};
+        string first;
+        getline(playerBreaker, first, ':');
+        string second;
+        getline(playerBreaker, second, '\r');
+        if (first == "TeamOnePoints") {
+            p->setTeamOnePoints(stoi(second));
+        }
+        if (first == "TeamTwoPoints") {
+            p->setTeamTwoPoints(stoi(second));
+        }
+    }
+}
+
 void ClientPacketReader::readDisconnect(istringstream &stream, string &current) {
     while (getline(stream, current) && current != "BOUNDARY!!!!!!!\r") {
         istringstream playerBreaker{current};
@@ -101,3 +118,5 @@ void ClientPacketReader::readDisconnect(istringstream &stream, string &current) 
         }
     }
 }
+
+

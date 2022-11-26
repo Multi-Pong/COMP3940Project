@@ -96,7 +96,7 @@ void update(double now, float deltaT) {
     // Send an initial buffer
     if (now - lastNow > INPUT_UPDATE_INTERVAL && (GameInstanceSingleton::getGameInstance().localHasMoved())) { // send based on inputUpdateInterval
 //    if (now - lastNow > INPUT_UPDATE_INTERVAL) {
-        cout << "SENDING" << endl;
+//        cout << "SENDING" << endl;
         string packet = ClientPacketBuilder::buildPacket(*GameInstanceSingleton::getGameInstance().getLocalPlayer());
 //        n += 1;
 //        cout << "PACKET:" << endl;

@@ -56,9 +56,7 @@ private:
      Ball* ball = nullptr;
 
     // TODO Implement Score.
-    // Member Variables
-    int teamOnePoints;
-    int teamTwoPoints;
+    Points* points = nullptr;
 
 public:
     /*
@@ -92,6 +90,14 @@ public:
 
     Ball* getBall(){
         return ball;
+    };
+
+    void setPoints(Points *p) {
+        points = p;
+    }
+
+    Points* getPoints(){
+        return points;
     };
 
     // Setters
@@ -182,6 +188,7 @@ public:
     ~GameInstanceSingleton() {
         delete localPlayer;
         delete ball;
+        delete points;
     }
 };
 

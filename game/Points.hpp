@@ -28,6 +28,9 @@ public:
     void setTeamOnePoints(int point){ teamOnePoints = point; }
     void setTeamTwoPoints(int point){ teamTwoPoints = point; }
 
+    void incrementTeamOnePoints(){ ++teamOnePoints; }
+    void incrementTeamTwoPoints(){ ++teamTwoPoints; }
+
 };
 
 

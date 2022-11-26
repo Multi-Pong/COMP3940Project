@@ -8,6 +8,8 @@
 
 GameInstanceSingleton::GameInstanceSingleton() {
 //    localPlayer = new Player;
+    ball = new Ball{FieldSizeWidth / 2, FieldSizeHeight / 2};
+    points = new Points{0,0};
 }
 
 GameInstanceSingleton &GameInstanceSingleton::getGameInstance() {
@@ -43,13 +45,13 @@ bool GameInstanceSingleton::localHasMoved() {
 
 void GameInstanceSingleton::notifyPlayers(string &packet) {
     for (pair<int, Thread *> pair: threadList) {
-        cout << pair.second;
         pair.second->send(packet);
     }
 
 }
 
 bool GameInstanceSingleton::assignSpot(Player *p) {
+    //TODO SET PLAYER POS ON ASSIGNMENT
     int spot;
     if ((spot = availableSpot()) > -1) {
         playerSpots[spot] = p->getID();
@@ -74,7 +76,7 @@ int GameInstanceSingleton::availableSpot() {
 }
 
 void GameInstanceSingleton::playerDisconnect(int id) {
-   playerSpots[getPlayerList().at(id).getPlayerNumber()] = 0;
-   removePlayer(id);
-   removeThread(id);
+    playerSpots[getPlayerList().at(id).getPlayerNumber()] = 0;
+    removePlayer(id);
+    removeThread(id);
 }

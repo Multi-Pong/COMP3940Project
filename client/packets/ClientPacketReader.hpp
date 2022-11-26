@@ -21,6 +21,7 @@ public:
     static void readPlayer(istringstream&, string &);
     static void readDisconnect(istringstream&, string &);
     static void readBall(istringstream &stream, string &current);
+    static void readPoints(istringstream &stream, string &current);
 };
 
 
