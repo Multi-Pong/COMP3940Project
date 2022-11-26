@@ -11,7 +11,7 @@
 //
 //#include "../game/GameInstanceSingleton.hpp"
 //#include "../sockets/ServerSocket.hpp"
-//#include "../threads/SocketThread.hpp"
+//#include "../threads/ServerReaderThread.hpp"
 //
 //// Need to link with Ws2_32.lib
 //#pragma comment (lib, "Ws2_32.lib")
@@ -24,60 +24,18 @@
 #include "raylib.h"
 #include "../threads/ListenThread.hpp"
 #include "../game/GameInstanceSingleton.hpp"
+#include "packets/ServerPacketBuilder.hpp"
 
+
+// Process one frame of updates
+void update(double, float);
 void shutdown();
 
+
+double lastNow = 0;
+bool gameBegin = false;
+
 int __cdecl main() {
-    // https://stackoverflow.com/questions/4991967/how-does-wsastartup-function-initiates-use-of-the-winsock-dll
-    // In the WSADATA that it populates, it will tell you what version it is offering you based on your request.
-    // It also fills in some other information which you are not required to look at if you aren't interested.
-    // You never have to submit this WSADATA struct to WinSock again, because it is used purely to give you feedback on your WSAStartup request.
-//    WSADATA wsaData;
-//    int iResult;
-//    bool isShutDown = false;
-//
-//    ServerSocket *ListenSocket;
-//    Socket *ClientSocket;
-//
-//    // Initialize Winsock
-//    iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
-//    if (iResult != 0) {
-//        printf("WSAStartup failed with error: %d\n", iResult);
-//        return 1;
-//    }
-//    GameInstanceSingleton::getGameInstance();
-//    // Create a SOCKET for the server to listen for client connections.
-//    ListenSocket = new ServerSocket(DEFAULT_PORT);
-//    while (!isShutDown) {
-//        cout << "waiting" << endl;
-//        ClientSocket = ListenSocket->Accept();
-//        if (ClientSocket != nullptr) {
-//            SocketThread *thread = new SocketThread(ClientSocket);
-//            thread->start();
-//        }
-////      shutDownServer();
-//    }
-
-    // No longer need server socket
-//    closesocket(ListenSocket);
-//    ListenSocket->close();
-//
-//
-//    // shutdown the connection since we're done
-//    iResult = ClientSocket->shutDown();
-//    if (iResult == SOCKET_ERROR) {
-//        printf("shutdown failed with error: %d\n", WSAGetLastError());
-////        closesocket(ClientSocket);
-//        ClientSocket->close();
-//        WSACleanup();
-//        return 1;
-//    }
-//
-//     cleanup
-//    closesocket(ClientSocket);
-//    ClientSocket->close();
-//    WSACleanup();
-
     GameInstanceSingleton::getGameInstance();
     auto *listenThread = new ListenThread{};
     listenThread->start();
@@ -89,33 +47,49 @@ int __cdecl main() {
     while (!WindowShouldClose()) {
 
         //TODO Implement game logic
-//        update(GetTime(), GetFrameTime());
+        update(GetTime(), GetFrameTime());
 
 
-        cout << "DRAWING" << endl;
+//        cout << "DRAWING" << endl;
         BeginDrawing();
         ClearBackground(BLACK);
-
-        vector<Rectangle*> playerHitboxes;
         for (pair<const int, Player> x: GameInstanceSingleton::getGameInstance().getPlayerList()) {
-//                cout << x.second.getID() << endl;
-            DrawRectangle((int) x.second.getX(), (int) x.second.getY(), PlayerWidth, PlayerHeight, WHITE);
-            Rectangle* r = new Rectangle();
-            r->x = x.second.getX();
-            r->y = x.second.getY();
-            r->height = PlayerHeight;
-            r->width = PlayerWidth;
-            playerHitboxes.push_back(r);
+            auto* r = new Rectangle{static_cast<float>(x.second.getX()), static_cast<float>(x.second.getY()), PlayerWidth, PlayerHeight};
+            DrawRectangleRec(*r,  WHITE);
         }
-
-        //TODO Draw Ball
+        //Draw Ball
         Ball* b = GameInstanceSingleton::getGameInstance().getBall();
-        if (GameInstanceSingleton::getGameInstance().getPlayerList().size() > 1){
+        DrawCircle(b->getXCoord(), b->getYCoord(), BallRadius, WHITE);
+        //TODO Draw Score
+
+        DrawFPS(0, 0);
+        EndDrawing();
+    }
+
+    CloseWindow();
+    shutdown();
+    delete listenThread;
+    sleep(3); // ENSURE PROPER SHUTDOWN OF THREADS
+    return 0;
+}
+
+// Process one frame of updates
+void update(double now, float deltaT){
+    if (now - lastNow > INPUT_UPDATE_INTERVAL) {
+        Ball* b = GameInstanceSingleton::getGameInstance().getBall();
+        if (!gameBegin && GameInstanceSingleton::getGameInstance().getPlayerList().size() > 1){
+            //START GAME
+            gameBegin = true;
             if (b->getXSpeed() == 0 && b->getYSpeed() == 0){
                 b->setXSpeed(3);
             }
         }
-        DrawCircle(b->getXCoord(), b->getYCoord(), BallRadius, WHITE);
+
+        vector<Rectangle*> playerHitboxes;
+        for (pair<const int, Player> x: GameInstanceSingleton::getGameInstance().getPlayerList()) {
+            playerHitboxes.push_back(new Rectangle{static_cast<float>(x.second.getX()), static_cast<float>(x.second.getY()), PlayerWidth, PlayerHeight});
+        }
+
         Rectangle ballHitbox{static_cast<float>(b->getXCoord()), static_cast<float>(b->getYCoord()), BallRadius*2, BallRadius*2};
         for(Rectangle* hb : playerHitboxes){
             if(hb->x <= ballHitbox.x && hb->x + hb->width >= ballHitbox.x){
@@ -161,17 +135,12 @@ int __cdecl main() {
         b->setXCoord(b->getXCoord() + b->getXSpeed());
 
         b->setYCoord(b->getYCoord() + b->getYSpeed());
-        //TODO Draw Score
 
-        DrawFPS(0, 0);
-        EndDrawing();
+//        cout << "SENDING" << endl;
+        string packet = ServerPacketBuilder::buildGameStatePacket();
+        GameInstanceSingleton::getGameInstance().notifyPlayers(packet);
+        lastNow = now;
     }
-
-    CloseWindow();
-    shutdown();
-    delete listenThread;
-    sleep(3); // ENSURE PROPER SHUTDOWN OF THREADS
-    return 0;
 }
 
 void shutdown(){

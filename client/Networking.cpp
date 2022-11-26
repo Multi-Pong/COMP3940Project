@@ -15,7 +15,7 @@ Socket *sock = nullptr;
 SOCKET ConnectSocket = INVALID_SOCKET;
 ClientReaderThread *thread = nullptr;
 int *threadRunning = new int;
-double inputUpdateInterval = 1.0f / 20.0f;
+//double inputUpdateInterval = 1.0f / 20.0f;
 double lastNow = 0;
 //int n = 1;
 
@@ -94,8 +94,8 @@ void connect() {
 
 void update(double now, float deltaT) {
     // Send an initial buffer
-//    if (now - lastNow > inputUpdateInterval && (GameInstanceSingleton::getGameInstance().localHasMoved())) { // send based on inputUpdateInterval
-    if (now - lastNow > inputUpdateInterval) {
+    if (now - lastNow > INPUT_UPDATE_INTERVAL && (GameInstanceSingleton::getGameInstance().localHasMoved())) { // send based on inputUpdateInterval
+//    if (now - lastNow > INPUT_UPDATE_INTERVAL) {
         cout << "SENDING" << endl;
         string packet = ClientPacketBuilder::buildPacket(*GameInstanceSingleton::getGameInstance().getLocalPlayer());
 //        n += 1;

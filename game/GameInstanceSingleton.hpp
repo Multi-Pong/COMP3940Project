@@ -27,6 +27,8 @@
 #define PlayerHeight 80
 #define BallRadius 5
 
+#define INPUT_UPDATE_INTERVAL 1.0f / 120.0f
+
 using namespace std;
 
 /*

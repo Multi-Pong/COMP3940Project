@@ -14,7 +14,7 @@
 
 #include "../game/GameInstanceSingleton.hpp"
 #include "../sockets/ServerSocket.hpp"
-#include "../threads/SocketThread.hpp"
+#include "../threads/ServerReaderThread.hpp"
 
 #include "ListenThread.hpp"
 
@@ -52,7 +52,7 @@ void ListenThread::run() {
         cout << "waiting" << endl;
         ClientSocket = ListenSocket->Accept();
         if (ClientSocket != nullptr) {
-            SocketThread *thread = new SocketThread(ClientSocket);
+            ServerReaderThread *thread = new ServerReaderThread(ClientSocket);
             thread->start();
         }
     }

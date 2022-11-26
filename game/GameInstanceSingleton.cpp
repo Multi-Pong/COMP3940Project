@@ -43,6 +43,7 @@ bool GameInstanceSingleton::localHasMoved() {
 
 void GameInstanceSingleton::notifyPlayers(string &packet) {
     for (pair<int, Thread *> pair: threadList) {
+        cout << pair.second;
         pair.second->send(packet);
     }
 
