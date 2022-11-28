@@ -35,7 +35,7 @@ int __cdecl main(int argc, char **argv) {
 //    Ball* startBall = new Ball(5, 5);
 //    GameInstanceSingleton::getGameInstance().setBall(startBall);
     srand(time(nullptr));
-    Player clientPlayer{(int) floor(rand() * 10.0), (int)floor(rand() % FieldSizeWidth), FieldSizeHeight/2};
+    Player clientPlayer{(int) floor(rand() * 10.0), FieldSizeWidth/2, FieldSizeHeight/2};
     GameInstanceSingleton::getGameInstance().setLocalPlayer(&clientPlayer);
     // set up raylib
     InitWindow(FieldSizeWidth, FieldSizeHeight, "Client");
