@@ -24,8 +24,10 @@
 
 // how big a player is
 #define PlayerWidth 10
+#define PlayerHitboxWidth 15
 #define PlayerHeight 80
 #define BallRadius 5
+#define BallSpeedModifier 1.2
 
 #define INPUT_UPDATE_INTERVAL 1.0f / 120.0f
 

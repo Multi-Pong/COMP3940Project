@@ -63,6 +63,11 @@ int __cdecl main(int argc, char **argv) {
             DrawText(TextFormat("Player %d", GameInstanceSingleton::getGameInstance().getLocalPlayer()->getPlayerNumber()), 0, 20, 20, LIME);
             //Mid line
             DrawLineEx(Vector2{FieldSizeWidth / 2, 0}, Vector2{FieldSizeWidth / 2, FieldSizeHeight}, 5, WHITE);
+            //Draw Score
+            Points *p = GameInstanceSingleton::getGameInstance().getPoints();
+            DrawText(to_string(p->getTeamOnePoints()).c_str(), FieldSizeWidth * 0.25, 10, 20, WHITE);
+            DrawText(to_string(p->getTeamTwoPoints()).c_str(), FieldSizeWidth * 0.75, 10, 20, WHITE);
+
             //Players
             for (pair<const int, Player> x: GameInstanceSingleton::getGameInstance().getPlayerList()) {
                 Color col;
@@ -101,10 +106,6 @@ int __cdecl main(int argc, char **argv) {
             //Draw Ball
             Ball* b = GameInstanceSingleton::getGameInstance().getBall();
             DrawCircle(b->getXCoord(), b->getYCoord(), BallRadius, WHITE);
-            //Draw Score
-            Points *p = GameInstanceSingleton::getGameInstance().getPoints();
-            DrawText(to_string(p->getTeamOnePoints()).c_str(), FieldSizeWidth * 0.25, 10, 20, WHITE);
-            DrawText(to_string(p->getTeamTwoPoints()).c_str(), FieldSizeWidth * 0.75, 10, 20, WHITE);
         }
         DrawFPS(0, 0);
         EndDrawing();
