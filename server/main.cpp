@@ -110,7 +110,7 @@ void update(double now, float deltaT) {
             //START GAME
             gameBegin = true;
             if (b->getXSpeed() == 0 && b->getYSpeed() == 0) {
-                b->setXSpeed(3);
+                b->setXSpeed(5);
             }
         }
 
@@ -126,7 +126,7 @@ void update(double now, float deltaT) {
         for (Rectangle *hb: playerHitboxes) {
             if (hb->x <= ballHitbox.x && hb->x + PlayerHitboxWidth >= ballHitbox.x && hb->y <= ballHitbox.y && hb->y + hb->height > ballHitbox.y) {
                 b->setXSpeed(b->getXSpeed() * -BallSpeedModifier);
-                b->setYSpeed(b->getYSpeed() * -BallSpeedModifier);
+//                b->setYSpeed(b->getYSpeed() * -BallSpeedModifier);
                 if (hb->y + hb->height / 3 > ballHitbox.y) {
                     //HIT TOP
                     b->setYSpeed(b->getYSpeed() - BallSpeedModifier);
@@ -154,7 +154,7 @@ void update(double now, float deltaT) {
             b->setXCoord(FieldSizeWidth / 2);
             b->setYCoord(FieldSizeHeight / 2);
             b->setYSpeed(0);
-            b->setXSpeed(-3);
+            b->setXSpeed(-5);
         }
 
         if (b->getXCoord() < BallRadius) {
@@ -163,7 +163,7 @@ void update(double now, float deltaT) {
             b->setXCoord(FieldSizeWidth / 2);
             b->setYCoord(FieldSizeHeight / 2);
             b->setYSpeed(0);
-            b->setXSpeed(3);
+            b->setXSpeed(5);
         }
 
         b->setXCoord(b->getXCoord() + b->getXSpeed());
