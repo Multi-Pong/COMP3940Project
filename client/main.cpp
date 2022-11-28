@@ -3,6 +3,7 @@
 // include raylib
 #include <unistd.h>
 #include <cmath>
+#include <ctime>
 #include "raylib.h"
 #include "Networking.hpp"
 #include "../game/GameInstanceSingleton.hpp"
