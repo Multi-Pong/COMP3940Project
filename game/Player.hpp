@@ -39,6 +39,8 @@ public:
 
     void setPlayerNumber(int num) { playerNumber = num;}
 
+    int getPlayerNumber() {return playerNumber;}
+
     friend ostream &operator<<(ostream &os, const Player &player) {
         os << "Player id: " << player.getID() << endl;
         os << "Player x: " << player.getX() << endl;

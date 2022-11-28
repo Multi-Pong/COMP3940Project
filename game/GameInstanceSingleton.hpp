@@ -48,14 +48,9 @@ private:
     map<int, Player> playerList;
     map<int, Thread *> threadList;
 
-    //TODO Implement player availability array
-    //TODO Implement player number ie. Player 1, Player 2, etc.
+    //Player availability array ie. Player 1, Player 2, etc.
     int playerSpots[MAX_PLAYERS];
-
-    // TODO Implement Ball.
-     Ball* ball = nullptr;
-
-    // TODO Implement Score.
+    Ball* ball = nullptr;
     Points* points = nullptr;
 
 public:
@@ -111,6 +106,8 @@ public:
     }
 
     // Getters
+    int* getPlayerSpots(){ return this->playerSpots; }
+
     Player *getLocalPlayer() { return this->localPlayer; }
 
 

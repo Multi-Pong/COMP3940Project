@@ -15,24 +15,17 @@ ClientReaderThread::ClientReaderThread(Socket **sock, int *threadRunning) : Thre
 
 void ClientReaderThread::run() {
     *threadRunning = 1;
-//    cout << "READING" << endl;
     //
     char *buf = new char[1];
     string str;
     do {
         memset(buf, 0, 1);
         str = "";
-//    string pattern = "";
-        int rval;
-
         while (buf[0] != '\4' && (*(buf = sock->getNext()) > 0)) {
-//            cout <<  str;
             if (buf[0] != '\4') {
                 str += buf[0];
             }
         }
-//        cout << "RECV" << endl;
-//        cout << str << endl;
         if (!str.empty()) { ClientPacketReader::readPacket(str); }
 
     } while (*buf > 0);
@@ -48,7 +41,6 @@ ClientReaderThread::~ClientReaderThread() {
         auto *deadS = new Socket(s);
         Socket tmp = *sock;
         *sock = *deadS;
-//        cout << sock << " "<< sock->isConnected() << endl;
     }
 
 }

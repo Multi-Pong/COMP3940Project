@@ -3,6 +3,7 @@
 // include raylib
 #include <unistd.h>
 #include <cmath>
+#include <ctime>
 #include "raylib.h"
 #include "Networking.hpp"
 #include "../game/GameInstanceSingleton.hpp"
@@ -16,19 +17,20 @@ const float MOVE_SPEED = 10;
  */
 void clientUpdateGameInstance() {
     float speed = MOVE_SPEED;
-
     // see what axes we move in
     if (IsKeyDown(KEY_UP))
         GameInstanceSingleton::getGameInstance().getLocalPlayer()->changeY(-speed);
     if (IsKeyDown(KEY_DOWN))
         GameInstanceSingleton::getGameInstance().getLocalPlayer()->changeY(speed);
-//    if (IsKeyDown(KEY_LEFT))
-//        GameInstanceSingleton::getGameInstance().getLocalPlayer()->changeX(-speed);
-//    if (IsKeyDown(KEY_RIGHT))
-//        GameInstanceSingleton::getGameInstance().getLocalPlayer()->changeX(speed);
 }
 
 int __cdecl main(int argc, char **argv) {
+    static string IPAddress ="";
+    static string PORT;
+    cout << "Enter IP Address:" << endl;
+    cin >> IPAddress;
+    cout << "Enter Port: " << endl;
+    cin >> PORT;
     GameInstanceSingleton::getGameInstance();
 //    Ball* startBall = new Ball(5, 5);
 //    GameInstanceSingleton::getGameInstance().setBall(startBall);
@@ -40,24 +42,16 @@ int __cdecl main(int argc, char **argv) {
     SetTargetFPS(60);
     bool connected = false;
 
-    connect(); // Connect to server
+    connect(PORT,IPAddress); // Connect to server
     while (!WindowShouldClose()) {
-        cout << endl;
-//        cout << "MAIN LOOP" << endl;
         connected = isConnected();
         if (connected) {
             clientUpdateGameInstance();
-
-//            cout << "UPDATING: " << connected << endl;
             update(GetTime(), GetFrameTime());
 
         } else {
-//            cout << "RECONNECTING" << endl;
-            connect();
-//            connected = false;
+            connect(PORT,IPAddress);
         }
-
-//        cout << "DRAWING" << endl;
         BeginDrawing();
         ClearBackground(BLACK);
 
@@ -71,8 +65,38 @@ int __cdecl main(int argc, char **argv) {
             DrawLineEx(Vector2{FieldSizeWidth / 2, 0}, Vector2{FieldSizeWidth / 2, FieldSizeHeight}, 5, WHITE);
             //Players
             for (pair<const int, Player> x: GameInstanceSingleton::getGameInstance().getPlayerList()) {
-                //TODO SET PLAYER COLOUR
-                DrawRectangle((int) x.second.getX(), (int) x.second.getY(), PlayerWidth, PlayerHeight, WHITE);
+                Color col;
+                switch(x.second.getPlayerNumber()){
+                    case 0:
+                        col = RED;
+                        break;
+                    case 1:
+                        col = GREEN;
+                        break;
+                    case 2:
+                        col = BLUE;
+                        break;
+                    case 3:
+                        col = YELLOW;
+                        break;
+                    case 4:
+                        col = SKYBLUE;
+                        break;
+                    case 5:
+                        col = PURPLE;
+                        break;
+                    case 6:
+                        col = PINK;
+                        break;
+                    case 7:
+                        col = VIOLET;
+                        break;
+                    case 8:
+                        col = DARKGREEN;
+                        break;
+                }
+                DrawRectangle((int) x.second.getX(), (int) x.second.getY(), PlayerWidth, PlayerHeight, col);
+
             }
             //Draw Ball
             Ball* b = GameInstanceSingleton::getGameInstance().getBall();

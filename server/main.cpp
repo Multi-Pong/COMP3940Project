@@ -26,12 +26,9 @@
 #include "../game/GameInstanceSingleton.hpp"
 #include "packets/ServerPacketBuilder.hpp"
 
-
 // Process one frame of updates
 void update(double, float);
-
 void shutdown();
-
 
 double lastNow = 0;
 bool gameBegin = false;
@@ -43,8 +40,6 @@ int __cdecl main() {
 
     InitWindow(FieldSizeWidth, FieldSizeHeight, "Server");
     SetTargetFPS(60);
-//    Ball* startBall = new Ball(FieldSizeWidth/2, FieldSizeHeight/2);
-//    GameInstanceSingleton::getGameInstance().setBall(startBall);
     while (!WindowShouldClose()) {
 
         //Game logic
@@ -55,8 +50,38 @@ int __cdecl main() {
         ClearBackground(BLACK);
         DrawLineEx(Vector2{FieldSizeWidth / 2, 0}, Vector2{FieldSizeWidth / 2, FieldSizeHeight}, 5, WHITE);
         for (pair<const int, Player> x: GameInstanceSingleton::getGameInstance().getPlayerList()) {
-            //TODO SET PLAYER COLOUR
-            DrawRectangle((int) x.second.getX(), (int) x.second.getY(), PlayerWidth, PlayerHeight, WHITE);
+            Color col;
+            switch(x.second.getPlayerNumber()){
+                case 0:
+                    col = RED;
+                    break;
+                case 1:
+                    col = GREEN;
+                    break;
+                case 2:
+                    col = BLUE;
+                    break;
+                case 3:
+                    col = YELLOW;
+                    break;
+                case 4:
+                    col = SKYBLUE;
+                    break;
+                case 5:
+                    col = PURPLE;
+                    break;
+                case 6:
+                    col = PINK;
+                    break;
+                case 7:
+                    col = VIOLET;
+                    break;
+                case 8:
+                    col = DARKGREEN;
+                    break;
+            }
+            DrawRectangle((int) x.second.getX(), (int) x.second.getY(), PlayerWidth, PlayerHeight, col);
+
         }
         //Draw Ball
         Ball *b = GameInstanceSingleton::getGameInstance().getBall();
@@ -114,10 +139,6 @@ void update(double now, float deltaT) {
                     b->setYSpeed((b->getYSpeed() * -1.2) + 5);
                 }
             }
-//            if(CheckCollisionRecs(*hb, ballHitbox)){
-//                b->setXSpeed(b->getXSpeed() * -1.2);
-//                b->setYSpeed(b->getYSpeed() * -1.2);
-//            }
         }
         if (b->getYCoord() < BallRadius) {
             b->setYCoord(BallRadius);
@@ -145,10 +166,8 @@ void update(double now, float deltaT) {
         }
 
         b->setXCoord(b->getXCoord() + b->getXSpeed());
-
         b->setYCoord(b->getYCoord() + b->getYSpeed());
 
-//        cout << "SENDING" << endl;
         string packet = ServerPacketBuilder::buildGameStatePacket();
         GameInstanceSingleton::getGameInstance().notifyPlayers(packet);
         lastNow = now;

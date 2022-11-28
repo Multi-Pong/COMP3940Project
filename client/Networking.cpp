@@ -19,7 +19,7 @@ int *threadRunning = new int;
 double lastNow = 0;
 //int n = 1;
 
-void connect() {
+void connect(string PORT = to_string(DEFAULT_PORT), string IPAddress= DEFAULT_IP) {
     // https://stackoverflow.com/questions/4991967/how-does-wsastartup-function-initiates-use-of-the-winsock-dll
     // In the WSADATA that it populates, it will tell you what version it is offering you based on your request.
     // It also fills in some other information which you are not required to look at if you aren't interested.
@@ -43,7 +43,7 @@ void connect() {
     hints.ai_protocol = IPPROTO_TCP;
 
     // Resolve the server address and port
-    iResult = getaddrinfo(DEFAULT_IP, to_string(DEFAULT_PORT).c_str(), &hints, &result);
+    iResult = getaddrinfo(IPAddress.c_str(), PORT.c_str(), &hints, &result);
     if (iResult != 0) {
         printf("getaddrinfo failed with error: %d\n", iResult);
         WSACleanup();
@@ -52,7 +52,6 @@ void connect() {
 
     // Attempt to connect to an address until one succeeds
     for (ptr = result; ptr != nullptr; ptr = ptr->ai_next) {
-
         // Create a SOCKET for connecting to server
         ConnectSocket = socket(ptr->ai_family, ptr->ai_socktype,
                                ptr->ai_protocol);
@@ -71,21 +70,15 @@ void connect() {
         }
         break;
     }
-
     freeaddrinfo(result);
-
-
     if (ConnectSocket == INVALID_SOCKET) {
         printf("Unable to connect to server!\n");
         WSACleanup();
         return;
     }
-
     sock = new Socket(ConnectSocket);
     // Receive until the peer closes the connection
     // Put reader into thread or something
-    cout << "Create thread" << endl;
-//    delete thread;
     thread = new ClientReaderThread(&sock, threadRunning);
     thread->start();
     string packet = ClientPacketBuilder::buildPacket(*GameInstanceSingleton::getGameInstance().getLocalPlayer());
@@ -95,12 +88,7 @@ void connect() {
 void update(double now, float deltaT) {
     // Send an initial buffer
     if (now - lastNow > INPUT_UPDATE_INTERVAL && (GameInstanceSingleton::getGameInstance().localHasMoved())) { // send based on inputUpdateInterval
-//    if (now - lastNow > INPUT_UPDATE_INTERVAL) {
-//        cout << "SENDING" << endl;
         string packet = ClientPacketBuilder::buildPacket(*GameInstanceSingleton::getGameInstance().getLocalPlayer());
-//        n += 1;
-//        cout << "PACKET:" << endl;
-//        cout << packet << endl;
         sock->sendResponse(packet);
         lastNow = now;
     }
@@ -108,7 +96,6 @@ void update(double now, float deltaT) {
 
 bool isConnected() {
     //This might be wrong
-//    cout << sock << endl;
     if (sock != nullptr && sock->isConnected()) {
         return true;
     }

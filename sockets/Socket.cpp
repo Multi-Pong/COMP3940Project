@@ -37,14 +37,10 @@ char *Socket::getNext() {
  */
 void Socket::sendResponse(string &res) {
     int rval;
-
-//    printf("SENDING: \n%s\n", res.c_str());
     if ((rval = send(sock, res.c_str(), strlen(res.c_str()), 0)) < 0) {
         perror("writing socket");
     } else {
-//        printf("%s\n", res.c_str());
     }
-
     return;
 }
 
@@ -66,13 +62,10 @@ Socket::~Socket() {
  * That code do so much in so little code.
  */
 void Socket::dump(std::vector<char> &result) {
-    int rval;
     char *buf;
-
     while (*(buf = getNext()) > 0) {
         result.push_back(*buf);
     }
-
     delete buf;
 }
 
