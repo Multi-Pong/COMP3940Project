@@ -52,7 +52,6 @@ void connect(string PORT = to_string(DEFAULT_PORT), string IPAddress= DEFAULT_IP
 
     // Attempt to connect to an address until one succeeds
     for (ptr = result; ptr != nullptr; ptr = ptr->ai_next) {
-
         // Create a SOCKET for connecting to server
         ConnectSocket = socket(ptr->ai_family, ptr->ai_socktype,
                                ptr->ai_protocol);
@@ -71,21 +70,15 @@ void connect(string PORT = to_string(DEFAULT_PORT), string IPAddress= DEFAULT_IP
         }
         break;
     }
-
     freeaddrinfo(result);
-
-
     if (ConnectSocket == INVALID_SOCKET) {
         printf("Unable to connect to server!\n");
         WSACleanup();
         return;
     }
-
     sock = new Socket(ConnectSocket);
     // Receive until the peer closes the connection
     // Put reader into thread or something
-    cout << "Create thread" << endl;
-//    delete thread;
     thread = new ClientReaderThread(&sock, threadRunning);
     thread->start();
     string packet = ClientPacketBuilder::buildPacket(*GameInstanceSingleton::getGameInstance().getLocalPlayer());
@@ -95,12 +88,7 @@ void connect(string PORT = to_string(DEFAULT_PORT), string IPAddress= DEFAULT_IP
 void update(double now, float deltaT) {
     // Send an initial buffer
     if (now - lastNow > INPUT_UPDATE_INTERVAL && (GameInstanceSingleton::getGameInstance().localHasMoved())) { // send based on inputUpdateInterval
-//    if (now - lastNow > INPUT_UPDATE_INTERVAL) {
-//        cout << "SENDING" << endl;
         string packet = ClientPacketBuilder::buildPacket(*GameInstanceSingleton::getGameInstance().getLocalPlayer());
-//        n += 1;
-//        cout << "PACKET:" << endl;
-//        cout << packet << endl;
         sock->sendResponse(packet);
         lastNow = now;
     }
@@ -108,7 +96,6 @@ void update(double now, float deltaT) {
 
 bool isConnected() {
     //This might be wrong
-//    cout << sock << endl;
     if (sock != nullptr && sock->isConnected()) {
         return true;
     }

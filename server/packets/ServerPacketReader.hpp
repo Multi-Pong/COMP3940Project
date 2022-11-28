@@ -10,10 +10,8 @@ using namespace std;
 
 class ServerPacketReader {
 private:
-//    Player p;
 public:
     static Player* readPacket(string packet);
-//    Player getPlayer();
 };
 
 

@@ -26,12 +26,9 @@
 #include "../game/GameInstanceSingleton.hpp"
 #include "packets/ServerPacketBuilder.hpp"
 
-
 // Process one frame of updates
 void update(double, float);
-
 void shutdown();
-
 
 double lastNow = 0;
 bool gameBegin = false;
@@ -43,8 +40,6 @@ int __cdecl main() {
 
     InitWindow(FieldSizeWidth, FieldSizeHeight, "Server");
     SetTargetFPS(60);
-//    Ball* startBall = new Ball(FieldSizeWidth/2, FieldSizeHeight/2);
-//    GameInstanceSingleton::getGameInstance().setBall(startBall);
     while (!WindowShouldClose()) {
 
         //Game logic
@@ -144,10 +139,6 @@ void update(double now, float deltaT) {
                     b->setYSpeed((b->getYSpeed() * -1.2) + 5);
                 }
             }
-//            if(CheckCollisionRecs(*hb, ballHitbox)){
-//                b->setXSpeed(b->getXSpeed() * -1.2);
-//                b->setYSpeed(b->getYSpeed() * -1.2);
-//            }
         }
         if (b->getYCoord() < BallRadius) {
             b->setYCoord(BallRadius);
@@ -175,10 +166,8 @@ void update(double now, float deltaT) {
         }
 
         b->setXCoord(b->getXCoord() + b->getXSpeed());
-
         b->setYCoord(b->getYCoord() + b->getYSpeed());
 
-//        cout << "SENDING" << endl;
         string packet = ServerPacketBuilder::buildGameStatePacket();
         GameInstanceSingleton::getGameInstance().notifyPlayers(packet);
         lastNow = now;

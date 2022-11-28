@@ -17,16 +17,11 @@ const float MOVE_SPEED = 10;
  */
 void clientUpdateGameInstance() {
     float speed = MOVE_SPEED;
-
     // see what axes we move in
     if (IsKeyDown(KEY_UP))
         GameInstanceSingleton::getGameInstance().getLocalPlayer()->changeY(-speed);
     if (IsKeyDown(KEY_DOWN))
         GameInstanceSingleton::getGameInstance().getLocalPlayer()->changeY(speed);
-//    if (IsKeyDown(KEY_LEFT))
-//        GameInstanceSingleton::getGameInstance().getLocalPlayer()->changeX(-speed);
-//    if (IsKeyDown(KEY_RIGHT))
-//        GameInstanceSingleton::getGameInstance().getLocalPlayer()->changeX(speed);
 }
 
 int __cdecl main(int argc, char **argv) {
@@ -49,22 +44,14 @@ int __cdecl main(int argc, char **argv) {
 
     connect(PORT,IPAddress); // Connect to server
     while (!WindowShouldClose()) {
-        cout << endl;
-//        cout << "MAIN LOOP" << endl;
         connected = isConnected();
         if (connected) {
             clientUpdateGameInstance();
-
-//            cout << "UPDATING: " << connected << endl;
             update(GetTime(), GetFrameTime());
 
         } else {
-//            cout << "RECONNECTING" << endl;
             connect(PORT,IPAddress);
-//            connected = false;
         }
-
-//        cout << "DRAWING" << endl;
         BeginDrawing();
         ClearBackground(BLACK);
 
@@ -78,7 +65,6 @@ int __cdecl main(int argc, char **argv) {
             DrawLineEx(Vector2{FieldSizeWidth / 2, 0}, Vector2{FieldSizeWidth / 2, FieldSizeHeight}, 5, WHITE);
             //Players
             for (pair<const int, Player> x: GameInstanceSingleton::getGameInstance().getPlayerList()) {
-
                 Color col;
                 switch(x.second.getPlayerNumber()){
                     case 0:
