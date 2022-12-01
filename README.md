@@ -21,6 +21,7 @@ This project showcases the implementation of our cumulative learnings earlier in
 4. Execute `server.exe` on the machine that you wish to host the game.
 Note: You may execute `client.exe` on the same machine that `server.exe` has been executed on. If you decide to do so, please state "**localhost**" as the IP address you wish to 'connect' to, and provide "**8888**" as the Port when prompted by the resulting command line that shows up upon execution of `client.exe`.
 5. Please distrubute your public IPv4 Address to the players that will execute `client.exe`, and the number "**8888**" as the Port Number to connect to.
+Note: If you are playing over the internet, the host must be port forwarding on port 8888. If you are on a local area network, this is not necessary.
 6. Please instruct the second player to execute `client.exe`. 
 7. Please input the above values given to you to connect to the computer that has executed `server.exe` 
 (The IP address to provide should be the public IPv4 Address of the Host computer, and the Port Number should be **8888**).
