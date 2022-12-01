@@ -57,7 +57,7 @@ void ServerReaderThread::run() {
                     pair<int, Thread *> pair = make_pair(playerId, this);
                     GameInstanceSingleton::getGameInstance().insertThread(pair);
                     GameInstanceSingleton::getGameInstance().assignSpot(p);
-                    p->setX((int)floor(rand() % ((p->getPlayerNumber() % 2 + 1) * FieldSizeWidth/2)));
+                    p->setX((int)floor(rand() % ( FieldSizeWidth/2) + (p->getPlayerNumber() % 2 *FieldSizeWidth / 2)));
                     GameInstanceSingleton::getGameInstance().updatePlayerList(p);
                 }
             } else {
