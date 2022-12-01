@@ -9,7 +9,7 @@
 GameInstanceSingleton::GameInstanceSingleton() {
 //    localPlayer = new Player;
     ball = new Ball{FieldSizeWidth / 2, FieldSizeHeight / 2};
-    points = new Points{0,0};
+    points = new Points{0, 0};
 }
 
 GameInstanceSingleton &GameInstanceSingleton::getGameInstance() {
@@ -45,7 +45,11 @@ bool GameInstanceSingleton::localHasMoved() {
 
 void GameInstanceSingleton::notifyPlayers(string &packet) {
     for (pair<int, Thread *> pair: threadList) {
-        pair.second->send(packet);
+        try {
+            pair.second->send(packet);
+        } catch (exception e) {
+            //DONOTHING
+        }
     }
 
 }

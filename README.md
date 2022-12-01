@@ -29,6 +29,6 @@ Note: You may execute `client.exe` on the same machine that `server.exe` has bee
 ## Team Members and Contact Information
 
 ---
-- Kyle, [Email](Email), [Github](https://github.com/Tissure)
+- Kyle, [kng168@my.bcit.ca](kng168@my.bcit.ca), [Github](https://github.com/Tissure)
 - Will, [wwhitfield6@my.bcit.ca](wwhitfield6@my.bcit.ca), [willowhitfield@outlook.com](willowhitfield@outlook.com), [Github](https://github.com/Arkangel964)
 - Jay Wang, [jwang@550@my.bcit.ca](jwang@550@my.bcit.ca), [artfuljw@gmail.com](artfuljw@gmail.com), [Github](https://github.com/ArtfulJW)
