@@ -49,9 +49,14 @@ int __cdecl main() {
         BeginDrawing();
         ClearBackground(BLACK);
         DrawLineEx(Vector2{FieldSizeWidth / 2, 0}, Vector2{FieldSizeWidth / 2, FieldSizeHeight}, 5, WHITE);
+        //Draw Score
+        Points *p = GameInstanceSingleton::getGameInstance().getPoints();
+        DrawText(to_string(p->getTeamOnePoints()).c_str(), FieldSizeWidth * 0.25, 10, 20, WHITE);
+        DrawText(to_string(p->getTeamTwoPoints()).c_str(), FieldSizeWidth * 0.75, 10, 20, WHITE);
+
         for (pair<const int, Player> x: GameInstanceSingleton::getGameInstance().getPlayerList()) {
             Color col;
-            switch(x.second.getPlayerNumber()){
+            switch (x.second.getPlayerNumber()) {
                 case 0:
                     col = RED;
                     break;
@@ -81,16 +86,10 @@ int __cdecl main() {
                     break;
             }
             DrawRectangle((int) x.second.getX(), (int) x.second.getY(), PlayerWidth, PlayerHeight, col);
-
         }
         //Draw Ball
         Ball *b = GameInstanceSingleton::getGameInstance().getBall();
         DrawCircle(b->getXCoord(), b->getYCoord(), BallRadius, WHITE);
-
-        //Draw Score
-        Points *p = GameInstanceSingleton::getGameInstance().getPoints();
-        DrawText(to_string(p->getTeamOnePoints()).c_str(), FieldSizeWidth * 0.25, 10, 20, WHITE);
-        DrawText(to_string(p->getTeamTwoPoints()).c_str(), FieldSizeWidth * 0.75, 10, 20, WHITE);
 
         DrawFPS(0, 0);
         EndDrawing();
@@ -111,7 +110,7 @@ void update(double now, float deltaT) {
             //START GAME
             gameBegin = true;
             if (b->getXSpeed() == 0 && b->getYSpeed() == 0) {
-                b->setXSpeed(3);
+                b->setXSpeed(5);
             }
         }
 
@@ -125,18 +124,18 @@ void update(double now, float deltaT) {
         Rectangle ballHitbox{static_cast<float>(b->getXCoord()), static_cast<float>(b->getYCoord()), BallRadius * 2,
                              BallRadius * 2};
         for (Rectangle *hb: playerHitboxes) {
-            if (hb->x <= ballHitbox.x && hb->x + hb->width >= ballHitbox.x) {
-                if (hb->y <= ballHitbox.y && hb->y + hb->height / 3 > ballHitbox.y) {
-                    b->setXSpeed(b->getXSpeed() * -1.3);
-                    b->setYSpeed((b->getYSpeed() * -1.2) - 5);
-                }
-                if (hb->y + hb->height / 3 <= ballHitbox.y && (hb->y + (2 * hb->height / 3)) > ballHitbox.y) {
-                    b->setXSpeed(b->getXSpeed() * -1.3);
-                    b->setYSpeed(b->getYSpeed() * -1.2);
-                }
-                if (hb->y + (2 * hb->height / 3) <= ballHitbox.y && hb->y + hb->height > ballHitbox.y) {
-                    b->setXSpeed(b->getXSpeed() * -1.3);
-                    b->setYSpeed((b->getYSpeed() * -1.2) + 5);
+            if (hb->x <= ballHitbox.x && hb->x + PlayerHitboxWidth >= ballHitbox.x && hb->y <= ballHitbox.y && hb->y + hb->height > ballHitbox.y) {
+                b->setXSpeed(b->getXSpeed() * -BallSpeedModifier);
+//                b->setYSpeed(b->getYSpeed() * -BallSpeedModifier);
+                if (hb->y + hb->height / 3 > ballHitbox.y) {
+                    //HIT TOP
+                    b->setYSpeed(b->getYSpeed() - BallSpeedModifier);
+                } else if (hb->y + (2 * hb->height / 3) <= ballHitbox.y) {
+                    //HIT BOT
+                    b->setYSpeed(b->getYSpeed() + BallSpeedModifier);
+                }else {
+                    //HIT MIDDLE
+//                    b->setYSpeed(b->getYSpeed() * -BallSpeedModifier);
                 }
             }
         }
@@ -153,16 +152,18 @@ void update(double now, float deltaT) {
             //ball exits right
             GameInstanceSingleton::getGameInstance().getPoints()->incrementTeamOnePoints();
             b->setXCoord(FieldSizeWidth / 2);
+            b->setYCoord(FieldSizeHeight / 2);
             b->setYSpeed(0);
-            b->setXSpeed(-3);
+            b->setXSpeed(-5);
         }
 
         if (b->getXCoord() < BallRadius) {
             //ball exits left
             GameInstanceSingleton::getGameInstance().getPoints()->incrementTeamTwoPoints();
             b->setXCoord(FieldSizeWidth / 2);
+            b->setYCoord(FieldSizeHeight / 2);
             b->setYSpeed(0);
-            b->setXSpeed(3);
+            b->setXSpeed(5);
         }
 
         b->setXCoord(b->getXCoord() + b->getXSpeed());

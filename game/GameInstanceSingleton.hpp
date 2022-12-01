@@ -23,9 +23,11 @@
 #define FieldSizeHeight  800
 
 // how big a player is
-#define PlayerWidth 10
+#define PlayerWidth 15
+#define PlayerHitboxWidth 15
 #define PlayerHeight 80
 #define BallRadius 5
+#define BallSpeedModifier 1.0
 
 #define INPUT_UPDATE_INTERVAL 1.0f / 120.0f
 

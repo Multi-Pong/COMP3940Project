@@ -6,6 +6,8 @@
 #include <unistd.h>
 #include <string>
 #include <iostream>
+#include <cmath>
+#include <ctime>
 #include "../server/packets/ServerPacketBuilder.hpp"
 #include "../server/packets/ServerPacketReader.hpp"
 
@@ -17,6 +19,7 @@ ServerReaderThread::ServerReaderThread(Socket *sock) : Thread(this) {
 }
 
 void ServerReaderThread::run() {
+    srand(time(nullptr));
     string str;
     string pattern;
     Player *p = nullptr;
@@ -54,6 +57,7 @@ void ServerReaderThread::run() {
                     pair<int, Thread *> pair = make_pair(playerId, this);
                     GameInstanceSingleton::getGameInstance().insertThread(pair);
                     GameInstanceSingleton::getGameInstance().assignSpot(p);
+                    p->setX((int)floor(rand() % ((p->getPlayerNumber() % 2 + 1) * FieldSizeWidth/2)));
                     GameInstanceSingleton::getGameInstance().updatePlayerList(p);
                 }
             } else {
